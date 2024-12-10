@@ -16,12 +16,7 @@ paths:
       summary: Список ближайших станций
       operationId: getNearestStations
       parameters:
-      - name: apikey
-        in: query
-        description: API key
-        required: true
-        schema:
-          type: string
+      - $ref: '#/components/parameters/ApiKey'
       - name: lat
         in: query
         description: широта
@@ -40,18 +35,8 @@ paths:
         required: true
         schema:
           type: integer
-      - name: format
-        in: query
-        description: json или xml
-        required: false
-        schema:
-          type: string
-      - name: lang
-        in: query
-        description: lang
-        required: false
-        schema:
-          type: string
+      - $ref: '#/components/parameters/Format'
+      - $ref: '#/components/parameters/Lang'
       responses:
         "200":
           description: success
@@ -60,6 +45,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/Stations'
 components:
+  parameters:
+    ApiKey:
+      name: apikey
+      in: query
+      description: API key
+      required: true
+      schema:
+        type: string
+    Lang:
+      name: lang
+      in: query
+      description: lang
+      required: false
+      schema:
+        type: string
+    Format:
+      name: format
+      in: query
+      description: json или xml
+      required: false
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      description: Значение по умолчанию — 100.
+      schema:
+        type: integer
+    Offset:
+      name: offset
+      in: query
+      description: Значение по умолчанию — 0.
+      schema:
+        type: integer
   schemas:
     Stations:
       type: object
