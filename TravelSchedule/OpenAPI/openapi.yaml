@@ -17,11 +17,12 @@ paths:
       summary: Расписание рейсов между станциями
       operationId: getSearches
       parameters:
+        - $ref: '#/components/parameters/ApiKey'
+          required: true
         - $ref: '#/components/parameters/From'
           required: true
         - $ref: '#/components/parameters/To'
           required: true
-        - $ref: '#/components/parameters/ApiKey'
         - $ref: '#/components/parameters/Format'
         - $ref: '#/components/parameters/Lang'
         - $ref: '#/components/parameters/TransportType'
@@ -39,7 +40,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SearchObject'
+                $ref: '#/components/schemas/Searches'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '404':
@@ -257,18 +258,18 @@ components:
       description: API key
       schema:
         type: string
-
-    Format:
-      name: format
+        
+    From:
+      name: from
       in: query
-      description: json или xml
+      description: Код станции отправления.
       schema:
         type: string
 
-    Lang:
-      name: lang
+    To:
+      name: to
       in: query
-      description: lang
+      description: Код станции прибытия.
       schema:
         type: string
 
@@ -331,45 +332,10 @@ components:
       schema:
         type: integer
 
-    Date:
-      name: date
-      in: query
-      description: Дата (формат YYYY-MM-DD)
-      schema:
-        type: string
-
-    Limit:
-      name: limit
-      in: query
-      description: Значение по умолчанию — 100.
-      schema:
-        type: integer
-
-    Offset:
-      name: Offset
-      in: query
-      description: Значение по умолчанию — 0.
-      schema:
-        type: integer
-
     ResultTimezone:
       name: result_timezone
       in: query
       description: Часовой пояс
-      schema:
-        type: string
-
-    From:
-      name: from
-      in: query
-      description: Код станции отправления.
-      schema:
-        type: string
-
-    To:
-      name: to
-      in: query
-      description: Код станции прибытия.
       schema:
         type: string
 
@@ -397,7 +363,7 @@ components:
     Event:
       name: event
       in: query
-      description: departure или arrival
+      description: Прибытие или отправление
       schema:
         type: string
         enum:
@@ -424,8 +390,59 @@ components:
       description: Идентификатор нитки.
       schema:
         type: string
+        
+    Date:
+      name: date
+      in: query
+      description: Дата (формат YYYY-MM-DD)
+      schema:
+        type: string
+
+    Limit:
+      name: limit
+      in: query
+      description: Значение по умолчанию — 100.
+      schema:
+        type: integer
+
+    Offset:
+      name: Offset
+      in: query
+      description: Значение по умолчанию — 0.
+      schema:
+        type: integer
+
+    Format:
+      name: format
+      in: query
+      description: json или xml
+      schema:
+        type: string
+
+    Lang:
+      name: lang
+      in: query
+      description: lang
+      schema:
+        type: string
 
   schemas:
+    Searches:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        interval_segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Segment'
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Segment'
+        search:
+          $ref: '#/components/schemas/Search'
+  
     Stations:
       type: object
       properties:
@@ -435,7 +452,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Station'
-
+            
     Pagination:
       type: object
       properties:
@@ -589,21 +606,7 @@ components:
           $ref: '#/components/schemas/StationCodes'
           nullable: true
 
-    SearchObject:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        interval_segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Segment'
-        segments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Segment'
-        search:
-          $ref: '#/components/schemas/Search'
+
 
     Segment:
       type: object
@@ -946,3 +949,4 @@ components:
             - type: number
             - type: string
           nullable: true
+
