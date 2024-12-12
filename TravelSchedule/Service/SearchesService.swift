@@ -14,19 +14,12 @@ protocol SearchesServiceProtocol {
     func getSearches(from: String, to: String) async throws -> Searches
 }
 
-final class SearchesService: SearchesServiceProtocol {
-    private let client: Client
-    private let apikey: String
-    
-    init(client: Client, apikey: String) {
-        self.client = client
-        self.apikey = apikey
-    }
-    
+final class SearchesService: BasicService, SearchesServiceProtocol {
+
     func getSearches(from: String, to: String) async throws -> Searches {
 
         let response = try await client.getSearches(query: .init(
-            apikey: apikey,
+            apikey: self.apikey,
             from: from,
             to: to
         ))

@@ -25,14 +25,14 @@ paths:
           required: true
         - $ref: '#/components/parameters/Format'
         - $ref: '#/components/parameters/Lang'
+        - $ref: '#/components/parameters/Date'
         - $ref: '#/components/parameters/TransportType'
         - $ref: '#/components/parameters/System'
         - $ref: '#/components/parameters/ShowSystems'
-        - $ref: '#/components/parameters/Date'
-        - $ref: '#/components/parameters/Limit'
         - $ref: '#/components/parameters/Offset'
-        - $ref: '#/components/parameters/ResultTimezone'
+        - $ref: '#/components/parameters/Limit'
         - $ref: '#/components/parameters/AddDaysMask'
+        - $ref: '#/components/parameters/ResultTimezone'
         - $ref: '#/components/parameters/Transfers'
       responses:
         '200':
@@ -53,19 +53,19 @@ paths:
       summary: Расписание рейсов по станции
       operationId: getSchedule
       parameters:
+        - $ref: '#/components/parameters/ApiKey'
+          required: true
         - $ref: '#/components/parameters/Station'
           required: true
-        - $ref: '#/components/parameters/ApiKey'
-        - $ref: '#/components/parameters/Format'
         - $ref: '#/components/parameters/Lang'
+        - $ref: '#/components/parameters/Format'
+        - $ref: '#/components/parameters/Date'
         - $ref: '#/components/parameters/TransportType'
+        - $ref: '#/components/parameters/Event'
         - $ref: '#/components/parameters/System'
         - $ref: '#/components/parameters/ShowSystems'
-        - $ref: '#/components/parameters/Limit'
-        - $ref: '#/components/parameters/ResultTimezone'
-        - $ref: '#/components/parameters/Date'
         - $ref: '#/components/parameters/Direction'
-        - $ref: '#/components/parameters/Event'
+        - $ref: '#/components/parameters/ResultTimezone'
       responses:
         '200':
           description: success
@@ -83,24 +83,25 @@ paths:
       tags:
         - TravelSchedule
       summary: Список станций следования
-      operationId: getThread
+      operationId: getThreads
       parameters:
+        - $ref: '#/components/parameters/ApiKey'
+          required: true
         - $ref: '#/components/parameters/Uid'
           required: true
-        - $ref: '#/components/parameters/ApiKey'
-        - $ref: '#/components/parameters/Format'
-        - $ref: '#/components/parameters/Lang'
-        - $ref: '#/components/parameters/ShowSystems'
-        - $ref: '#/components/parameters/Date'
         - $ref: '#/components/parameters/From'
         - $ref: '#/components/parameters/To'
+        - $ref: '#/components/parameters/Format'
+        - $ref: '#/components/parameters/Lang'
+        - $ref: '#/components/parameters/Date'
+        - $ref: '#/components/parameters/ShowSystems'
       responses:
         '200':
           description: success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ThreadObject'
+                $ref: '#/components/schemas/Threads'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '404':
@@ -141,13 +142,13 @@ paths:
       summary: Ближайший город
       operationId: getNearestSettlement
       parameters:
+        - $ref: '#/components/parameters/ApiKey'
+          required: true
         - $ref: '#/components/parameters/Lat'
           required: true
         - $ref: '#/components/parameters/Lng'
           required: true
         - $ref: '#/components/parameters/Distance'
-          required: true
-        - $ref: '#/components/parameters/ApiKey'
         - $ref: '#/components/parameters/Format'
         - $ref: '#/components/parameters/Lang'
       responses:
@@ -342,14 +343,14 @@ components:
     Station:
       name: station
       in: query
-      description: код станции
+      description: Код станции
       schema:
         type: string
 
     Code:
       name: code
       in: query
-      description: код перевозчика
+      description: Код перевозчика
       schema:
         type: string
 
@@ -373,14 +374,14 @@ components:
     AddDaysMask:
       name: add_days_mask
       in: query
-      description: запрос календаря хождения рейсов
+      description: Запрос календаря хождения рейсов
       schema:
         type: boolean
 
     Transfers:
       name: transfers
       in: query
-      description: признак запроса маршрутов с пересадками.
+      description: Признак запроса маршрутов с пересадками.
       schema:
         type: boolean
 
@@ -442,7 +443,69 @@ components:
             $ref: '#/components/schemas/Segment'
         search:
           $ref: '#/components/schemas/Search'
-  
+
+    Schedules:
+      type: object
+      properties:
+        date:
+          type: string
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        station:
+            $ref: '#/components/schemas/Station'
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/StationSchedule'
+        schedule_direction:
+          $ref: '#/components/schemas/Directions'
+        directions:
+          $ref: '#/components/schemas/Directions'
+
+    Threads:
+      type: object
+      properties:
+        except_days:
+          type: string
+        arrival_date:
+          type: string
+        from:
+          type: string
+        uid:
+          type: string
+        title:
+          type: string
+        interval:
+          $ref: '#/components/schemas/Interval'
+        departure_date:
+          type: string
+        start_time:
+          type: string
+        number:
+          type: string
+        short_title:
+          type: string
+        days:
+          type: string
+        to:
+          type: string
+        carrier:
+          $ref: '#/components/schemas/Carrier'
+        transport_type:
+          type: string
+        stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/Stop'
+        vehicle:
+          type: string
+        start_date:
+          type: string
+        transport_subtype:
+          $ref: '#/components/schemas/TransportSubtype'
+        express_type:
+          type: string
+          
     Stations:
       type: object
       properties:
@@ -452,7 +515,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Station'
-            
+          
+    Settlement:
+      type: object
+      properties:
+       distance:
+          type: number
+       code:
+          type: string
+       title:
+          type: string
+       popular_title:
+          type: string
+       short_title:
+          type: string
+       lat:
+          type: number
+       lng:
+          type: number
+       type:
+          type: string
+        
     Pagination:
       type: object
       properties:
@@ -509,23 +592,6 @@ components:
         http_code:
           type: string
 
-    Schedules:
-      type: object
-      properties:
-        date:
-          type: string
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-        station:
-            $ref: '#/components/schemas/Station'
-        schedule:
-          type: array
-          items:
-            $ref: '#/components/schemas/StationSchedule'
-        schedule_direction:
-          $ref: '#/components/schemas/Directions'
-        directions:
-          $ref: '#/components/schemas/Directions'
 
     StationSchedule:
       type: object
@@ -606,8 +672,6 @@ components:
           $ref: '#/components/schemas/StationCodes'
           nullable: true
 
-
-
     Segment:
       type: object
       properties:
@@ -660,56 +724,7 @@ components:
           $ref: '#/components/schemas/TransportSubtype'
         express_type:
           type: string
-        thread_method_link:
-          type: string
-          nullable: true
-        interval:
-          $ref: '#/components/schemas/Interval'
-          nullable: true
 
-    ThreadObject:
-      type: object
-      properties:
-        except_days:
-          type: string
-        arrival_date:
-          type: string
-        from:
-          type: string
-        uid:
-          type: string
-        title:
-          type: string
-        interval:
-          $ref: '#/components/schemas/Interval'
-        departure_date:
-          type: string
-        start_time:
-          type: string
-        number:
-          type: string
-        short_title:
-          type: string
-        days:
-          type: string
-        to:
-          type: string
-        carrier:
-          $ref: '#/components/schemas/Carrier'
-        transport_type:
-          type: string
-        stops:
-          type: array
-          items:
-            $ref: '#/components/schemas/Stop'
-        vehicle:
-          type: string
-        start_date:
-          type: string
-        transport_subtype:
-          $ref: '#/components/schemas/TransportSubtype'
-        express_type:
-          type: string
 
     Interval:
       type: object
@@ -852,26 +867,6 @@ components:
         platform:
           type: string
 
-    Settlement:
-      type: object
-      properties:
-       distance:
-          type: number
-       code:
-          type: string
-       title:
-          type: string
-       popular_title:
-          type: string
-       short_title:
-          type: string
-       lat:
-          type: number
-       lng:
-          type: number
-       type:
-          type: string
-
     Carriers:
       type: object
       properties:
@@ -949,4 +944,3 @@ components:
             - type: number
             - type: string
           nullable: true
-
