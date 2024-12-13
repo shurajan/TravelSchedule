@@ -24,7 +24,10 @@ struct ContentView: View {
                 //try searches()
                 //try schedules()
                 //try threads()
-                try nearestSettlement()
+                //try nearestSettlement()
+                //try carriers()
+                //try stationsList()
+                try copyright()
             } catch {
                 print(error.localizedDescription)
             }
@@ -115,7 +118,71 @@ struct ContentView: View {
             print(settlement)
         }
     }
-
+    
+    func carriers() throws {
+        let client = Client(
+            serverURL: try Servers.Server1.url(),
+            transport: URLSessionTransport()
+        )
+        
+        let service = CarriersService(
+            client: client,
+            apikey: apiKey
+        )
+        
+        Task {
+            let carriers = try await service.getCarriers(code: "680")
+            print(carriers)
+        }
+    }
+    
+    func stationsList(timeout: TimeInterval = 120) throws {
+        let sessionConfiguration = URLSessionConfiguration.default
+        sessionConfiguration.timeoutIntervalForRequest = timeout
+        sessionConfiguration.timeoutIntervalForResource = timeout
+        
+        let session = URLSession(configuration: sessionConfiguration)
+        
+        let transportConfiguration = URLSessionTransport.Configuration(session: session)
+        
+        let transport = URLSessionTransport(configuration: transportConfiguration)
+        
+        let client = Client(
+            serverURL: try Servers.Server1.url(),
+            transport: transport
+        )
+        
+        let service = StationsListService(
+            client: client,
+            apikey: apiKey
+        )
+        
+        Task {
+            do {
+                let stationsList = try await service.getStationsList()
+                print(stationsList.countries?.count ?? "Not loaded")
+            } catch {
+                print("Error fetching stations list: \(error)")
+            }
+        }
+    }
+    
+    func copyright() throws {
+        let client = Client(
+            serverURL: try Servers.Server1.url(),
+            transport: URLSessionTransport()
+        )
+        
+        let service = CopyrightService(
+            client: client,
+            apikey: apiKey
+        )
+        
+        Task {
+            let copyright = try await service.getCopyright()
+            print(copyright)
+        }
+    }
 }
 
 #Preview {

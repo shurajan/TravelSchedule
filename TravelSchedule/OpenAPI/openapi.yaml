@@ -170,12 +170,13 @@ paths:
       summary: Информация о перевозчике
       operationId: getCarrier
       parameters:
+        - $ref: '#/components/parameters/ApiKey'
+          required: true
         - $ref: '#/components/parameters/Code'
           required: true
-        - $ref: '#/components/parameters/ApiKey'
-        - $ref: '#/components/parameters/Format'
-        - $ref: '#/components/parameters/Lang'
         - $ref: '#/components/parameters/System'
+        - $ref: '#/components/parameters/Lang'
+        - $ref: '#/components/parameters/Format'
       responses:
         '200':
           description: success
@@ -196,8 +197,9 @@ paths:
       operationId: getStationsList
       parameters:
         - $ref: '#/components/parameters/ApiKey'
-        - $ref: '#/components/parameters/Format'
+          required: true
         - $ref: '#/components/parameters/Lang'
+        - $ref: '#/components/parameters/Format'
       responses:
         '200':
           description: success
@@ -220,6 +222,7 @@ paths:
       operationId: getCopyright
       parameters:
         - $ref: '#/components/parameters/ApiKey'
+          required: true
         - $ref: '#/components/parameters/Format'
       responses:
         '200':
@@ -233,10 +236,7 @@ paths:
         '404':
           $ref: '#/components/responses/404NotFound'
 
-
-
 components:
-
   responses:
     400BadRequest:
       description: Bad request
@@ -535,7 +535,50 @@ components:
           type: number
        type:
           type: string
-        
+          
+    Carrier:
+      type: object
+      properties:
+        code:
+          type: number
+        contacts:
+          type: string
+          nullable: true
+        url:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        codes:
+          $ref: '#/components/schemas/CarrierCodes'
+        logo:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+
+    StationsList:
+      type: object
+      properties:
+        countries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Country'
+
+    CopyrightObject:
+      type: object
+      properties:
+        copyright:
+          $ref: '#/components/schemas/Copyright'
+
     Pagination:
       type: object
       properties:
@@ -554,11 +597,6 @@ components:
         touch_url:
           type: string
 
-    CopyrightObject:
-      type: object
-      properties:
-        copyright:
-          $ref: '#/components/schemas/Copyright'
 
     Copyright:
       type: object
@@ -764,37 +802,6 @@ components:
         whole:
           type: integer
 
-    Carrier:
-      type: object
-      properties:
-        code:
-          type: number
-        codes:
-          $ref: '#/components/schemas/CarrierCodes'
-        title:
-          type: string
-          nullable: true
-        contacts:
-          type: string
-          nullable: true
-        url:
-          type: string
-          nullable: true
-        logo_svg:
-          type: string
-          nullable: true
-        phone:
-          type: string
-          nullable: true
-        address:
-          type: string
-          nullable: true
-        logo:
-          type: string
-          nullable: true
-        email:
-          type: string
-          nullable: true
 
     CarrierCodes:
       type: object
@@ -876,14 +883,6 @@ components:
             $ref: '#/components/schemas/Carrier'
         carrier:
           $ref: '#/components/schemas/Carrier'
-
-    StationsList:
-      type: object
-      properties:
-        countries:
-          type: array
-          items:
-            $ref: '#/components/schemas/Country'
 
     Country:
       type: object
