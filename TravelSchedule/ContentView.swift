@@ -21,7 +21,8 @@ struct ContentView: View {
                 //try nearestSettlement()
                 //try carriers()
                 //try stationsList()
-                try copyright()
+                //try copyright()
+                print("Launched")
             } catch {
                 print(error.localizedDescription)
             }

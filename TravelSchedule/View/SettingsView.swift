@@ -1,5 +1,5 @@
 //
-//  ScheduleView.swift
+//  SettingsView.swift
 //  TravelSchedule
 //
 //  Created by Alexander Bralnin on 03.01.2025.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct ScheduleView: View {
+struct SettingsView: View {
     var body: some View {
-        Text("Hello, World! - 1")
+        Text("Settings")
     }
 }
 
 #Preview {
-    ScheduleView()
+    SettingsView()
 }
