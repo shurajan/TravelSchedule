@@ -11,13 +11,7 @@ import OpenAPIURLSession
 struct ContentView: View {
     let apiKey = "05d03cb7-d988-4bb4-92cb-513b293fd349"
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        MainTabView()
         .onAppear {
             do {
                 //try nearestStations()
