@@ -11,7 +11,6 @@ struct Story: Hashable, Identifiable {
     let id = UUID()
     let previewImageName: String
     let imageNames: [String]
-    let title: String
     let text: String
     let isWatched: Bool
 }

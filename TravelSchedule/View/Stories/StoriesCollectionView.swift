@@ -12,27 +12,12 @@ struct StoriesCollectionView: View {
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
+            LazyHStack(spacing: 12) {
                 ForEach(viewModel.stories) { story in
-                    VStack {
-                        ZStack {
-                            Image(story.previewImageName)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 92, height: 140)
-                                .clipShape(Rectangle())
-                            if !story.isWatched {
-          
-                            }
-                            
-                            Text(story.title)
-                                .font(.system(size: 12))
-                                .foregroundColor(ColorPalette.white(day: true).color)
-                        }
-                    }
+                    StoryView(story: story)
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(EdgeInsets(top: 24, leading: 16, bottom: 24, trailing: 16))
         }
         .frame(height: 188)
     }
