@@ -9,8 +9,8 @@ import SwiftUI
 
 struct DirectionSelectorView: View {
     
-    @State private var from: String = "Откуда"
-    @State private var to: String = "Куда"
+    @State private var from: String = ""
+    @State private var to: String = ""
     
     var body: some View {
         ZStack {
@@ -21,17 +21,15 @@ struct DirectionSelectorView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 16) {
                     NavigationLink(destination: Text("Выбор места отправления")) {
-                        Text(from)
-                            .foregroundColor(ColorPalette.gray.color)
+                        TextField("Откуда", text: $from)
+                            .multilineTextAlignment(.leading)
                             .font(.system(size: 17, weight: .regular))
-                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     
                     NavigationLink(destination: Text("Выбор места назначения")) {
-                        Text(to)
-                            .foregroundColor(ColorPalette.gray.color)
+                        TextField("Кудв", text: $to)
+                            .multilineTextAlignment(.leading)
                             .font(.system(size: 17, weight: .regular))
-                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
                 .padding()
