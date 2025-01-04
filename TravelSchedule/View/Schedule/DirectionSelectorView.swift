@@ -9,8 +9,8 @@ import SwiftUI
 
 struct DirectionSelectorView: View {
     
-    @State private var from: String = ""
-    @State private var to: String = ""
+    @State private var from: String = "Откуда"
+    @State private var to: String = "Куда"
     
     var body: some View {
         ZStack {
@@ -20,15 +20,19 @@ struct DirectionSelectorView: View {
             
             HStack {
                 VStack(alignment: .leading, spacing: 16) {
-                    TextField("Откуда", text: $from)
-                        .textFieldStyle(.plain)
-                        .foregroundColor(ColorPalette.gray.color)
-                        .font(.system(size: 17, weight: .regular))
+                    NavigationLink(destination: Text("Выбор места отправления")) {
+                        Text(from)
+                            .foregroundColor(ColorPalette.gray.color)
+                            .font(.system(size: 17, weight: .regular))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                     
-                    TextField("Куда", text: $to)
-                        .textFieldStyle(.plain)
-                        .foregroundColor(ColorPalette.gray.color)
-                        .font(.system(size: 17, weight: .regular))
+                    NavigationLink(destination: Text("Выбор места назначения")) {
+                        Text(to)
+                            .foregroundColor(ColorPalette.gray.color)
+                            .font(.system(size: 17, weight: .regular))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                 }
                 .padding()
                 .background(ColorPalette.white(day: true).color)
@@ -45,8 +49,10 @@ struct DirectionSelectorView: View {
                     ZStack {
                         Circle()
                             .fill(ColorPalette.white(day: true).color)
-                            .frame(width: 36, height: 36)
+                            .frame(width: 44, height: 44)
                         Image("Change")
+                            .renderingMode(.template)
+                            .foregroundColor(ColorPalette.blue.color)
                             .scaledToFit()
                             .frame(width: 24, height: 24)
                     }
@@ -55,8 +61,6 @@ struct DirectionSelectorView: View {
             }
         }
         .padding(.horizontal, 16)
-        
-        Spacer()
     }
 }
 
