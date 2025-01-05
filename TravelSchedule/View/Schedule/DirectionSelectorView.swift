@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DirectionSelectorView: View {
-    
+    @Binding var path: [ViewPath]
     @State private var from: String = ""
     @State private var to: String = ""
     
@@ -20,14 +20,14 @@ struct DirectionSelectorView: View {
             
             HStack {
                 VStack(alignment: .leading, spacing: 16) {
-                    NavigationLink(destination: Text("Выбор места отправления")) {
+                    NavigationLink(value: ViewPath.citiesView) {
                         TextField("Откуда", text: $from)
                             .multilineTextAlignment(.leading)
                             .font(.system(size: 17, weight: .regular))
                     }
                     
-                    NavigationLink(destination: Text("Выбор места назначения")) {
-                        TextField("Кудв", text: $to)
+                    NavigationLink(value: ViewPath.citiesView) {
+                        TextField("Куда", text: $to)
                             .multilineTextAlignment(.leading)
                             .font(.system(size: 17, weight: .regular))
                     }
@@ -63,5 +63,5 @@ struct DirectionSelectorView: View {
 }
 
 #Preview {
-    DirectionSelectorView()
+    DirectionSelectorView(path: .constant([]))
 }
