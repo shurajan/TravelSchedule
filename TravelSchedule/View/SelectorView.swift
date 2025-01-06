@@ -22,13 +22,11 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                     
                     TextField("Введите запрос", text: $viewModel.searchText)
                         .foregroundColor(.gray)
+                        .frame(height: 36)
                 }
-                .padding(.vertical, 8)
-                .padding(.horizontal, 12)
                 .background(Color.gray.opacity(0.15))
-                .cornerRadius(8)
-                .padding(.horizontal)
-                .padding(.top, 8)
+                .cornerRadius(10)
+                .padding()
                 
                 List {
                     ForEach(viewModel.filteredItems, id: \.self) { item in

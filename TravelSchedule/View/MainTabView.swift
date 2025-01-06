@@ -36,7 +36,10 @@ struct MainTabView: View {
             .navigationDestination(for: ViewPath.self) { id in
                 switch id {
                 case .citiesView:
-                    Text ("Cities")
+                    @StateObject var citiesViewModel = CitySelectorViewModel()
+                    
+                    SelectorView(title: "Выбор города",
+                                 viewModel: citiesViewModel)
                 case .stationsView:
                     Text ("Stations")
                 case .routesView:
