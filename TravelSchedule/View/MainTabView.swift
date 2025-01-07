@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var path: [ViewPath] = []
+    @StateObject var citiesViewModel = CitySelectorViewModel()
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -36,10 +37,10 @@ struct MainTabView: View {
             .navigationDestination(for: ViewPath.self) { id in
                 switch id {
                 case .citiesView:
-                    @StateObject var citiesViewModel = CitySelectorViewModel()
-                    
-                    SelectorView(title: "Выбор города",
+                    SelectorView(path: $path,
+                                 title: "Выбор города",
                                  viewModel: citiesViewModel)
+                    .navigationBarBackButtonHidden(true)
                 case .stationsView:
                     Text ("Stations")
                 case .routesView:

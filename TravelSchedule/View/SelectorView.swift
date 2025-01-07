@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
-    
+    @Binding var path: [ViewPath]
     let title: String
     
     @ObservedObject var viewModel: ViewModel
@@ -51,6 +51,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
                         viewModel.goBack()
+                        path.removeLast()
                     }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.black)
@@ -66,7 +67,7 @@ struct SelectorView_Previews: PreviewProvider {
     @StateObject static var mockViewModel = CitySelectorViewModel()
     
     static var previews: some View {
-        SelectorView(title: "Выбор города",
+        SelectorView(path: .constant([]), title: "Выбор города",
                      viewModel: mockViewModel)
     }
 }

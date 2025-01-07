@@ -7,6 +7,7 @@
 import SwiftUI
 
 final class CitySelectorViewModel: SelectorViewModelProtocol {
+    
     @Published var searchText: String = ""
     
     private let allItems: [String] = [
@@ -18,6 +19,8 @@ final class CitySelectorViewModel: SelectorViewModelProtocol {
         "Казань",
         "Омск"
     ]
+    
+    
     
     var filteredItems: [String] {
         guard !searchText.isEmpty else {
