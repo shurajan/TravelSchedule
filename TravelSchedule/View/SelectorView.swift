@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     @Binding var path: [ViewPath]
+    @Binding var item: String
+    
     let title: String
     
     @ObservedObject var viewModel: ViewModel
@@ -31,7 +33,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                 List {
                     ForEach(viewModel.filteredItems, id: \.self) { item in
                         Button(action: {
-                            viewModel.didSelectItem(item)
+                            self.item = item
                         }) {
                             HStack {
                                 Text(item)
@@ -50,7 +52,6 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        viewModel.goBack()
                         path.removeLast()
                     }) {
                         Image(systemName: "chevron.left")
@@ -67,7 +68,7 @@ struct SelectorView_Previews: PreviewProvider {
     @StateObject static var mockViewModel = CitySelectorViewModel()
     
     static var previews: some View {
-        SelectorView(path: .constant([]), title: "Выбор города",
+        SelectorView(path: .constant([]), item: .constant("Москва"), title: "Выбор города",
                      viewModel: mockViewModel)
     }
 }

@@ -4,13 +4,12 @@
 //
 //  Created by Alexander Bralnin on 04.01.2025.
 //
-
 import SwiftUI
 
 struct DirectionSelectorView: View {
     @Binding var path: [ViewPath]
-    @State private var from: String = ""
-    @State private var to: String = ""
+    @Binding var from: String
+    @Binding var to: String
     
     var body: some View {
         ZStack {
@@ -20,13 +19,13 @@ struct DirectionSelectorView: View {
             
             HStack {
                 VStack(alignment: .leading, spacing: 16) {
-                    NavigationLink(value: ViewPath.citiesView) {
+                    NavigationLink(value: ViewPath.citiesFromView) {
                         TextField("Откуда", text: $from)
                             .multilineTextAlignment(.leading)
                             .font(.system(size: 17, weight: .regular))
                     }
                     
-                    NavigationLink(value: ViewPath.citiesView) {
+                    NavigationLink(value: ViewPath.citiesToView) {
                         TextField("Куда", text: $to)
                             .multilineTextAlignment(.leading)
                             .font(.system(size: 17, weight: .regular))
@@ -63,5 +62,5 @@ struct DirectionSelectorView: View {
 }
 
 #Preview {
-    DirectionSelectorView(path: .constant([]))
+    DirectionSelectorView(path: .constant([]), from: .constant("Москва"), to: .constant("Сочи"))
 }

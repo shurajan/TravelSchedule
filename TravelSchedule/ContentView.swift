@@ -9,24 +9,23 @@ import SwiftUI
 import OpenAPIURLSession
 
 struct ContentView: View {
-    let apiKey = "05d03cb7-d988-4bb4-92cb-513b293fd349"
     var body: some View {
         MainTabView()
-        .onAppear {
-            do {
-                //try nearestStations()
-                //try searches()
-                //try schedules()
-                //try threads()
-                //try nearestSettlement()
-                //try carriers()
-                //try stationsList()
-                //try copyright()
-                print("Launched")
-            } catch {
-                print(error.localizedDescription)
+            .onAppear {
+                do {
+                    //try nearestStations()
+                    //try searches()
+                    //try schedules()
+                    //try threads()
+                    //try nearestSettlement()
+                    //try carriers()
+                    //try stationsList()
+                    //try copyright()
+                    print("Loaded")
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
-        }
     }
     
     func nearestStations() throws {
@@ -37,7 +36,7 @@ struct ContentView: View {
         
         let service = NearestStationsService(
             client: client,
-            apikey: apiKey
+            apikey: APIConstants.apiKey
         )
         
         Task {
@@ -54,7 +53,7 @@ struct ContentView: View {
         
         let service = SearchesService(
             client: client,
-            apikey: apiKey
+            apikey: APIConstants.apiKey
         )
         
         Task {
@@ -71,7 +70,7 @@ struct ContentView: View {
         
         let service = SchedulesService(
             client: client,
-            apikey: apiKey
+            apikey: APIConstants.apiKey
         )
         
         Task {
@@ -88,7 +87,7 @@ struct ContentView: View {
         
         let service = ThreadsService(
             client: client,
-            apikey: apiKey
+            apikey: APIConstants.apiKey
         )
         
         Task {
@@ -105,7 +104,7 @@ struct ContentView: View {
         
         let service = NearestSettlementService(
             client: client,
-            apikey: apiKey
+            apikey: APIConstants.apiKey
         )
         
         Task {
@@ -122,7 +121,7 @@ struct ContentView: View {
         
         let service = CarriersService(
             client: client,
-            apikey: apiKey
+            apikey: APIConstants.apiKey
         )
         
         Task {
@@ -149,13 +148,14 @@ struct ContentView: View {
         
         let service = StationsListService(
             client: client,
-            apikey: apiKey
+            apikey: APIConstants.apiKey
         )
         
         Task {
             do {
                 let stationsList = try await service.getStationsList()
                 print(stationsList.countries?.count ?? "Not loaded")
+                
             } catch {
                 print("Error fetching stations list: \(error)")
             }
@@ -170,7 +170,7 @@ struct ContentView: View {
         
         let service = CopyrightService(
             client: client,
-            apikey: apiKey
+            apikey: APIConstants.apiKey
         )
         
         Task {

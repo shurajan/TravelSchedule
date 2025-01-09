@@ -926,7 +926,7 @@ components:
         direction:
           type: string
         codes:
-          $ref: '#/components/schemas/Carrier'
+          $ref: '#/components/schemas/StationCodes'
         station_type:
           type: string
         title:

@@ -9,13 +9,15 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var path: [ViewPath] = []
-    @StateObject var citiesViewModel = CitySelectorViewModel()
+    @StateObject var citiesViewModel = CitySelectorViewModel() // ViewModel создаётся один раз
+    @State var from: String = ""
+    @State var to: String = ""
     
     var body: some View {
         NavigationStack(path: $path) {
             ZStack(alignment: .bottom) {
                 TabView {
-                    ScheduleView(path: $path)
+                    ScheduleView(path: $path, from: $from, to: $to)
                         .tabItem {
                             Image("Schedule")
                                 .renderingMode(.template)
@@ -36,24 +38,26 @@ struct MainTabView: View {
             }
             .navigationDestination(for: ViewPath.self) { id in
                 switch id {
-                case .citiesView:
+                case .citiesFromView:
                     SelectorView(path: $path,
+                                 item: $from,
+                                 title: "Выбор города",
+                                 viewModel: citiesViewModel)
+                    .navigationBarBackButtonHidden(true)
+                case .citiesToView:
+                    SelectorView(path: $path,
+                                 item: $to,
                                  title: "Выбор города",
                                  viewModel: citiesViewModel)
                     .navigationBarBackButtonHidden(true)
                 case .stationsView:
-                    Text ("Stations")
+                    Text("Stations")
                 case .routesView:
-                    Text ("Routes")
+                    Text("Routes")
                 case .timeSlotsView:
-                    Text ("timeSlots")
+                    Text("Time Slots")
                 }
-                
             }
         }
     }
-}
-
-#Preview {
-    MainTabView()
 }

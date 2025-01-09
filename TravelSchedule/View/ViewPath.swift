@@ -6,7 +6,8 @@
 //
 
 enum ViewPath {
-    case citiesView
+    case citiesFromView
+    case citiesToView
     case stationsView
     case routesView
     case timeSlotsView
