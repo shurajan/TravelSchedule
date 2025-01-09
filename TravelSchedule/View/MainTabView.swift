@@ -40,15 +40,21 @@ struct MainTabView: View {
                 switch id {
                 case .citiesFromView:
                     SelectorView(path: $path,
-                                 item: $from,
                                  title: "Выбор города",
-                                 viewModel: citiesViewModel)
+                                 viewModel: citiesViewModel,
+                                 onItemTap: { newItem in
+                        from = newItem
+                        path.append(.stationsView)
+                    })
                     .navigationBarBackButtonHidden(true)
                 case .citiesToView:
                     SelectorView(path: $path,
-                                 item: $to,
                                  title: "Выбор города",
-                                 viewModel: citiesViewModel)
+                                 viewModel: citiesViewModel,
+                                 onItemTap: { newItem in
+                        to = newItem
+                        path.append(.stationsView)
+                    })
                     .navigationBarBackButtonHidden(true)
                 case .stationsView:
                     Text("Stations")

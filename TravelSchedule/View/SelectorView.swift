@@ -9,11 +9,13 @@ import SwiftUI
 
 struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     @Binding var path: [ViewPath]
-    @Binding var item: String
+    //@Binding var item: String
     
     let title: String
-    
     @ObservedObject var viewModel: ViewModel
+    
+    /// Логика, которая срабатывает при выборе элемента списка
+    let onItemTap: (String) -> Void
     
     var body: some View {
         NavigationView {
@@ -33,7 +35,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                 List {
                     ForEach(viewModel.filteredItems, id: \.self) { item in
                         Button(action: {
-                            self.item = item
+                            onItemTap(item)
                         }) {
                             HStack {
                                 Text(item)
@@ -68,7 +70,9 @@ struct SelectorView_Previews: PreviewProvider {
     @StateObject static var mockViewModel = CitySelectorViewModel()
     
     static var previews: some View {
-        SelectorView(path: .constant([]), item: .constant("Москва"), title: "Выбор города",
-                     viewModel: mockViewModel)
+        SelectorView(path: .constant([]),
+                     title: "Выбор города",
+                     viewModel: mockViewModel,
+                     onItemTap: { _ in })
     }
 }

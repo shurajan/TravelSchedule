@@ -19,16 +19,37 @@ struct DirectionSelectorView: View {
             
             HStack {
                 VStack(alignment: .leading, spacing: 16) {
+                    
+                    // MARK: - From
                     NavigationLink(value: ViewPath.citiesFromView) {
-                        TextField("Откуда", text: $from)
-                            .multilineTextAlignment(.leading)
-                            .font(.system(size: 17, weight: .regular))
+                        ZStack(alignment: .leading) {
+                            if from.isEmpty {
+                                Text("Откуда")
+                                    .foregroundColor(.gray)
+                                    .font(.system(size: 17, weight: .regular))
+                            } else {
+                                Text(from)
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 17, weight: .regular))
+                            }
+                        }
+                        .frame(width: 259, alignment: .leading)
                     }
                     
+                    // MARK: - To
                     NavigationLink(value: ViewPath.citiesToView) {
-                        TextField("Куда", text: $to)
-                            .multilineTextAlignment(.leading)
-                            .font(.system(size: 17, weight: .regular))
+                        ZStack(alignment: .leading) {
+                            if to.isEmpty {
+                                Text("Куда")
+                                    .foregroundColor(.gray)
+                                    .font(.system(size: 17, weight: .regular))
+                            } else {
+                                Text(to)
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 17, weight: .regular))
+                            }
+                        }
+                        .frame(width: 259, alignment: .leading)
                     }
                 }
                 .padding()
@@ -62,5 +83,7 @@ struct DirectionSelectorView: View {
 }
 
 #Preview {
-    DirectionSelectorView(path: .constant([]), from: .constant("Москва"), to: .constant("Сочи"))
+    DirectionSelectorView(path: .constant([]),
+                          from: .constant("Москва"),
+                          to: .constant("Сочи"))
 }
