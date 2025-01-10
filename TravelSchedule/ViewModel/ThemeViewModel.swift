@@ -23,6 +23,10 @@ final class ThemeViewModel: ObservableObject {
         ColorPalette.white(day: isDarkMode).color
     }
     
+    var searchFieldBackGroundColor: Color {
+        isDarkMode ?  ColorPalette.darkGray.color : ColorPalette.lightGray.color
+    }
+    
     func toggleTheme() {
         isDarkMode.toggle()
     }

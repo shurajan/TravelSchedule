@@ -21,15 +21,15 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
             VStack(spacing: 0) {
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(viewModel.searchText.isEmpty ? ColorPalette.gray.color : ColorPalette.black(day: true).color)
+                        .foregroundColor(viewModel.searchText.isEmpty ? ColorPalette.gray.color : themeViewModel.accentColor)
                         .padding(.leading, 8)
                     
                     TextField("Введите запрос", text: $viewModel.searchText)
-                        .foregroundColor(ColorPalette.black(day: true).color)
+                        .foregroundColor(themeViewModel.accentColor)
                         .frame(height: 36)
 
                 }
-                .background(ColorPalette.lightGray.color)
+                .background(themeViewModel.searchFieldBackGroundColor)
                 .cornerRadius(10)
                 .padding()
                 

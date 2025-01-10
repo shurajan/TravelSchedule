@@ -14,6 +14,7 @@ enum ColorPalette {
     case lightGray
     case blue
     case red
+    case darkGray
     
     var color: Color {
         switch self {
@@ -29,12 +30,14 @@ enum ColorPalette {
             return Color(hex: "#3772E7")
         case .red:
             return Color(hex: "#F56B6C")
+        case .darkGray:
+            return Color(hex: "#767680", opacity: 0.24)
         }
     }
 }
 
 extension Color {
-    init(hex: String) {
+    init(hex: String, opacity: Double = 1.0) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0
         Scanner(string: hex).scanHexInt64(&int)
@@ -54,7 +57,7 @@ extension Color {
             red: Double(r) / 255,
             green: Double(g) / 255,
             blue: Double(b) / 255,
-            opacity: Double(a) / 255
+            opacity: opacity
         )
     }
 }
