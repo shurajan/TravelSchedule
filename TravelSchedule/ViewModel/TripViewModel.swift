@@ -13,4 +13,9 @@ final class TripViewModel: ObservableObject {
     
     @Published var stationsFrom: Station?
     @Published var stationsTo: Station?
+    
+    func invert() {
+        (from, to) = (to, from)
+        (stationsFrom, stationsTo) = (stationsTo, stationsFrom)
+    }
 }

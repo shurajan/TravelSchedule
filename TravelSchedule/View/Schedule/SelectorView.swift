@@ -20,13 +20,15 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
             VStack(spacing: 0) {
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
+                        .foregroundColor(viewModel.searchText.isEmpty ? ColorPalette.gray.color : ColorPalette.black(day: true).color)
+                        .padding(.leading, 8)
                     
                     TextField("Введите запрос", text: $viewModel.searchText)
-                        .foregroundColor(.gray)
+                        .foregroundColor(ColorPalette.black(day: true).color)
                         .frame(height: 36)
+
                 }
-                .background(Color.gray.opacity(0.15))
+                .background(ColorPalette.lightGray.color)
                 .cornerRadius(10)
                 .padding()
                 
@@ -37,11 +39,17 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                         }) {
                             HStack {
                                 Text(viewModel.displayName(for: item))
+                                    .font(.system(size: 17, weight: .regular))
+                                    .padding(.leading, 16)
                                 Spacer()
                                 Image(systemName: "chevron.right")
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(ColorPalette.black(day: true).color)
+                                    .padding(.trailing, 16)
                             }
+                            .frame(height: 60)
                         }
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets())
                     }
                 }
                 .listStyle(.plain)
@@ -55,7 +63,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                         path.removeLast()
                     }) {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(.black)
+                            .foregroundColor(ColorPalette.black(day: true).color)
                     }
                 }
             }

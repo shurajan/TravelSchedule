@@ -22,8 +22,11 @@ struct DirectionSelectorView: View {
                     // MARK: - From
                     NavigationLink(value: ViewPath.citiesFromView) {
                         ZStack(alignment: .leading) {
-                            if let from = tripViewModel.from {
-                                Text(from.name)
+                            if let from = tripViewModel.from,
+                               let fromStation = tripViewModel.stationsFrom {
+                                Text("\(from.name) (\(fromStation.name))")
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
                                     .foregroundColor(.black)
                                     .font(.system(size: 17, weight: .regular))
                             } else {
@@ -38,8 +41,11 @@ struct DirectionSelectorView: View {
                     // MARK: - To
                     NavigationLink(value: ViewPath.citiesToView) {
                         ZStack(alignment: .leading) {
-                            if let to = tripViewModel.to {
-                                Text(to.name)
+                            if let to = tripViewModel.to,
+                               let toStation = tripViewModel.stationsTo {
+                                Text("\(to.name) (\(toStation.name))")
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
                                     .foregroundColor(.black)
                                     .font(.system(size: 17, weight: .regular))
                             } else {
@@ -59,9 +65,7 @@ struct DirectionSelectorView: View {
                 Spacer()
                 
                 Button(action: {
-                    let temp = tripViewModel.to
-                    tripViewModel.to = tripViewModel.from
-                    tripViewModel.from = temp
+                    tripViewModel.invert()
                 }) {
                     ZStack {
                         Circle()

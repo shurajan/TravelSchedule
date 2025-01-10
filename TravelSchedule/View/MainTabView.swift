@@ -16,9 +16,6 @@ struct MainTabView: View {
         nameKeyPath: \.name
     )
     
-    //@State var from: City? = nil
-    //@State var to: City? = nil
-    
     var body: some View {
         NavigationStack(path: $path) {
             ZStack(alignment: .bottom) {
@@ -43,64 +40,11 @@ struct MainTabView: View {
                     .padding(.bottom, 49)
             }
             .navigationDestination(for: ViewPath.self) { id in
-                switch id {
-                case .citiesFromView:
-                    SelectorView(path: $path,
-                                 title: "Выбор города",
-                                 viewModel: citiesViewModel,
-                                 onItemTap: { newItem in
-                        tripViewModel.from = newItem
-                        path.append(.stationsFromView)
-                    })
-                    .navigationBarBackButtonHidden(true)
-                case .citiesToView:
-                    SelectorView(path: $path,
-                                 title: "Выбор города",
-                                 viewModel: citiesViewModel,
-                                 onItemTap: { newItem in
-                        tripViewModel.to = newItem
-                        path.append(.stationsToView)
-                    })
-                    .navigationBarBackButtonHidden(true)
-                case .stationsFromView:
-                    if let from = tripViewModel.from {
-                        let viewModel = SelectorViewModel<Station>(
-                            allItems: from.stations,
-                            nameKeyPath: \.name
-                        )
-                        SelectorView(path: $path,
-                                     title: "Выбор станции",
-                                     viewModel: viewModel,
-                                     onItemTap: { newItem in
-                            tripViewModel.stationsFrom = newItem
-                            path.removeAll()
-                        })
-                        .navigationBarBackButtonHidden(true)
-                    } else {
-                        Text("TODO - Ошибка")
-                    }
-                case .stationsToView:
-                    if let to = tripViewModel.to {
-                        let viewModel = SelectorViewModel<Station>(
-                            allItems: to.stations,
-                            nameKeyPath: \.name
-                        )
-                        SelectorView(path: $path,
-                                     title: "Выбор станции",
-                                     viewModel: viewModel,
-                                     onItemTap: { newItem in
-                            tripViewModel.stationsTo = newItem
-                            path.removeAll()
-                        })
-                        .navigationBarBackButtonHidden(true)
-                    } else {
-                        Text("TODO - Ошибка")
-                    }
-                case .routesView:
-                    Text("Routes")
-                case .timeSlotsView:
-                    Text("Time Slots")
-                }
+                NavigationHandler(
+                    tripViewModel: tripViewModel,
+                    citiesViewModel: citiesViewModel,
+                    path: $path
+                ).destination(for: id)
             }
         }
     }
