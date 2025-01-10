@@ -9,13 +9,12 @@ import SwiftUI
 
 struct ScheduleView: View {
     @Binding var path: [ViewPath]
-    @Binding var from: City?
-    @Binding var to: City?
+    @EnvironmentObject var tripViewModel: TripViewModel
     
     var body: some View {
         VStack(spacing: 20) {
             StoriesCollectionView()
-            DirectionSelectorView(path: $path, from: $from, to: $to)
+            DirectionSelectorView(path: $path)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.white)
@@ -24,8 +23,6 @@ struct ScheduleView: View {
 
 #Preview {
     ScheduleView(
-        path: .constant([]),
-        from: .constant(City(name: "Москва", stations: [])),
-        to: .constant(City(name: "Сочи", stations: []))
+        path: .constant([])
     )
 }

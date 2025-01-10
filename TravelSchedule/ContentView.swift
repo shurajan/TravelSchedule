@@ -9,8 +9,11 @@ import SwiftUI
 import OpenAPIURLSession
 
 struct ContentView: View {
+    @StateObject private var tripViewModel = TripViewModel()
+    
     var body: some View {
         MainTabView()
+            .environmentObject(tripViewModel)
             .onAppear {
                 do {
                     //try nearestStations()

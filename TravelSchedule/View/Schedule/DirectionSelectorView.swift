@@ -7,9 +7,8 @@
 import SwiftUI
 
 struct DirectionSelectorView: View {
+    @EnvironmentObject var tripViewModel: TripViewModel
     @Binding var path: [ViewPath]
-    @Binding var from: City?
-    @Binding var to: City?
     
     var body: some View {
         ZStack {
@@ -23,7 +22,7 @@ struct DirectionSelectorView: View {
                     // MARK: - From
                     NavigationLink(value: ViewPath.citiesFromView) {
                         ZStack(alignment: .leading) {
-                            if let from {
+                            if let from = tripViewModel.from {
                                 Text(from.name)
                                     .foregroundColor(.black)
                                     .font(.system(size: 17, weight: .regular))
@@ -39,7 +38,7 @@ struct DirectionSelectorView: View {
                     // MARK: - To
                     NavigationLink(value: ViewPath.citiesToView) {
                         ZStack(alignment: .leading) {
-                            if let to {
+                            if let to = tripViewModel.to {
                                 Text(to.name)
                                     .foregroundColor(.black)
                                     .font(.system(size: 17, weight: .regular))
@@ -60,9 +59,9 @@ struct DirectionSelectorView: View {
                 Spacer()
                 
                 Button(action: {
-                    let temp = to
-                    to = from
-                    from = temp
+                    let temp = tripViewModel.to
+                    tripViewModel.to = tripViewModel.from
+                    tripViewModel.from = temp
                 }) {
                     ZStack {
                         Circle()
@@ -83,7 +82,5 @@ struct DirectionSelectorView: View {
 }
 
 #Preview {
-    DirectionSelectorView(path: .constant([]),
-                          from: .constant(City(name: "Москва", stations: [])),
-                          to: .constant(City(name: "Сочи", stations: [])))
+    DirectionSelectorView(path: .constant([]))
 }
