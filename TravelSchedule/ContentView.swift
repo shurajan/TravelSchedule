@@ -10,10 +10,12 @@ import OpenAPIURLSession
 
 struct ContentView: View {
     @StateObject private var tripViewModel = TripViewModel()
+    @StateObject private var themeViewModel = ThemeViewModel()
     
     var body: some View {
         MainTabView()
             .environmentObject(tripViewModel)
+            .environmentObject(themeViewModel)
             .onAppear {
                 do {
                     //try nearestStations()

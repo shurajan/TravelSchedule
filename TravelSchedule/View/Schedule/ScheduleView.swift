@@ -10,6 +10,7 @@ import SwiftUI
 struct ScheduleView: View {
     @Binding var path: [ViewPath]
     @EnvironmentObject var tripViewModel: TripViewModel
+    @EnvironmentObject var themeViewModel: ThemeViewModel
     
     var body: some View {
         VStack(spacing: 20) {
@@ -17,7 +18,8 @@ struct ScheduleView: View {
             DirectionSelectorView(path: $path)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(Color.white)
+        .background(themeViewModel.backgroundColor)
+        .environment(\.colorScheme, themeViewModel.colorScheme)
     }
 }
 

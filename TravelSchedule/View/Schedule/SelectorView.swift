@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
+    @EnvironmentObject var themeViewModel: ThemeViewModel
     @Binding var path: [ViewPath]
     
     let title: String
@@ -40,20 +41,23 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                             HStack {
                                 Text(viewModel.displayName(for: item))
                                     .font(.system(size: 17, weight: .regular))
+                                    .foregroundColor(themeViewModel.accentColor)
                                     .padding(.leading, 16)
                                 Spacer()
                                 Image(systemName: "chevron.right")
-                                    .foregroundColor(ColorPalette.black(day: true).color)
+                                    .foregroundColor(themeViewModel.accentColor)
                                     .padding(.trailing, 16)
                             }
                             .frame(height: 60)
                         }
+                        .background(themeViewModel.backgroundColor)
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets())
                     }
                 }
                 .listStyle(.plain)
             }
+            .background(themeViewModel.backgroundColor)
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -63,7 +67,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                         path.removeLast()
                     }) {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(ColorPalette.black(day: true).color)
+                            .foregroundColor(themeViewModel.accentColor)
                     }
                 }
             }

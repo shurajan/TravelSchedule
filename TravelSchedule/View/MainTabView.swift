@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @EnvironmentObject var tripViewModel: TripViewModel
+    @EnvironmentObject var themeViewModel: ThemeViewModel
     
     @State private var path: [ViewPath] = []
     @StateObject var citiesViewModel = SelectorViewModel<City>(
@@ -19,6 +20,9 @@ struct MainTabView: View {
     var body: some View {
         NavigationStack(path: $path) {
             ZStack(alignment: .bottom) {
+                themeViewModel.backgroundColor
+                    .ignoresSafeArea()
+                
                 TabView {
                     ScheduleView(path: $path)
                         .tabItem {
@@ -32,7 +36,8 @@ struct MainTabView: View {
                                 .renderingMode(.template)
                         }
                 }
-                .accentColor(ColorPalette.black(day: true).color)
+                .accentColor(themeViewModel.accentColor)
+                .environment(\.colorScheme, themeViewModel.colorScheme)
                 
                 Divider()
                     .background(ColorPalette.gray.color)
