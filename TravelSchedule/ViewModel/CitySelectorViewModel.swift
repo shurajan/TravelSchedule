@@ -7,6 +7,10 @@
 import SwiftUI
 
 final class CitySelectorViewModel: SelectorViewModelProtocol {
+    func displayName(for item: String) -> String {
+        return ""
+    }
+    
     @Published var searchText: String = ""
     
     private let allItems: [City] = [

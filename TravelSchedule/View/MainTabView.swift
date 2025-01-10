@@ -9,9 +9,13 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var path: [ViewPath] = []
-    @StateObject var citiesViewModel = CitySelectorViewModel() // ViewModel создаётся один раз
-    @State var from: String = ""
-    @State var to: String = ""
+    @StateObject var citiesViewModel = SelectorViewModel<City>(
+        allItems: City.mockCities,
+        nameKeyPath: \.name
+    )
+    
+    @State var from: City = City(name: "", stations: [])
+    @State var to: City = City(name: "", stations: [])
     
     var body: some View {
         NavigationStack(path: $path) {

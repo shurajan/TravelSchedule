@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ScheduleView: View {
     @Binding var path: [ViewPath]
-    @Binding var from: String
-    @Binding var to: String
+    @Binding var from: City
+    @Binding var to: City
     
     var body: some View {
         VStack(spacing: 20) {
@@ -25,7 +25,7 @@ struct ScheduleView: View {
 #Preview {
     ScheduleView(
         path: .constant([]),
-        from: .constant("Москва"),
-        to: .constant("Сочи")
+        from: .constant(City(name: "Москва", stations: [])),
+        to: .constant(City(name: "Сочи", stations: []))
     )
 }

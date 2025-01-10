@@ -8,6 +8,10 @@
 import SwiftUI
 
 protocol SelectorViewModelProtocol: ObservableObject {
+    associatedtype Item: Hashable
+    
     var searchText: String { get set }
-    var filteredItems: [String] { get } 
+    var filteredItems: [Item] { get }
+    
+    func displayName(for item: Item) -> String
 }

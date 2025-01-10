@@ -8,8 +8,8 @@ import SwiftUI
 
 struct DirectionSelectorView: View {
     @Binding var path: [ViewPath]
-    @Binding var from: String
-    @Binding var to: String
+    @Binding var from: City
+    @Binding var to: City
     
     var body: some View {
         ZStack {
@@ -23,12 +23,12 @@ struct DirectionSelectorView: View {
                     // MARK: - From
                     NavigationLink(value: ViewPath.citiesFromView) {
                         ZStack(alignment: .leading) {
-                            if from.isEmpty {
+                            if from.name.isEmpty {
                                 Text("Откуда")
                                     .foregroundColor(.gray)
                                     .font(.system(size: 17, weight: .regular))
                             } else {
-                                Text(from)
+                                Text(from.name)
                                     .foregroundColor(.black)
                                     .font(.system(size: 17, weight: .regular))
                             }
@@ -39,12 +39,12 @@ struct DirectionSelectorView: View {
                     // MARK: - To
                     NavigationLink(value: ViewPath.citiesToView) {
                         ZStack(alignment: .leading) {
-                            if to.isEmpty {
+                            if to.name.isEmpty {
                                 Text("Куда")
                                     .foregroundColor(.gray)
                                     .font(.system(size: 17, weight: .regular))
                             } else {
-                                Text(to)
+                                Text(to.name)
                                     .foregroundColor(.black)
                                     .font(.system(size: 17, weight: .regular))
                             }
@@ -84,6 +84,6 @@ struct DirectionSelectorView: View {
 
 #Preview {
     DirectionSelectorView(path: .constant([]),
-                          from: .constant("Москва"),
-                          to: .constant("Сочи"))
+                          from: .constant(City(name: "Москва", stations: [])),
+                          to: .constant(City(name: "Сочи", stations: [])))
 }

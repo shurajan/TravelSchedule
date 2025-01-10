@@ -9,13 +9,11 @@ import SwiftUI
 
 struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     @Binding var path: [ViewPath]
-    //@Binding var item: String
     
     let title: String
     @ObservedObject var viewModel: ViewModel
     
-    /// Логика, которая срабатывает при выборе элемента списка
-    let onItemTap: (String) -> Void
+    let onItemTap: (ViewModel.Item) -> Void
     
     var body: some View {
         NavigationView {
@@ -38,7 +36,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                             onItemTap(item)
                         }) {
                             HStack {
-                                Text(item)
+                                Text(viewModel.displayName(for: item))
                                 Spacer()
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(.gray)
@@ -65,14 +63,35 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     }
 }
 
-// MARK: - Превью
-struct SelectorView_Previews: PreviewProvider {
-    @StateObject static var mockViewModel = CitySelectorViewModel()
+#Preview {
+
+    let mockCities: [City] = [
+        City(name: "Москва", stations: [
+            Station(name: "Ленинградский вокзал", code: "MOW001"),
+            Station(name: "Казанский вокзал", code: "MOW002")
+        ]),
+        City(name: "Санкт-Петербург", stations: [
+            Station(name: "Московский вокзал", code: "SPB001")
+        ]),
+        City(name: "Сочи", stations: [
+            Station(name: "Адлер", code: "SOC001")
+        ]),
+        City(name: "Краснодар", stations: [
+            Station(name: "Краснодар-1", code: "KRD001")
+        ])
+    ]
     
-    static var previews: some View {
-        SelectorView(path: .constant([]),
-                     title: "Выбор города",
-                     viewModel: mockViewModel,
-                     onItemTap: { _ in })
-    }
+    let viewModel = SelectorViewModel<City>(
+        allItems: mockCities,
+        nameKeyPath: \.name
+    )
+    
+    return SelectorView(
+        path: .constant([]),
+        title: "Выбор города",
+        viewModel: viewModel,
+        onItemTap: { city in
+            print("Выбран город:", city.name)
+        }
+    )
 }
