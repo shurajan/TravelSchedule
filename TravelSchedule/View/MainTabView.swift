@@ -14,8 +14,8 @@ struct MainTabView: View {
         nameKeyPath: \.name
     )
     
-    @State var from: City = City(name: "", stations: [])
-    @State var to: City = City(name: "", stations: [])
+    @State var from: City? = nil
+    @State var to: City? = nil
     
     var body: some View {
         NavigationStack(path: $path) {
