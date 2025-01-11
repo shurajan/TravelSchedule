@@ -18,6 +18,7 @@ struct NavigationHandler {
         case .citiesFromView:
             selectorView(
                 title: "Выбор города",
+                emptyListText: "Город не найден",
                 viewModel: citiesViewModel,
                 onItemTap: { newItem in
                     tripViewModel.from = newItem
@@ -27,6 +28,7 @@ struct NavigationHandler {
         case .citiesToView:
             selectorView(
                 title: "Выбор города",
+                emptyListText: "Город не найден",
                 viewModel: citiesViewModel,
                 onItemTap: { newItem in
                     tripViewModel.to = newItem
@@ -37,6 +39,7 @@ struct NavigationHandler {
             if let from = tripViewModel.from {
                 selectorView(
                     title: "Выбор станции",
+                    emptyListText: "Станция не найдена",
                     viewModel: SelectorViewModel<Station>(
                         allItems: from.stations,
                         nameKeyPath: \.name
@@ -53,6 +56,7 @@ struct NavigationHandler {
             if let to = tripViewModel.to {
                 selectorView(
                     title: "Выбор станции",
+                    emptyListText: "Станция не найдена",
                     viewModel: SelectorViewModel<Station>(
                         allItems: to.stations,
                         nameKeyPath: \.name
@@ -74,12 +78,14 @@ struct NavigationHandler {
     
     private func selectorView<Item: Identifiable>(
         title: String,
+        emptyListText: String,
         viewModel: SelectorViewModel<Item>,
         onItemTap: @escaping (Item) -> Void
     ) -> some View {
         SelectorView(
             path: $path,
             title: title,
+            notification: emptyListText,
             viewModel: viewModel,
             onItemTap: onItemTap
         )

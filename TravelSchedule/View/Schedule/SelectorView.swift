@@ -12,6 +12,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     @Binding var path: [ViewPath]
     
     let title: String
+    let notification: String
     @ObservedObject var viewModel: ViewModel
     
     let onItemTap: (ViewModel.Item) -> Void
@@ -37,30 +38,38 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                 .cornerRadius(10)
                 .padding()
                 
-                // Список
-                List {
-                    ForEach(viewModel.filteredItems, id: \.self) { item in
-                        Button {
-                            onItemTap(item)
-                        } label: {
-                            HStack {
-                                Text(viewModel.displayName(for: item))
-                                    .font(.system(size: 17, weight: .regular))
-                                    .foregroundColor(themeViewModel.textColor)
-                                    .padding(.leading, 16)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(themeViewModel.textColor)
-                                    .padding(.trailing, 16)
+                if viewModel.filteredItems.isEmpty {
+                    Spacer()
+                    Text(notification)
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(themeViewModel.textColor)
+                    Spacer()
+                } else {
+                    List {
+                        ForEach(viewModel.filteredItems, id: \.self) { item in
+                            Button {
+                                onItemTap(item)
+                            } label: {
+                                HStack {
+                                    Text(viewModel.displayName(for: item))
+                                        .font(.system(size: 17, weight: .regular))
+                                        .foregroundColor(themeViewModel.textColor)
+                                        .padding(.leading, 16)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(themeViewModel.textColor)
+                                        .padding(.trailing, 16)
+                                }
+                                .frame(height: 60)
                             }
-                            .frame(height: 60)
+                            .background(themeViewModel.backgroundColor)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets())
                         }
-                        .background(themeViewModel.backgroundColor)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets())
                     }
+                    .listStyle(.plain)
                 }
-                .listStyle(.plain)
+                
             }
             .background(themeViewModel.backgroundColor)
             .navigationTitle(title)
@@ -126,6 +135,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     return SelectorView(
         path: .constant([]),
         title: "Выбор города",
+        notification: "Город не найден",
         viewModel: viewModel
     ) { city in
         print("Выбран город:", city.name)
