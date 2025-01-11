@@ -31,10 +31,10 @@ struct SettingsView: View {
                     NavigationLink(destination: Text("Тут будет текст соглашения")) {
                         HStack {
                             Text("Пользовательское соглашение")
-                                .foregroundColor(ColorPalette.black(day: !themeViewModel.isDarkMode).color)
+                                .foregroundColor(themeViewModel.textColor)
                             Spacer()
                             Image(systemName: "chevron.right")
-                                .foregroundColor(ColorPalette.black(day: !themeViewModel.isDarkMode).color)
+                                .foregroundColor(themeViewModel.textColor)
                         }
                     }
                     .padding()
@@ -43,9 +43,11 @@ struct SettingsView: View {
                     
                     Text("Приложение использует API «Яндекс.Расписания»\nВерсия 1.0 (beta)")
                         .font(.footnote)
-                        .foregroundColor(ColorPalette.gray.color)
+                        .foregroundColor(themeViewModel.textColor)
                         .multilineTextAlignment(.center)
-                        .padding(.bottom, 16)
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 24)
+                        .padding(.horizontal, 16)
                 }
             }
         }
