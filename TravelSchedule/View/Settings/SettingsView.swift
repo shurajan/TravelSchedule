@@ -56,4 +56,5 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
+        .environmentObject(ThemeViewModel())
 }

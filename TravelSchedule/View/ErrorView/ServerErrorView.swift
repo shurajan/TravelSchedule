@@ -9,10 +9,11 @@ import SwiftUI
 
 struct ServerErrorView: View {
     var body: some View {
-        Text("TODO - Server Error")
+        BasicErrorView(imageName: "Server Error", text: "Ошибка сервера")
     }
 }
 
 #Preview {
     ServerErrorView()
+        .environmentObject(ThemeViewModel())
 }

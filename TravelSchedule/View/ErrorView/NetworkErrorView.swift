@@ -9,10 +9,11 @@ import SwiftUI
 
 struct NetworkErrorView: View {
     var body: some View {
-        Text("TODO - Network Error")
+        BasicErrorView(imageName: "No Internet", text: "Нет интернета")
     }
 }
 
 #Preview {
     NetworkErrorView()
+        .environmentObject(ThemeViewModel())
 }

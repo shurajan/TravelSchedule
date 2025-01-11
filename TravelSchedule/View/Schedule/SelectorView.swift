@@ -140,5 +140,5 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     ) { city in
         print("Выбран город:", city.name)
     }
-    .environmentObject(ThemeViewModel()) // Подставьте реальный ThemeViewModel
+    .environmentObject(ThemeViewModel())
 }
