@@ -19,7 +19,7 @@ final class ThemeViewModel: ObservableObject {
         isDarkMode ? .dark : .light
     }
     
-    var accentColor: Color {
+    var textColor: Color {
         ColorPalette.white(day: isDarkMode).color
     }
     

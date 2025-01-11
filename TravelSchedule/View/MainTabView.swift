@@ -36,7 +36,7 @@ struct MainTabView: View {
                                 .renderingMode(.template)
                         }
                 }
-                .accentColor(themeViewModel.accentColor)
+                .accentColor(themeViewModel.textColor)
                 .environment(\.colorScheme, themeViewModel.colorScheme)
                 
                 Divider()

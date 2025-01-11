@@ -21,31 +21,36 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
             VStack(spacing: 0) {
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(viewModel.searchText.isEmpty ? ColorPalette.gray.color : themeViewModel.accentColor)
+                        .foregroundColor(viewModel.searchText.isEmpty ? ColorPalette.gray.color : themeViewModel.textColor)
                         .padding(.leading, 8)
                     
-                    TextField("Введите запрос", text: $viewModel.searchText)
-                        .foregroundColor(themeViewModel.accentColor)
+                    TextField("",
+                              text: $viewModel.searchText,
+                              prompt: Text("Введите запрос")
+                                           .foregroundColor(ColorPalette.gray.color))
+                        .foregroundColor(themeViewModel.textColor)
+                        .autocorrectionDisabled(true)
+                        .autocapitalization(.none)
                         .frame(height: 36)
-
                 }
                 .background(themeViewModel.searchFieldBackGroundColor)
                 .cornerRadius(10)
                 .padding()
                 
+                // Список
                 List {
                     ForEach(viewModel.filteredItems, id: \.self) { item in
-                        Button(action: {
+                        Button {
                             onItemTap(item)
-                        }) {
+                        } label: {
                             HStack {
                                 Text(viewModel.displayName(for: item))
                                     .font(.system(size: 17, weight: .regular))
-                                    .foregroundColor(themeViewModel.accentColor)
+                                    .foregroundColor(themeViewModel.textColor)
                                     .padding(.leading, 16)
                                 Spacer()
                                 Image(systemName: "chevron.right")
-                                    .foregroundColor(themeViewModel.accentColor)
+                                    .foregroundColor(themeViewModel.textColor)
                                     .padding(.trailing, 16)
                             }
                             .frame(height: 60)
@@ -63,20 +68,40 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
+                    Button {
                         path.removeLast()
-                    }) {
+                    } label: {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(themeViewModel.accentColor)
+                            .foregroundColor(themeViewModel.textColor)
                     }
                 }
             }
+        }
+        .onAppear {
+            let appearance = UINavigationBarAppearance()
+            
+            appearance.backgroundColor = UIColor(themeViewModel.backgroundColor)
+            
+            appearance.shadowColor = .clear
+            
+            appearance.titleTextAttributes = [
+                .foregroundColor: UIColor(themeViewModel.textColor),
+                .font: UIFont.systemFont(ofSize: 17, weight: .bold)
+            ]
+            
+            appearance.largeTitleTextAttributes = [
+                .foregroundColor: UIColor(themeViewModel.textColor)
+            ]
+            
+            UINavigationBar.appearance().standardAppearance = appearance
+            UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            
+            UINavigationBar.appearance().tintColor = UIColor(themeViewModel.textColor)
         }
     }
 }
 
 #Preview {
-
     let mockCities: [City] = [
         City(name: "Москва", stations: [
             Station(name: "Ленинградский вокзал", code: "MOW001"),
@@ -101,9 +126,9 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     return SelectorView(
         path: .constant([]),
         title: "Выбор города",
-        viewModel: viewModel,
-        onItemTap: { city in
-            print("Выбран город:", city.name)
-        }
-    )
+        viewModel: viewModel
+    ) { city in
+        print("Выбран город:", city.name)
+    }
+    .environmentObject(ThemeViewModel()) // Подставьте реальный ThemeViewModel
 }

@@ -19,7 +19,6 @@ struct ScheduleView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(themeViewModel.backgroundColor)
-        .environment(\.colorScheme, themeViewModel.colorScheme)
     }
 }
 

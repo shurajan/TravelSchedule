@@ -20,7 +20,7 @@ struct SettingsView: View {
                     
                     HStack {
                         Text("Темная тема")
-                            .foregroundColor(themeViewModel.accentColor)
+                            .foregroundColor(themeViewModel.textColor)
                         Spacer()
                         Toggle("", isOn: $themeViewModel.isDarkMode)
                             .labelsHidden()
@@ -48,7 +48,6 @@ struct SettingsView: View {
                         .padding(.bottom, 16)
                 }
             }
-            .environment(\.colorScheme, themeViewModel.colorScheme)
         }
     }
 }
