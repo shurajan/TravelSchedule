@@ -16,10 +16,28 @@ struct ScheduleView: View {
         VStack(spacing: 20) {
             StoriesCollectionView()
             DirectionSelectorView(path: $path)
+            
+            if let stationFrom = tripViewModel.stationsFrom,
+               let stationTo = tripViewModel.stationsTo {
+                
+                Button(action: search) {
+                    Text("Найти")
+                        .font(.system(size: 17, weight: .bold))
+                        .frame(width: 150, height: 60)
+                        .foregroundColor(ColorPalette.white(day: true).color)
+                        .background(ColorPalette.blue.color)
+                        .cornerRadius(16)
+                }
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(themeViewModel.backgroundColor)
     }
+    
+    private func search() {
+        //TODO: - develop
+    }
+    
 }
 
 #Preview {
