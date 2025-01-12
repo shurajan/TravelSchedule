@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var themeViewModel: ThemeViewModel
+    @EnvironmentObject var errorService: ErrorService
     
     var body: some View {
         NavigationView {
@@ -57,4 +58,5 @@ struct SettingsView: View {
 #Preview {
     SettingsView()
         .environmentObject(ThemeViewModel())
+        .environmentObject(ErrorService())
 }

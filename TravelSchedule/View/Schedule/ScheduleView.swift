@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ScheduleView: View {
-    @Binding var path: [ViewPath]
     @EnvironmentObject var tripViewModel: TripViewModel
     @EnvironmentObject var themeViewModel: ThemeViewModel
+    @Binding var path: [ViewPath]
     
     var body: some View {
         VStack(spacing: 20) {
@@ -26,4 +26,6 @@ struct ScheduleView: View {
     ScheduleView(
         path: .constant([])
     )
+    .environmentObject(ThemeViewModel())
+    .environmentObject(TripViewModel())
 }

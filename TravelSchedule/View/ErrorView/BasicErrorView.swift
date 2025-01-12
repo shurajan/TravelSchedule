@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BasicErrorView: View {
     @EnvironmentObject var themeViewModel: ThemeViewModel
+    @EnvironmentObject var errorService: ErrorService
     
     let imageName: String
     let text: String
@@ -16,6 +17,7 @@ struct BasicErrorView: View {
     var body: some View {
         VStack {
             Spacer()
+            
             Image(imageName)
                 .resizable()
                 .scaledToFit()
@@ -38,4 +40,5 @@ struct BasicErrorView: View {
 #Preview {
     BasicErrorView(imageName: "No Internet", text: "Нет интернета")
         .environmentObject(ThemeViewModel())
+        .environmentObject(ErrorService())
 }

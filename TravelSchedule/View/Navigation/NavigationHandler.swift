@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct NavigationHandler {
-    let tripViewModel: TripViewModel
-    let citiesViewModel: SelectorViewModel<City>
+    var tripViewModel: TripViewModel
     @Binding var path: [ViewPath]
+    
+    let citiesViewModel: SelectorViewModel<City>
     
     @ViewBuilder
     func destination(for id: ViewPath) -> some View {

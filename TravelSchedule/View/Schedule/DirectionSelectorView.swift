@@ -27,11 +27,11 @@ struct DirectionSelectorView: View {
                                 Text("\(from.name) (\(fromStation.name))")
                                     .lineLimit(1)
                                     .truncationMode(.tail)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(ColorPalette.black(day: true).color)
                                     .font(.system(size: 17, weight: .regular))
                             } else {
                                 Text("Откуда")
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(ColorPalette.gray.color)
                                     .font(.system(size: 17, weight: .regular))
                             }
                         }
@@ -46,11 +46,11 @@ struct DirectionSelectorView: View {
                                 Text("\(to.name) (\(toStation.name))")
                                     .lineLimit(1)
                                     .truncationMode(.tail)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(ColorPalette.black(day: true).color)
                                     .font(.system(size: 17, weight: .regular))
                             } else {
                                 Text("Куда")
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(ColorPalette.gray.color)
                                     .font(.system(size: 17, weight: .regular))
                             }
                         }
@@ -87,4 +87,5 @@ struct DirectionSelectorView: View {
 
 #Preview {
     DirectionSelectorView(path: .constant([]))
+        .environmentObject(TripViewModel())
 }

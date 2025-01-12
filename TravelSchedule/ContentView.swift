@@ -11,11 +11,13 @@ import OpenAPIURLSession
 struct ContentView: View {
     @StateObject private var tripViewModel = TripViewModel()
     @StateObject private var themeViewModel = ThemeViewModel()
+    @StateObject private var errorService: ErrorService = ErrorService()
     
     var body: some View {
         MainTabView()
             .environmentObject(tripViewModel)
             .environmentObject(themeViewModel)
+            .environmentObject(errorService)
             .onAppear {
                 do {
                     //try nearestStations()
@@ -25,10 +27,11 @@ struct ContentView: View {
                     //try nearestSettlement()
                     //try carriers()
                     //try stationsList()
-                    //try copyright()
+                    try copyright()
                     print("Loaded")
                 } catch {
                     print(error.localizedDescription)
+                    errorService.showError(.serverError(message: error.localizedDescription))
                 }
             }
     }

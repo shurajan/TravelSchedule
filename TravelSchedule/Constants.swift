@@ -12,9 +12,9 @@ enum APIConstants {
     static let maxJsonSize: Int = 50 * 1024 * 1024
 }
 
-enum Errors {
+/*enum AppErrors {
     enum Network : Error {
         case serverError
         case connectionError
     }
-}
+}*/

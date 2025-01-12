@@ -34,7 +34,7 @@ final class StationsLoaderService {
         
         do {
             let stationsList = try await service.getStationsList()
-            guard let countries = stationsList.countries else { throw Errors.Network.serverError }
+            guard let countries = stationsList.countries else { throw AppError.networkError(message: "can not parse stations") }
             countries.forEach { country in
                 country.regions?.forEach { region in
                     region.settlements?.forEach { settlement in
@@ -54,7 +54,7 @@ final class StationsLoaderService {
                 }
             }
         } catch {
-            throw Errors.Network.serverError
+            throw AppError.networkError(message: "can not parse stations")
         }
         return cities
     }
