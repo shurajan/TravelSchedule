@@ -71,7 +71,8 @@ struct NavigationHandler {
                 ServerErrorView()
             }
         case .routesView:
-            Text("Routes")
+            RoutesView(path: $path)
+                .navigationBarBackButtonHidden(true)
         case .timeSlotsView:
             Text("Time Slots")
         }

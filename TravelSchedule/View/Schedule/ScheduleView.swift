@@ -35,7 +35,7 @@ struct ScheduleView: View {
     }
     
     private func search() {
-        //TODO: - develop
+        path.append(.routesView)
     }
     
 }

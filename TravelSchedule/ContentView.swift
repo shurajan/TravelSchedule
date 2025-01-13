@@ -21,13 +21,13 @@ struct ContentView: View {
             .onAppear {
                 do {
                     //try nearestStations()
-                    //try searches()
+                    try searches()
                     //try schedules()
                     //try threads()
                     //try nearestSettlement()
                     //try carriers()
                     //try stationsList()
-                    try copyright()
+                    //try copyright()
                     print("Loaded")
                 } catch {
                     print(error.localizedDescription)
@@ -65,7 +65,7 @@ struct ContentView: View {
         )
         
         Task {
-            let searches = try await service.getSearches(from: "s2006004", to: "s9602494")
+            let searches = try await service.getSearches(from: "s9600213", to: "s9727331")
             print(searches)
         }
     }
