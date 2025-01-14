@@ -8,7 +8,7 @@
 import Foundation
 
 
-final class StoriesViewModel: ObservableObject {
+final class StoryViewModel: ObservableObject {
     @Published var stories: [Story]
     
     init(stories: [Story]) {

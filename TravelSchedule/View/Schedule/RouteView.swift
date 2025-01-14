@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RouteCardView: View {
+struct RouteView: View {
     let route: Route
     let carrier: Carrier
         
@@ -88,7 +88,7 @@ struct RouteCardView: View {
     let route2 =  Route.mockRoutes[1]
     
     VStack (spacing: 8) {
-        RouteCardView(route: route1, carrier: carrier1)
-        RouteCardView(route: route2, carrier: carrier2)
+        RouteView(route: route1, carrier: carrier1)
+        RouteView(route: route2, carrier: carrier2)
     }
 }

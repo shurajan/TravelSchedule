@@ -11,6 +11,7 @@ struct NavigationHandler {
     @Binding var path: [ViewPath]
     var tripViewModel: TripViewModel
     var citiesViewModel: SelectorViewModel<City>
+    var carrierViewModel: CarrierViewModel
     
     @ViewBuilder
     func destination(for id: ViewPath) -> some View {
@@ -69,12 +70,14 @@ struct NavigationHandler {
             if let fromStation = tripViewModel.fromStation,
                let toStation = tripViewModel.toStation {
                 
-                let routesViewModel = RoutesViewModel(routeFinder: RouteFinderService.shared,
-                                                      fromStation: fromStation,
-                                                      toStation: toStation)
-                RoutesView(path: $path, viewModel: routesViewModel)
+                let routesViewModel = RouteViewModel(fromStation: fromStation,
+                                                     toStation: toStation)
+                RoutesView(path: $path, viewModel: routesViewModel, carrierViewModel: carrierViewModel)
                     .navigationBarBackButtonHidden(true)
             }
+            
+        case .carrierView(let carrier):
+            CarrierView(path: $path, carrier: carrier)
             
         case .timeSlotsView:
             Text("Time Slots")

@@ -5,11 +5,12 @@
 //  Created by Alexander Bralnin on 05.01.2025.
 //
 
-enum ViewPath {
+enum ViewPath: Hashable {
     case citiesFromView
     case citiesToView
     case stationsFromView
     case stationsToView
     case routesView
     case timeSlotsView
+    case carrierView(Carrier)
 }

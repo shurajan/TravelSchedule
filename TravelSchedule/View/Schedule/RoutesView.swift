@@ -11,15 +11,15 @@ struct RoutesView: View {
     @EnvironmentObject var themeViewModel: ThemeViewModel
     @EnvironmentObject var tripViewModel: TripViewModel
     @Binding var path: [ViewPath]
-    @ObservedObject var viewModel: RoutesViewModel
+    @ObservedObject var viewModel: RouteViewModel
+    @ObservedObject var carrierViewModel: CarrierViewModel
     
     var body: some View {
         ZStack {
             VStack {
                 Text(tripViewModel.text())
                     .multilineTextAlignment(.leading)
-                    .font(.title)
-                    .fontWeight(.bold)
+                    .font(.system(size: 24, weight: .bold))
                     .foregroundColor(themeViewModel.textColor)
                 
                 Spacer().frame(height: 16)
@@ -27,7 +27,12 @@ struct RoutesView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: 8) {
                         ForEach(viewModel.filteredRoutes) { route in
-                            RouteCardView(route: route, carrier: Carrier.mockCarriers[0])
+                            if let carrier = carrierViewModel.findByID(route.carrierID) {
+                                RouteView(route: route, carrier: carrier)
+                                    .onTapGesture {
+                                        handleRouteSelection(route)
+                                    }
+                            }
                         }
                     }
                 }
@@ -65,6 +70,12 @@ struct RoutesView: View {
             }
         }
     }
+    
+    private func handleRouteSelection(_ route: Route) {
+        if let carrier = carrierViewModel.findByID(route.carrierID) {
+            path.append(.carrierView(carrier))
+        }
+    }
 }
 
 #Preview {
@@ -74,12 +85,13 @@ struct RoutesView: View {
     tripViewModel.fromStation = City.mockCities[0].stations[0]
     tripViewModel.toStation = City.mockCities[1].stations[0]
     
-    let viewModel = RoutesViewModel(routeFinder: RouteFinderService.shared,
-                                    fromStation: City.mockCities[0].stations[0],
-                                    toStation: City.mockCities[1].stations[0])
+    let viewModel = RouteViewModel(fromStation: City.mockCities[0].stations[0],
+                                   toStation: City.mockCities[1].stations[0])
+    
+    let carrierViewModel = CarrierViewModel()
     
     
-   return RoutesView(path: .constant([]), viewModel: viewModel)
+    return RoutesView(path: .constant([]), viewModel: viewModel, carrierViewModel: carrierViewModel)
         .environmentObject(tripViewModel)
         .environmentObject(ThemeViewModel())
 }

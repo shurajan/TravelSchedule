@@ -18,6 +18,8 @@ struct MainTabView: View {
         nameKeyPath: \.name
     )
     
+    @StateObject var carrierViewModel = CarrierViewModel()
+    
     var body: some View {
         NavigationStack(path: $path) {
             ZStack(alignment: .bottom) {
@@ -63,7 +65,8 @@ struct MainTabView: View {
                 NavigationHandler(
                     path: $path,
                     tripViewModel: tripViewModel,
-                    citiesViewModel: citiesViewModel
+                    citiesViewModel: citiesViewModel,
+                    carrierViewModel: carrierViewModel
                 ).destination(for: id)
             }
         }
