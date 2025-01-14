@@ -23,8 +23,8 @@ struct DirectionSelectorView: View {
                     NavigationLink(value: ViewPath.citiesFromView) {
                         ZStack(alignment: .leading) {
                             if let from = tripViewModel.from,
-                               let fromStation = tripViewModel.stationsFrom {
-                                Text("\(from.name) (\(fromStation.name))")
+                               let fromStation = tripViewModel.fromStation {
+                                Text(tripViewModel.fromText())
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                                     .foregroundColor(ColorPalette.black(day: true).color)
@@ -42,8 +42,8 @@ struct DirectionSelectorView: View {
                     NavigationLink(value: ViewPath.citiesToView) {
                         ZStack(alignment: .leading) {
                             if let to = tripViewModel.to,
-                               let toStation = tripViewModel.stationsTo {
-                                Text("\(to.name) (\(toStation.name))")
+                               let toStation = tripViewModel.toStation {
+                                Text(tripViewModel.toText())
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                                     .foregroundColor(ColorPalette.black(day: true).color)

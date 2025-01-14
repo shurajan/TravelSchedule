@@ -13,11 +13,6 @@ final class SelectorViewModel<Item: Hashable>: SelectorViewModelProtocol {
     private let allItems: [Item]
     private let nameKeyPath: KeyPath<Item, String>
     
-    init(allItems: [Item], nameKeyPath: KeyPath<Item, String>) {
-        self.allItems = allItems
-        self.nameKeyPath = nameKeyPath
-    }
-    
     var filteredItems: [Item] {
         guard !searchText.isEmpty else {
             return allItems
@@ -27,6 +22,11 @@ final class SelectorViewModel<Item: Hashable>: SelectorViewModelProtocol {
                 .lowercased()
                 .contains(searchText.lowercased())
         }
+    }
+    
+    init(allItems: [Item], nameKeyPath: KeyPath<Item, String>) {
+        self.allItems = allItems
+        self.nameKeyPath = nameKeyPath
     }
     
     func displayName(for item: Item) -> String {

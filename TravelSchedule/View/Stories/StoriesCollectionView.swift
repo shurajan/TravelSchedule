@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StoriesCollectionView: View {
-    @StateObject var viewModel = StoriesViewModel(stories: StoriesViewModel.sampleStories)
+    @StateObject var viewModel = StoriesViewModel(stories: Story.mockStories)
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {

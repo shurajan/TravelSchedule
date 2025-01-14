@@ -34,6 +34,7 @@ struct RouteCardView: View {
                         Text(route.departureTime.dayMonthString)
                             .font(.system(size: 12, weight: .regular))
                             .foregroundColor(ColorPalette.black(day: true).color)
+                            .padding(.trailing, 8)
                     }
                     
                     if route.stations.count > 2 {
@@ -44,6 +45,7 @@ struct RouteCardView: View {
                 }
     
             }
+            .padding(.leading, 14)
         
             
             HStack {
@@ -70,37 +72,23 @@ struct RouteCardView: View {
                     .foregroundColor(ColorPalette.black(day: true).color)
 
             }
-            
+            .padding(.horizontal, 14)
         }
-        .padding()
+        .frame(height: 104)
         .background(ColorPalette.lightGray.color)
         .cornerRadius(24)
-        .frame(height: 90)
     }
 }
 
 #Preview {
-    let carrier1 = Carrier(name: "РЖД", logo: "rzd", email: "i.lozgkina@rzd.ru", phone: "+7 (901) 111-11-11")
-    let route1 =  Route(
-        stations: ["Москва", "Костроме", "Санкт-Петербург"],
-        departure: "2025-01-14T22:30:00+03:00",
-        arrival: "2025-01-15T08:15:00+03:00",
-        duration: 20 * 3600,
-        carrierID: Carrier.mockCarriers[0].id
-    )
+    let carrier1 = Carrier.mockCarriers[0]
+    let route1 =  Route.mockRoutes[0]
     
-    let carrier2 = Carrier(name: "РЖД", logo: "ural", email: "i.lozgkina@rzd.ru", phone: "+7 (901) 111-11-11")
-    let route2 =  Route(
-        stations: ["Москва", "Санкт-Петербург"],
-        departure: "2025-01-14T22:30:00+03:00",
-        arrival: "2025-01-15T08:15:00+03:00",
-        duration: 15 * 3600,
-        carrierID: Carrier.mockCarriers[0].id
-    )
+    let carrier2 = Carrier.mockCarriers[1]
+    let route2 =  Route.mockRoutes[1]
     
     VStack (spacing: 8) {
         RouteCardView(route: route1, carrier: carrier1)
-        Spacer().frame(height: 8)
         RouteCardView(route: route2, carrier: carrier2)
     }
 }

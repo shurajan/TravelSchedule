@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct NavigationHandler {
-    var tripViewModel: TripViewModel
     @Binding var path: [ViewPath]
-    
-    let citiesViewModel: SelectorViewModel<City>
+    var tripViewModel: TripViewModel
+    var citiesViewModel: SelectorViewModel<City>
     
     @ViewBuilder
     func destination(for id: ViewPath) -> some View {
@@ -46,13 +45,11 @@ struct NavigationHandler {
                         nameKeyPath: \.name
                     ),
                     onItemTap: { newItem in
-                        tripViewModel.stationsFrom = newItem
+                        tripViewModel.fromStation = newItem
                         path.removeAll()
                     }
                 )
-            } else {
-                ServerErrorView()
-            }
+            } 
         case .stationsToView:
             if let to = tripViewModel.to {
                 selectorView(
@@ -63,16 +60,22 @@ struct NavigationHandler {
                         nameKeyPath: \.name
                     ),
                     onItemTap: { newItem in
-                        tripViewModel.stationsTo = newItem
+                        tripViewModel.toStation = newItem
                         path.removeAll()
                     }
                 )
-            } else {
-                ServerErrorView()
             }
         case .routesView:
-            RoutesView(path: $path)
-                .navigationBarBackButtonHidden(true)
+            if let fromStation = tripViewModel.fromStation,
+               let toStation = tripViewModel.toStation {
+                
+                let routesViewModel = RoutesViewModel(routeFinder: RouteFinderService.shared,
+                                                      fromStation: fromStation,
+                                                      toStation: toStation)
+                RoutesView(path: $path, viewModel: routesViewModel)
+                    .navigationBarBackButtonHidden(true)
+            }
+            
         case .timeSlotsView:
             Text("Time Slots")
         }

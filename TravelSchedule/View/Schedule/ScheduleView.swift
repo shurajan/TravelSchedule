@@ -17,9 +17,8 @@ struct ScheduleView: View {
             StoriesCollectionView()
             DirectionSelectorView(path: $path)
             
-            if let stationFrom = tripViewModel.stationsFrom,
-               let stationTo = tripViewModel.stationsTo {
-                
+            if let fromStation = tripViewModel.fromStation,
+               let toStation = tripViewModel.toStation {
                 Button(action: search) {
                     Text("Найти")
                         .font(.system(size: 17, weight: .bold))

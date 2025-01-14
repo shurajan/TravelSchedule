@@ -19,6 +19,7 @@ struct Route: Hashable, Identifiable {
     let carrierID: UUID
     
     init(stations: [String], departure: String, arrival: String, duration: Int, carrierID: UUID) {
+        //TODO: - further changes required 
         self.stations = stations.count >= 2 ? stations : ["Неизвестно", "Неизвестно"]
         
         self.departureTime = Date.ISODateFormatter.date(from: departure) ?? Date()
@@ -69,6 +70,27 @@ extension Route {
             departure: "2025-01-17T22:30:00+03:00",
             arrival: "2025-01-18T08:15:00+03:00",
             duration: 20 * 3600, 
+            carrierID: Carrier.mockCarriers[0].id
+        ),
+        Route(
+            stations: ["Москва", "Твери", "Санкт-Петербург"],
+            departure: "2025-01-17T22:30:00+03:00",
+            arrival: "2025-01-18T08:30:00+03:00",
+            duration: 12 * 3600,
+            carrierID: Carrier.mockCarriers[0].id
+        ),
+        Route(
+            stations: ["Москва", "Сочи"],
+            departure: "2025-01-14T22:30:00+03:00",
+            arrival: "2025-01-16T00:30:00+03:00",
+            duration: 26 * 3600,
+            carrierID: Carrier.mockCarriers[0].id
+        ),
+        Route(
+            stations: ["Москва","Ростове-На-Дону", "Сочи"],
+            departure: "2025-01-14T22:30:00+03:00",
+            arrival: "2025-01-16T02:30:00+03:00",
+            duration: 28 * 3600,
             carrierID: Carrier.mockCarriers[0].id
         )
     ]

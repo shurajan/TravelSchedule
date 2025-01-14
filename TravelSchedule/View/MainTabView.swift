@@ -61,8 +61,8 @@ struct MainTabView: View {
             }
             .navigationDestination(for: ViewPath.self) { id in
                 NavigationHandler(
-                    tripViewModel: tripViewModel,
                     path: $path,
+                    tripViewModel: tripViewModel,
                     citiesViewModel: citiesViewModel
                 ).destination(for: id)
             }
