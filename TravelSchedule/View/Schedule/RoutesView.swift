@@ -50,16 +50,27 @@ struct RoutesView: View {
             .padding(.horizontal, 16)
             
             VStack {
-                
                 Button(action: {
                     handleFilterButtonTap()
                 }) {
-                    Text("Уточнить время")
-                        .font(.system(size: 17, weight: .bold))
-                        .frame(maxWidth: .infinity, minHeight: 60,  maxHeight: 60)
-                        .foregroundColor(AppColors.white.color)
-                        .background(AppColors.blue.color)
-                        .cornerRadius(16)
+                    HStack {
+                        Text("Уточнить время")
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundColor(AppColors.white.color)
+                            .background(AppColors.blue.color)
+                            .cornerRadius(16)
+                        
+                        let hasFilter = trip.isDirect != nil || !trip.TimeOfDay.isEmpty
+                        
+                        if hasFilter {
+                            Circle()
+                                .fill(AppColors.red.color)
+                                .frame(width: 8, height: 8)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 60,  maxHeight: 60)
+                    .background(AppColors.blue.color)
+                    .cornerRadius(16)
                 }
             }
             .padding(.bottom, 24)
