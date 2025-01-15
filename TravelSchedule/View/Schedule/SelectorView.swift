@@ -78,6 +78,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
+                        viewModel.searchText = "" 
                         path.removeLast()
                     } label: {
                         Image(systemName: "chevron.left")

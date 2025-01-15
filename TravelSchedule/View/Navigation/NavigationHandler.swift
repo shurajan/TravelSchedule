@@ -22,6 +22,7 @@ struct NavigationHandler {
                 emptyListText: "Город не найден",
                 viewModel: citiesViewModel,
                 onItemTap: { newItem in
+                    citiesViewModel.searchText = ""
                     trip.from = newItem
                     path.append(.stationsFromView)
                 }
@@ -32,6 +33,7 @@ struct NavigationHandler {
                 emptyListText: "Город не найден",
                 viewModel: citiesViewModel,
                 onItemTap: { newItem in
+                    citiesViewModel.searchText = ""
                     trip.to = newItem
                     path.append(.stationsToView)
                 }
