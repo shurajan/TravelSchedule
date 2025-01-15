@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NavigationHandler {
     @Binding var path: [ViewPath]
-    var tripViewModel: TripViewModel
+    @ObservedObject var trip: Trip
     var citiesViewModel: SelectorViewModel<City>
     var carrierViewModel: CarrierViewModel
     
@@ -22,7 +22,7 @@ struct NavigationHandler {
                 emptyListText: "Город не найден",
                 viewModel: citiesViewModel,
                 onItemTap: { newItem in
-                    tripViewModel.from = newItem
+                    trip.from = newItem
                     path.append(.stationsFromView)
                 }
             )
@@ -32,12 +32,12 @@ struct NavigationHandler {
                 emptyListText: "Город не найден",
                 viewModel: citiesViewModel,
                 onItemTap: { newItem in
-                    tripViewModel.to = newItem
+                    trip.to = newItem
                     path.append(.stationsToView)
                 }
             )
         case .stationsFromView:
-            if let from = tripViewModel.from {
+            if let from = trip.from {
                 selectorView(
                     title: "Выбор станции",
                     emptyListText: "Станция не найдена",
@@ -46,13 +46,13 @@ struct NavigationHandler {
                         nameKeyPath: \.name
                     ),
                     onItemTap: { newItem in
-                        tripViewModel.fromStation = newItem
+                        trip.fromStation = newItem
                         path.removeAll()
                     }
                 )
             } 
         case .stationsToView:
-            if let to = tripViewModel.to {
+            if let to = trip.to {
                 selectorView(
                     title: "Выбор станции",
                     emptyListText: "Станция не найдена",
@@ -61,21 +61,21 @@ struct NavigationHandler {
                         nameKeyPath: \.name
                     ),
                     onItemTap: { newItem in
-                        tripViewModel.toStation = newItem
+                        trip.toStation = newItem
                         path.removeAll()
                     }
                 )
             }
         case .routesView:
-            let routeViewModel = RouteViewModel(tripViewModel: tripViewModel)
-            RoutesView(path: $path, carrierViewModel: carrierViewModel, routeViewModel: routeViewModel)
+            let routeViewModel = RouteViewModel(trip: trip)
+            RoutesView(path: $path, trip: trip, carrierViewModel: carrierViewModel, routeViewModel: routeViewModel)
                 .navigationBarBackButtonHidden(true)
             
         case .carrierView(let carrier):
             CarrierView(path: $path, carrier: carrier)
             
         case .filterView:
-            FilterView(path: $path)
+            FilterView(path: $path, trip: trip)
         }
     }
     

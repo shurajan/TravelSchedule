@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct RoutesView: View {
-    @EnvironmentObject var themeViewModel: ThemeViewModel
-    @EnvironmentObject var tripViewModel: TripViewModel
+    @EnvironmentObject var theme: Theme
     @Binding var path: [ViewPath]
+    @ObservedObject var trip: Trip
     @ObservedObject var carrierViewModel: CarrierViewModel
     @ObservedObject var routeViewModel: RouteViewModel
     
     var body: some View {
         ZStack {
             VStack {
-                Text(tripViewModel.text())
+                Text(trip.text())
                     .multilineTextAlignment(.leading)
                     .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(themeViewModel.textColor)
+                    .foregroundColor(theme.textColor)
                 
                 if !routeViewModel.filteredRoutes.isEmpty {
                     Spacer().frame(height: 16)
@@ -41,7 +41,7 @@ struct RoutesView: View {
                     Spacer()
                     Text("Вариантов нет")
                         .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(themeViewModel.textColor)
+                        .foregroundColor(theme.textColor)
                     Spacer()
                 }
             }
@@ -62,8 +62,8 @@ struct RoutesView: View {
                 .padding(.bottom, 24)
             }
         }
-        .background(themeViewModel.backgroundColor)
         .padding(.horizontal, 16)
+        .background(theme.backgroundColor)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -72,7 +72,7 @@ struct RoutesView: View {
                     path.removeLast()
                 } label: {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(themeViewModel.textColor)
+                        .foregroundColor(theme.textColor)
                 }
             }
         }
@@ -90,16 +90,16 @@ struct RoutesView: View {
 }
 
 #Preview {
-    let tripViewModel = TripViewModel()
-    tripViewModel.from = City.mockCities[0]
-    tripViewModel.to = City.mockCities[1]
-    tripViewModel.fromStation = City.mockCities[0].stations[0]
-    tripViewModel.toStation = City.mockCities[1].stations[0]
+    let trip = Trip()
+    trip.from = City.mockCities[0]
+    trip.to = City.mockCities[1]
+    trip.fromStation = City.mockCities[0].stations[0]
+    trip.toStation = City.mockCities[1].stations[0]
     
     let carrierViewModel = CarrierViewModel()
-    let routeViewModel = RouteViewModel(tripViewModel: tripViewModel)
+    let routeViewModel = RouteViewModel(trip: trip)
     
-    return RoutesView(path: .constant([]), carrierViewModel: carrierViewModel, routeViewModel: routeViewModel)
-        .environmentObject(tripViewModel)
-        .environmentObject(ThemeViewModel())
+    return RoutesView(path: .constant([]), trip: trip, carrierViewModel: carrierViewModel, routeViewModel: routeViewModel)
+        .environmentObject(trip)
+        .environmentObject(Theme())
 }

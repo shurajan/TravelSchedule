@@ -1,5 +1,5 @@
 //
-//  TripViewModel.swift
+//  trip.swift
 //  TravelSchedule
 //
 //  Created by Alexander Bralnin on 10.01.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-final class TripViewModel: ObservableObject {
+final class Trip: ObservableObject {
     @Published var from: City?
     @Published var to: City?
     

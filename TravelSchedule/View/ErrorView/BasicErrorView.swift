@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BasicErrorView: View {
-    @EnvironmentObject var themeViewModel: ThemeViewModel
+    @EnvironmentObject var theme: Theme
     @EnvironmentObject var errorService: ErrorService
     
     let imageName: String
@@ -27,18 +27,18 @@ struct BasicErrorView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .padding(.top, 24)
-                .foregroundColor(themeViewModel.textColor)
+                .foregroundColor(theme.textColor)
             
             Spacer()
         }
         .padding(.horizontal, 16)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(themeViewModel.backgroundColor)
+        .background(theme.backgroundColor)
     }
 }
 
 #Preview {
     BasicErrorView(imageName: "No Internet", text: "Нет интернета")
-        .environmentObject(ThemeViewModel())
+        .environmentObject(Theme())
         .environmentObject(ErrorService())
 }

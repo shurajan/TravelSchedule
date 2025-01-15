@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @EnvironmentObject var tripViewModel: TripViewModel
-    @EnvironmentObject var themeViewModel: ThemeViewModel
+    @EnvironmentObject var theme: Theme
     @EnvironmentObject var errorService: ErrorService
     
     @State private var path: [ViewPath] = []
+    @StateObject private var trip: Trip = Trip()
+    
     @StateObject var citiesViewModel = SelectorViewModel<City>(
         allItems: City.mockCities,
         nameKeyPath: \.name
@@ -23,7 +24,7 @@ struct MainTabView: View {
     var body: some View {
         NavigationStack(path: $path) {
             ZStack(alignment: .bottom) {
-                themeViewModel.backgroundColor
+                theme.backgroundColor
                     .ignoresSafeArea()
                 
                 TabView {
@@ -32,7 +33,7 @@ struct MainTabView: View {
                         if let error = errorService.error {
                             errorView(for: error)
                         } else {
-                            ScheduleView(path: $path)
+                            ScheduleView(path: $path, trip: trip)
                         }
                     }
                     .tabItem {
@@ -53,8 +54,8 @@ struct MainTabView: View {
                             .renderingMode(.template)
                     }
                 }
-                .accentColor(themeViewModel.textColor)
-                .environment(\.colorScheme, themeViewModel.colorScheme)
+                .accentColor(theme.textColor)
+                .environment(\.colorScheme, theme.colorScheme)
                 
                 Divider()
                     .background(ColorPalette.gray.color)
@@ -64,7 +65,7 @@ struct MainTabView: View {
             .navigationDestination(for: ViewPath.self) { id in
                 NavigationHandler(
                     path: $path,
-                    tripViewModel: tripViewModel,
+                    trip: trip,
                     citiesViewModel: citiesViewModel,
                     carrierViewModel: carrierViewModel
                 ).destination(for: id)
@@ -84,7 +85,7 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
-        .environmentObject(TripViewModel())
-        .environmentObject(ThemeViewModel())
+        .environmentObject(Trip())
+        .environmentObject(Theme())
         .environmentObject(ErrorService())
 }

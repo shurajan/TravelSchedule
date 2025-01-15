@@ -15,5 +15,5 @@ struct ServerErrorView: View {
 
 #Preview {
     ServerErrorView()
-        .environmentObject(ThemeViewModel())
+        .environmentObject(Theme())
 }

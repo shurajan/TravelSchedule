@@ -7,8 +7,8 @@
 import SwiftUI
 
 struct DirectionSelectorView: View {
-    @EnvironmentObject var tripViewModel: TripViewModel
     @Binding var path: [ViewPath]
+    @ObservedObject var trip: Trip
     
     var body: some View {
         ZStack {
@@ -22,9 +22,9 @@ struct DirectionSelectorView: View {
                     // MARK: - From
                     NavigationLink(value: ViewPath.citiesFromView) {
                         ZStack(alignment: .leading) {
-                            if let from = tripViewModel.from,
-                               let fromStation = tripViewModel.fromStation {
-                                Text(tripViewModel.fromText())
+                            if let from = trip.from,
+                               let fromStation = trip.fromStation {
+                                Text(trip.fromText())
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                                     .foregroundColor(ColorPalette.black(day: true).color)
@@ -41,9 +41,9 @@ struct DirectionSelectorView: View {
                     // MARK: - To
                     NavigationLink(value: ViewPath.citiesToView) {
                         ZStack(alignment: .leading) {
-                            if let to = tripViewModel.to,
-                               let toStation = tripViewModel.toStation {
-                                Text(tripViewModel.toText())
+                            if let to = trip.to,
+                               let toStation = trip.toStation {
+                                Text(trip.toText())
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                                     .foregroundColor(ColorPalette.black(day: true).color)
@@ -65,7 +65,7 @@ struct DirectionSelectorView: View {
                 Spacer()
                 
                 Button(action: {
-                    tripViewModel.invert()
+                    trip.invert()
                 }) {
                     ZStack {
                         Circle()
@@ -86,6 +86,5 @@ struct DirectionSelectorView: View {
 }
 
 #Preview {
-    DirectionSelectorView(path: .constant([]))
-        .environmentObject(TripViewModel())
+    DirectionSelectorView(path: .constant([]), trip: Trip())
 }

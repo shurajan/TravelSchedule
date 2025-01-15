@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CarrierView: View {
-    @EnvironmentObject var themeViewModel: ThemeViewModel
+    @EnvironmentObject var theme: Theme
     @Binding var path: [ViewPath]
     var carrier: Carrier
     
@@ -23,13 +23,13 @@ struct CarrierView: View {
             
             Text(carrier.name)
                 .font(.system(size: 24, weight: .bold))
-                .foregroundColor(themeViewModel.textColor)
+                .foregroundColor(theme.textColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             VStack(alignment: .leading, spacing: 8) {
                 Text("E-mail")
                     .font(.system(size: 17, weight: .regular))
-                    .foregroundColor(themeViewModel.textColor)
+                    .foregroundColor(theme.textColor)
                 Text(carrier.email)
                     .font(.system(size: 12, weight: .regular))
                     .foregroundColor(ColorPalette.blue.color)
@@ -38,7 +38,7 @@ struct CarrierView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Телефон")
                     .font(.system(size: 17, weight: .regular))
-                    .foregroundColor(themeViewModel.textColor)
+                    .foregroundColor(theme.textColor)
                 Text(carrier.phone)
                     .font(.system(size: 13, weight: .regular))
                     .foregroundColor(ColorPalette.blue.color)
@@ -47,7 +47,7 @@ struct CarrierView: View {
             Spacer()
         }
         .padding(16)
-        .background(themeViewModel.backgroundColor)
+        .background(theme.backgroundColor)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -56,7 +56,7 @@ struct CarrierView: View {
                     path.removeLast()
                 } label: {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(themeViewModel.textColor)
+                        .foregroundColor(theme.textColor)
                 }
             }
         }
@@ -66,5 +66,5 @@ struct CarrierView: View {
 #Preview {
     let carrier = Carrier.mockCarriers[0]
     CarrierView(path: .constant([]), carrier: carrier)
-        .environmentObject(ThemeViewModel())
+        .environmentObject(Theme())
 }

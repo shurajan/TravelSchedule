@@ -1,5 +1,5 @@
 //
-//  ThemeViewModel.swift
+//  theme.swift
 //  TravelSchedule
 //
 //  Created by Alexander Bralnin on 10.01.2025.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-final class ThemeViewModel: ObservableObject {
+final class Theme: ObservableObject {
     @AppStorage("isDarkMode") var isDarkMode = false
     
     var backgroundColor: Color {

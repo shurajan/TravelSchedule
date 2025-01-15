@@ -15,5 +15,5 @@ struct NetworkErrorView: View {
 
 #Preview {
     NetworkErrorView()
-        .environmentObject(ThemeViewModel())
+        .environmentObject(Theme())
 }

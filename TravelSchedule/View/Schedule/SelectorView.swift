@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
-    @EnvironmentObject var themeViewModel: ThemeViewModel
+    @EnvironmentObject var theme: Theme
     @Binding var path: [ViewPath]
     
     let title: String
@@ -22,19 +22,19 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
             VStack(spacing: 0) {
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(viewModel.searchText.isEmpty ? ColorPalette.gray.color : themeViewModel.textColor)
+                        .foregroundColor(viewModel.searchText.isEmpty ? ColorPalette.gray.color : theme.textColor)
                         .padding(.leading, 8)
                     
                     TextField("",
                               text: $viewModel.searchText,
                               prompt: Text("Введите запрос")
                                            .foregroundColor(ColorPalette.gray.color))
-                        .foregroundColor(themeViewModel.textColor)
+                        .foregroundColor(theme.textColor)
                         .autocorrectionDisabled(true)
                         .autocapitalization(.none)
                         .frame(height: 36)
                 }
-                .background(themeViewModel.searchFieldBackGroundColor)
+                .background(theme.searchFieldBackGroundColor)
                 .cornerRadius(10)
                 .padding()
                 
@@ -42,7 +42,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                     Spacer()
                     Text(notification)
                         .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(themeViewModel.textColor)
+                        .foregroundColor(theme.textColor)
                     Spacer()
                 } else {
                     List {
@@ -53,16 +53,16 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                                 HStack {
                                     Text(viewModel.displayName(for: item))
                                         .font(.system(size: 17, weight: .regular))
-                                        .foregroundColor(themeViewModel.textColor)
+                                        .foregroundColor(theme.textColor)
                                         .padding(.leading, 16)
                                     Spacer()
                                     Image(systemName: "chevron.right")
-                                        .foregroundColor(themeViewModel.textColor)
+                                        .foregroundColor(theme.textColor)
                                         .padding(.trailing, 16)
                                 }
                                 .frame(height: 60)
                             }
-                            .background(themeViewModel.backgroundColor)
+                            .background(theme.backgroundColor)
                             .listRowSeparator(.hidden)
                             .listRowInsets(EdgeInsets())
                         }
@@ -71,7 +71,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                 }
                 
             }
-            .background(themeViewModel.backgroundColor)
+            .background(theme.backgroundColor)
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -81,7 +81,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
                         path.removeLast()
                     } label: {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(themeViewModel.textColor)
+                            .foregroundColor(theme.textColor)
                     }
                 }
             }
@@ -89,23 +89,23 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
         .onAppear {
             let appearance = UINavigationBarAppearance()
             
-            appearance.backgroundColor = UIColor(themeViewModel.backgroundColor)
+            appearance.backgroundColor = UIColor(theme.backgroundColor)
             
             appearance.shadowColor = .clear
             
             appearance.titleTextAttributes = [
-                .foregroundColor: UIColor(themeViewModel.textColor),
+                .foregroundColor: UIColor(theme.textColor),
                 .font: UIFont.systemFont(ofSize: 17, weight: .bold)
             ]
             
             appearance.largeTitleTextAttributes = [
-                .foregroundColor: UIColor(themeViewModel.textColor)
+                .foregroundColor: UIColor(theme.textColor)
             ]
             
             UINavigationBar.appearance().standardAppearance = appearance
             UINavigationBar.appearance().scrollEdgeAppearance = appearance
             
-            UINavigationBar.appearance().tintColor = UIColor(themeViewModel.textColor)
+            UINavigationBar.appearance().tintColor = UIColor(theme.textColor)
         }
     }
 }
@@ -140,5 +140,5 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     ) { city in
         print("Выбран город:", city.name)
     }
-    .environmentObject(ThemeViewModel())
+    .environmentObject(Theme())
 }

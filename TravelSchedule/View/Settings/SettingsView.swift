@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var themeViewModel: ThemeViewModel
+    @EnvironmentObject var theme: Theme
     @EnvironmentObject var errorService: ErrorService
     
     var body: some View {
         NavigationView {
             ZStack {
-                themeViewModel.backgroundColor
+                theme.backgroundColor
                     .ignoresSafeArea()
                 
                 VStack(alignment: .leading, spacing: 0) {
                     
                     HStack {
                         Text("Темная тема")
-                            .foregroundColor(themeViewModel.textColor)
+                            .foregroundColor(theme.textColor)
                         Spacer()
-                        Toggle("", isOn: $themeViewModel.isDarkMode)
+                        Toggle("", isOn: $theme.isDarkMode)
                             .labelsHidden()
                             .tint(ColorPalette.blue.color)
                     }
@@ -32,10 +32,10 @@ struct SettingsView: View {
                     NavigationLink(destination: Text("Тут будет текст соглашения")) {
                         HStack {
                             Text("Пользовательское соглашение")
-                                .foregroundColor(themeViewModel.textColor)
+                                .foregroundColor(theme.textColor)
                             Spacer()
                             Image(systemName: "chevron.right")
-                                .foregroundColor(themeViewModel.textColor)
+                                .foregroundColor(theme.textColor)
                         }
                     }
                     .padding()
@@ -44,7 +44,7 @@ struct SettingsView: View {
                     
                     Text("Приложение использует API «Яндекс.Расписания»\nВерсия 1.0 (beta)")
                         .font(.footnote)
-                        .foregroundColor(themeViewModel.textColor)
+                        .foregroundColor(theme.textColor)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
                         .padding(.bottom, 24)
@@ -57,6 +57,6 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
-        .environmentObject(ThemeViewModel())
+        .environmentObject(Theme())
         .environmentObject(ErrorService())
 }

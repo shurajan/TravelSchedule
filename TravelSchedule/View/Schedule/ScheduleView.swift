@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct ScheduleView: View {
-    @EnvironmentObject var tripViewModel: TripViewModel
-    @EnvironmentObject var themeViewModel: ThemeViewModel
+    @EnvironmentObject var theme: Theme
     @Binding var path: [ViewPath]
+    @ObservedObject var trip: Trip
     
     var body: some View {
         VStack(spacing: 20) {
             StoriesCollectionView()
-            DirectionSelectorView(path: $path)
+            DirectionSelectorView(path: $path, trip: trip)
             
-            if let fromStation = tripViewModel.fromStation,
-               let toStation = tripViewModel.toStation {
+            if let fromStation = trip.fromStation,
+               let toStation = trip.toStation {
                 Button(action: search) {
                     Text("Найти")
                         .font(.system(size: 17, weight: .bold))
@@ -30,7 +30,7 @@ struct ScheduleView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(themeViewModel.backgroundColor)
+        .background(theme.backgroundColor)
     }
     
     private func search() {
@@ -41,8 +41,9 @@ struct ScheduleView: View {
 
 #Preview {
     ScheduleView(
-        path: .constant([])
+        path: .constant([]),
+        trip: Trip()
     )
-    .environmentObject(ThemeViewModel())
-    .environmentObject(TripViewModel())
+    .environmentObject(Theme())
+    //.environmentObject(Trip())
 }

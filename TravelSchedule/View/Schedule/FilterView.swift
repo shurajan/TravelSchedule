@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct FilterView: View {
-    @EnvironmentObject var themeViewModel: ThemeViewModel
-    @EnvironmentObject var tripViewModel: TripViewModel
+    @EnvironmentObject var theme: Theme
     @Binding var path: [ViewPath]
+    @ObservedObject var trip: Trip
     
     var body: some View {
         ScrollView {
@@ -18,20 +18,20 @@ struct FilterView: View {
                 // Время отправления
                 Text("Время отправления")
                     .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(themeViewModel.textColor)
+                    .foregroundColor(theme.textColor)
                 
                 ForEach(Date.TimeOfDay.allCases, id: \.self) { timeOfDay in
                     HStack {
                         Text(timeOfDay.description)
-                            .foregroundColor(themeViewModel.textColor)
+                            .foregroundColor(theme.textColor)
                         Spacer()
                         CheckBoxView(isChecked: Binding(
-                            get: { tripViewModel.TimeOfDay.contains(timeOfDay) },
+                            get: { trip.TimeOfDay.contains(timeOfDay) },
                             set: { isChecked in
                                 if isChecked {
-                                    tripViewModel.TimeOfDay.append(timeOfDay)
+                                    trip.TimeOfDay.append(timeOfDay)
                                 } else {
-                                    tripViewModel.TimeOfDay.removeAll { $0 == timeOfDay }
+                                    trip.TimeOfDay.removeAll { $0 == timeOfDay }
                                 }
                             }
                         ))
@@ -43,24 +43,24 @@ struct FilterView: View {
                 // Показ вариантов с пересадками
                 Text("Показывать варианты с пересадками")
                     .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(themeViewModel.textColor)
+                    .foregroundColor(theme.textColor)
                 
                 VStack(alignment: .leading, spacing: 8) {
                     RadioButtonView(
                         label: "Да",
                         isSelected: Binding(
-                            get: { tripViewModel.isDirect },
+                            get: { trip.isDirect },
                             set: { isSelected in
-                                tripViewModel.isDirect = isSelected
+                                trip.isDirect = isSelected
                             }
                         )
                     )
                     RadioButtonView(
                         label: "Нет",
                         isSelected: Binding(
-                            get: { !tripViewModel.isDirect },
+                            get: { !trip.isDirect },
                             set: { isSelected in
-                                tripViewModel.isDirect = !isSelected
+                                trip.isDirect = !isSelected
                             }
                         )
                     )
@@ -68,7 +68,7 @@ struct FilterView: View {
             }
             .padding(.horizontal, 16)
         }
-        .background(themeViewModel.backgroundColor)
+        .background(theme.backgroundColor)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -77,7 +77,7 @@ struct FilterView: View {
                     path.removeLast()
                 } label: {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(themeViewModel.textColor)
+                        .foregroundColor(theme.textColor)
                 }
             }
         }
@@ -120,13 +120,12 @@ struct RadioButtonView: View {
 }
 
 #Preview {
-    let tripViewModel = TripViewModel()
-    tripViewModel.from = City.mockCities[0]
-    tripViewModel.to = City.mockCities[1]
-    tripViewModel.fromStation = City.mockCities[0].stations[0]
-    tripViewModel.toStation = City.mockCities[1].stations[0]
+    let trip = Trip()
+    trip.from = City.mockCities[0]
+    trip.to = City.mockCities[1]
+    trip.fromStation = City.mockCities[0].stations[0]
+    trip.toStation = City.mockCities[1].stations[0]
     
-    return FilterView(path: .constant([]))
-        .environmentObject(tripViewModel)
-        .environmentObject(ThemeViewModel())
+    return FilterView(path: .constant([]), trip: trip)
+        .environmentObject(Theme())
 }
