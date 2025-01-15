@@ -14,7 +14,7 @@ final class Trip: ObservableObject {
     @Published var fromStation: Station?
     @Published var toStation: Station?
     
-    @Published var isDirect: Bool = false
+    @Published var isDirect: Bool?
     @Published var TimeOfDay: [Date.TimeOfDay] = []
     
     func invert() {

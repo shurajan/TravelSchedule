@@ -19,12 +19,12 @@ struct StoryView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 16))
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(story.isWatched ? ColorPalette.blue.color : Color.clear, lineWidth: 4)
+                        .stroke(story.isWatched ? AppColors.blue.color : Color.clear, lineWidth: 4)
                 )
             
             Text(story.text)
                 .font(.system(size: 12))
-                .foregroundColor(ColorPalette.white(day: true).color)
+                .foregroundColor(AppColors.white.color)
                 .multilineTextAlignment(.leading)
                 .lineLimit(3)
                 .truncationMode(.tail)

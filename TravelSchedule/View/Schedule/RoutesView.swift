@@ -4,7 +4,6 @@
 //
 //  Created by Alexander Bralnin on 13.01.2025.
 //
-
 import SwiftUI
 
 struct RoutesView: View {
@@ -15,64 +14,69 @@ struct RoutesView: View {
     @ObservedObject var routeViewModel: RouteViewModel
     
     var body: some View {
-        ZStack {
-            VStack {
-                Text(trip.text())
-                    .multilineTextAlignment(.leading)
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(theme.textColor)
+        NavigationView {
+            ZStack (alignment: .bottom) {
+                theme.backgroundColor
+                    .ignoresSafeArea()
                 
-                if !routeViewModel.filteredRoutes.isEmpty {
-                    Spacer().frame(height: 16)
+                VStack {
+                    Text(trip.text())
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(theme.textColor)
                     
-                    ScrollView(.vertical, showsIndicators: false) {
-                        LazyVStack(spacing: 8) {
-                            ForEach(routeViewModel.filteredRoutes) { route in
-                                if let carrier = carrierViewModel.findByID(route.carrierID) {
-                                    RouteView(route: route, carrier: carrier)
-                                        .onTapGesture {
-                                            handleRouteSelection(route)
-                                        }
+                    if !routeViewModel.filteredRoutes.isEmpty {
+                        Spacer().frame(height: 16)
+                        ScrollView(.vertical, showsIndicators: false) {
+                            LazyVStack(spacing: 8) {
+                                ForEach(routeViewModel.filteredRoutes) { route in
+                                    if let carrier = carrierViewModel.findByID(route.carrierID) {
+                                        RouteView(route: route, carrier: carrier)
+                                            .onTapGesture {
+                                                handleRouteSelection(route)
+                                            }
+                                    }
                                 }
                             }
                         }
+                    } else {
+                        Spacer()
+                        Text("Вариантов нет")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(theme.textColor)
+                        Spacer()
                     }
-                } else {
-                    Spacer()
-                    Text("Вариантов нет")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(theme.textColor)
-                    Spacer()
+                    
                 }
-            }
-            
-            VStack {
-                Spacer()
+                .padding(.horizontal, 16)
                 
-                Button(action: {
-                    handleFilterButtonTap()
-                }) {
-                    Text("Уточнить время")
-                        .font(.system(size: 17, weight: .bold))
-                        .frame(maxWidth: .infinity, minHeight: 60,  maxHeight: 60)
-                        .foregroundColor(ColorPalette.white(day: true).color)
-                        .background(ColorPalette.blue.color)
-                        .cornerRadius(16)
+                VStack {
+                    
+                    Button(action: {
+                        handleFilterButtonTap()
+                    }) {
+                        Text("Уточнить время")
+                            .font(.system(size: 17, weight: .bold))
+                            .frame(maxWidth: .infinity, minHeight: 60,  maxHeight: 60)
+                            .foregroundColor(AppColors.white.color)
+                            .background(AppColors.blue.color)
+                            .cornerRadius(16)
+                    }
                 }
                 .padding(.bottom, 24)
+                .padding(.horizontal, 16)
             }
-        }
-        .padding(.horizontal, 16)
-        .background(theme.backgroundColor)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    path.removeLast()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(theme.textColor)
+            .toolbarBackground(theme.backgroundColor, for: .navigationBar)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        path.removeLast()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(theme.textColor)
+                    }
                 }
             }
         }
@@ -99,7 +103,10 @@ struct RoutesView: View {
     let carrierViewModel = CarrierViewModel()
     let routeViewModel = RouteViewModel(trip: trip)
     
-    return RoutesView(path: .constant([]), trip: trip, carrierViewModel: carrierViewModel, routeViewModel: routeViewModel)
-        .environmentObject(trip)
-        .environmentObject(Theme())
+    return RoutesView(path: .constant([]),
+                      trip: trip,
+                      carrierViewModel: carrierViewModel,
+                      routeViewModel: routeViewModel)
+    .environmentObject(trip)
+    .environmentObject(Theme())
 }

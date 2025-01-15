@@ -58,7 +58,7 @@ struct MainTabView: View {
                 .environment(\.colorScheme, theme.colorScheme)
                 
                 Divider()
-                    .background(ColorPalette.gray.color)
+                    .background(AppColors.gray.color)
                     .frame(height: 1)
                     .padding(.bottom, 49)
             }
@@ -85,7 +85,6 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
-        .environmentObject(Trip())
         .environmentObject(Theme())
         .environmentObject(ErrorService())
 }

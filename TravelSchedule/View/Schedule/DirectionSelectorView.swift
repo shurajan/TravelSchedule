@@ -13,7 +13,7 @@ struct DirectionSelectorView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .fill(ColorPalette.blue.color)
+                .fill(AppColors.blue.color)
                 .frame(height: 128)
             
             HStack {
@@ -27,11 +27,11 @@ struct DirectionSelectorView: View {
                                 Text(trip.fromText())
                                     .lineLimit(1)
                                     .truncationMode(.tail)
-                                    .foregroundColor(ColorPalette.black(day: true).color)
+                                    .foregroundColor(AppColors.black.color)
                                     .font(.system(size: 17, weight: .regular))
                             } else {
                                 Text("Откуда")
-                                    .foregroundColor(ColorPalette.gray.color)
+                                    .foregroundColor(AppColors.gray.color)
                                     .font(.system(size: 17, weight: .regular))
                             }
                         }
@@ -46,11 +46,11 @@ struct DirectionSelectorView: View {
                                 Text(trip.toText())
                                     .lineLimit(1)
                                     .truncationMode(.tail)
-                                    .foregroundColor(ColorPalette.black(day: true).color)
+                                    .foregroundColor(AppColors.black.color)
                                     .font(.system(size: 17, weight: .regular))
                             } else {
                                 Text("Куда")
-                                    .foregroundColor(ColorPalette.gray.color)
+                                    .foregroundColor(AppColors.gray.color)
                                     .font(.system(size: 17, weight: .regular))
                             }
                         }
@@ -58,7 +58,7 @@ struct DirectionSelectorView: View {
                     }
                 }
                 .padding()
-                .background(ColorPalette.white(day: true).color)
+                .background(AppColors.white.color)
                 .cornerRadius(20)
                 .padding(.leading, 16)
                 
@@ -69,11 +69,11 @@ struct DirectionSelectorView: View {
                 }) {
                     ZStack {
                         Circle()
-                            .fill(ColorPalette.white(day: true).color)
+                            .fill(AppColors.white.color)
                             .frame(width: 44, height: 44)
                         Image("Change")
                             .renderingMode(.template)
-                            .foregroundColor(ColorPalette.blue.color)
+                            .foregroundColor(AppColors.blue.color)
                             .scaledToFit()
                             .frame(width: 24, height: 24)
                     }

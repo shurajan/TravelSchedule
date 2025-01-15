@@ -73,9 +73,11 @@ struct NavigationHandler {
             
         case .carrierView(let carrier):
             CarrierView(path: $path, carrier: carrier)
+                .navigationBarBackButtonHidden(true)
             
         case .filterView:
             FilterView(path: $path, trip: trip)
+                .navigationBarBackButtonHidden(true)
         }
     }
     

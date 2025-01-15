@@ -22,19 +22,19 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
             VStack(spacing: 0) {
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(viewModel.searchText.isEmpty ? ColorPalette.gray.color : theme.textColor)
+                        .foregroundColor(viewModel.searchText.isEmpty ? AppColors.gray.color : theme.textColor)
                         .padding(.leading, 8)
                     
                     TextField("",
                               text: $viewModel.searchText,
                               prompt: Text("Введите запрос")
-                                           .foregroundColor(ColorPalette.gray.color))
+                                           .foregroundColor(AppColors.gray.color))
                         .foregroundColor(theme.textColor)
                         .autocorrectionDisabled(true)
                         .autocapitalization(.none)
                         .frame(height: 36)
                 }
-                .background(theme.searchFieldBackGroundColor)
+                .background(theme.searchFieldBackgroundColor)
                 .cornerRadius(10)
                 .padding()
                 

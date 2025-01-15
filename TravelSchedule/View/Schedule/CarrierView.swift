@@ -32,7 +32,7 @@ struct CarrierView: View {
                     .foregroundColor(theme.textColor)
                 Text(carrier.email)
                     .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(ColorPalette.blue.color)
+                    .foregroundColor(AppColors.blue.color)
             }
             
             VStack(alignment: .leading, spacing: 8) {
@@ -41,7 +41,7 @@ struct CarrierView: View {
                     .foregroundColor(theme.textColor)
                 Text(carrier.phone)
                     .font(.system(size: 13, weight: .regular))
-                    .foregroundColor(ColorPalette.blue.color)
+                    .foregroundColor(AppColors.blue.color)
             }
             
             Spacer()

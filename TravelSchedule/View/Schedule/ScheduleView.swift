@@ -23,8 +23,8 @@ struct ScheduleView: View {
                     Text("Найти")
                         .font(.system(size: 17, weight: .bold))
                         .frame(width: 150, height: 60)
-                        .foregroundColor(ColorPalette.white(day: true).color)
-                        .background(ColorPalette.blue.color)
+                        .foregroundColor(AppColors.white.color)
+                        .background(AppColors.blue.color)
                         .cornerRadius(16)
                 }
             }

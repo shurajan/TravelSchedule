@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-enum ColorPalette {
-    case black(day: Bool)
-    case white(day: Bool)
+enum AppColors {
+    case black
+    case white
     case gray
     case lightGray
     case blue
@@ -18,10 +18,10 @@ enum ColorPalette {
     
     var color: Color {
         switch self {
-        case .black(let day):
-            return day ? Color(hex: "#1A1B22") : Color(hex: "#FFFFFF")
-        case .white(let day):
-            return day ? Color(hex: "#FFFFFF") : Color(hex: "#1A1B22")
+        case .black:
+            return Color(hex: "#1A1B22")
+        case .white:
+            return Color(hex: "#FFFFFF")
         case .gray:
             return Color(hex: "#AEAFB4")
         case .lightGray:

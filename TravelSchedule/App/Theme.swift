@@ -9,10 +9,14 @@ import SwiftUI
 import Combine
 
 final class Theme: ObservableObject {
-    @AppStorage("isDarkMode") var isDarkMode = false
+    @AppStorage("isDarkMode") var isDarkMode = false {
+        didSet {
+            objectWillChange.send()
+        }
+    }
     
     var backgroundColor: Color {
-        ColorPalette.black(day: isDarkMode).color
+        isDarkMode ? AppColors.black.color : AppColors.white.color
     }
     
     var colorScheme: ColorScheme {
@@ -20,13 +24,13 @@ final class Theme: ObservableObject {
     }
     
     var textColor: Color {
-        ColorPalette.white(day: isDarkMode).color
+        isDarkMode ? AppColors.white.color : AppColors.black.color
     }
     
-    var searchFieldBackGroundColor: Color {
-        isDarkMode ?  ColorPalette.darkGray.color : ColorPalette.lightGray.color
+    var searchFieldBackgroundColor: Color {
+        isDarkMode ? AppColors.darkGray.color : AppColors.lightGray.color
     }
-    
+
     func toggleTheme() {
         isDarkMode.toggle()
     }

@@ -25,7 +25,7 @@ struct SettingsView: View {
                         Spacer()
                         Toggle("", isOn: $theme.isDarkMode)
                             .labelsHidden()
-                            .tint(ColorPalette.blue.color)
+                            .tint(AppColors.blue.color)
                     }
                     .padding()
                     

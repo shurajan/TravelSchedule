@@ -27,20 +27,20 @@ struct RouteView: View {
                     HStack {
                         Text(carrier.name)
                             .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(ColorPalette.black(day: true).color)
+                            .foregroundColor(AppColors.black.color)
                         
                         Spacer()
                         
                         Text(route.departureTime.dayMonthString)
                             .font(.system(size: 12, weight: .regular))
-                            .foregroundColor(ColorPalette.black(day: true).color)
+                            .foregroundColor(AppColors.black.color)
                             .padding(.trailing, 8)
                     }
                     
                     if route.stations.count > 2 {
                         Text("С пересадкой в \(route.stations[1])")
                             .font(.system(size: 12, weight: .regular))
-                            .foregroundColor(ColorPalette.red.color)
+                            .foregroundColor(AppColors.red.color)
                     }
                 }
     
@@ -51,31 +51,31 @@ struct RouteView: View {
             HStack {
                 Text(route.departureTime.shortTimeString)
                     .font(.system(size: 17, weight: .regular))
-                    .foregroundColor(ColorPalette.black(day: true).color)
+                    .foregroundColor(AppColors.black.color)
  
                 
                 Rectangle()
-                    .fill(ColorPalette.gray.color)
+                    .fill(AppColors.gray.color)
                     .frame(height: 2)
                 
                 Text(route.durationText(from: route.duration))
                     .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(ColorPalette.black(day: true).color)
+                    .foregroundColor(AppColors.black.color)
                     
                 
                 Rectangle()
-                    .fill(ColorPalette.gray.color)
+                    .fill(AppColors.gray.color)
                     .frame(height: 2)
     
                 Text(route.arrivalTime.shortTimeString)
                     .font(.system(size: 17, weight: .regular))
-                    .foregroundColor(ColorPalette.black(day: true).color)
+                    .foregroundColor(AppColors.black.color)
 
             }
             .padding(.horizontal, 14)
         }
         .frame(height: 104)
-        .background(ColorPalette.lightGray.color)
+        .background(AppColors.lightGray.color)
         .cornerRadius(24)
     }
 }

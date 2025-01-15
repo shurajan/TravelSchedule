@@ -13,71 +13,90 @@ struct FilterView: View {
     @ObservedObject var trip: Trip
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                // Время отправления
-                Text("Время отправления")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(theme.textColor)
+        NavigationView {
+            ZStack {
+                theme.backgroundColor
+                    .ignoresSafeArea()
                 
-                ForEach(Date.TimeOfDay.allCases, id: \.self) { timeOfDay in
-                    HStack {
-                        Text(timeOfDay.description)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Время отправления")
+                            .font(.system(size: 24, weight: .bold))
+                            .multilineTextAlignment(.leading)
                             .foregroundColor(theme.textColor)
-                        Spacer()
-                        CheckBoxView(isChecked: Binding(
-                            get: { trip.TimeOfDay.contains(timeOfDay) },
-                            set: { isChecked in
-                                if isChecked {
-                                    trip.TimeOfDay.append(timeOfDay)
-                                } else {
-                                    trip.TimeOfDay.removeAll { $0 == timeOfDay }
-                                }
+                        
+                        ForEach(Date.TimeOfDay.allCases, id: \.self) { timeOfDay in
+                            HStack {
+                                Text(timeOfDay.description)
+                                    .foregroundColor(theme.textColor)
+                                    .font(.system(size: 17, weight: .regular))
+                                    .multilineTextAlignment(.leading)
+                                Spacer()
+                                CheckBoxView(isChecked: Binding(
+                                    get: { trip.TimeOfDay.contains(timeOfDay) },
+                                    set: { isChecked in
+                                        if isChecked {
+                                            trip.TimeOfDay.append(timeOfDay)
+                                        } else {
+                                            trip.TimeOfDay.removeAll { $0 == timeOfDay }
+                                        }
+                                    }
+                                ))
                             }
-                        ))
+                        }
+                        
+                        Text("Показывать варианты с пересадками")
+                            .font(.system(size: 24, weight: .bold))
+                            .multilineTextAlignment(.leading)
+                            .foregroundColor(theme.textColor)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            RadioButtonView(
+                                label: "Да",
+                                isSelected: Binding(
+                                    get: { trip.isDirect == false },
+                                    set: { isSelected in
+                                        if isSelected {
+                                            trip.isDirect = false
+                                        }
+                                    }
+                                )
+                            )
+                            .font(.system(size: 17, weight: .regular))
+                            .multilineTextAlignment(.leading)
+                            .foregroundColor(theme.textColor)
+                            
+                            RadioButtonView(
+                                label: "Нет",
+                                isSelected: Binding(
+                                    get: { trip.isDirect == true },
+                                    set: { isSelected in
+                                        if isSelected {
+                                            trip.isDirect = true
+                                        }
+                                    }
+                                )
+                            )
+                            .font(.system(size: 17, weight: .regular))
+                            .multilineTextAlignment(.leading)
+                            .foregroundColor(theme.textColor)
+                        }
                     }
-                }
-                
-                Divider()
-                
-                // Показ вариантов с пересадками
-                Text("Показывать варианты с пересадками")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(theme.textColor)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    RadioButtonView(
-                        label: "Да",
-                        isSelected: Binding(
-                            get: { trip.isDirect },
-                            set: { isSelected in
-                                trip.isDirect = isSelected
-                            }
-                        )
-                    )
-                    RadioButtonView(
-                        label: "Нет",
-                        isSelected: Binding(
-                            get: { !trip.isDirect },
-                            set: { isSelected in
-                                trip.isDirect = !isSelected
-                            }
-                        )
-                    )
+                    .padding(.horizontal, 16)
                 }
             }
-            .padding(.horizontal, 16)
-        }
-        .background(theme.backgroundColor)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    path.removeLast()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(theme.textColor)
+            .toolbarBackground(theme.backgroundColor, for: .navigationBar)
+            .environment(\.colorScheme, theme.colorScheme)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        path.removeLast()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(theme.textColor)
+                    }
                 }
             }
         }
@@ -85,6 +104,7 @@ struct FilterView: View {
 }
 
 struct CheckBoxView: View {
+    @EnvironmentObject var theme: Theme
     @Binding var isChecked: Bool
     
     var body: some View {
@@ -92,30 +112,32 @@ struct CheckBoxView: View {
             isChecked.toggle()
         }) {
             Image(systemName: isChecked ? "checkmark.square.fill" : "square")
-                .foregroundColor(.black)
+                .foregroundColor(theme.textColor)
         }
         .buttonStyle(BorderlessButtonStyle())
+        .frame(height: 60)
     }
 }
 
-// Радиокнопка
 struct RadioButtonView: View {
+    @EnvironmentObject var theme: Theme
     let label: String
     @Binding var isSelected: Bool
     
     var body: some View {
         HStack {
             Text(label)
-                .foregroundColor(.black)
+                .foregroundColor(theme.textColor)
             Spacer()
             Button(action: {
                 isSelected = true
             }) {
                 Image(systemName: isSelected ? "largecircle.fill.circle" : "circle")
-                    .foregroundColor(.black)
+                    .foregroundColor(theme.textColor)
             }
             .buttonStyle(BorderlessButtonStyle())
         }
+        .frame(height: 60)
     }
 }
 
