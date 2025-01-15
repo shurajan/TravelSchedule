@@ -14,6 +14,9 @@ final class TripViewModel: ObservableObject {
     @Published var fromStation: Station?
     @Published var toStation: Station?
     
+    @Published var isDirect: Bool = false
+    @Published var TimeOfDay: [Date.TimeOfDay] = []
+    
     func invert() {
         (from, to) = (to, from)
         (fromStation, toStation) = (toStation, fromStation)

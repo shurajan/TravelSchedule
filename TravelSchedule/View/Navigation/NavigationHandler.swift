@@ -67,20 +67,15 @@ struct NavigationHandler {
                 )
             }
         case .routesView:
-            if let fromStation = tripViewModel.fromStation,
-               let toStation = tripViewModel.toStation {
-                
-                let routesViewModel = RouteViewModel(fromStation: fromStation,
-                                                     toStation: toStation)
-                RoutesView(path: $path, viewModel: routesViewModel, carrierViewModel: carrierViewModel)
-                    .navigationBarBackButtonHidden(true)
-            }
+            let routeViewModel = RouteViewModel(tripViewModel: tripViewModel)
+            RoutesView(path: $path, carrierViewModel: carrierViewModel, routeViewModel: routeViewModel)
+                .navigationBarBackButtonHidden(true)
             
         case .carrierView(let carrier):
             CarrierView(path: $path, carrier: carrier)
             
-        case .timeSlotsView:
-            Text("Time Slots")
+        case .filterView:
+            FilterView(path: $path)
         }
     }
     

@@ -8,20 +8,19 @@
 import SwiftUI
 
 final class RouteViewModel: ObservableObject {
+    private var tripViewModel: TripViewModel
     private let routes: [Route]
-    private let fromStation: Station
-    private let toStation: Station
-    @Published var timeOfDay: [Date.TimeOfDay] = []
-    @Published var isDirect: Bool = false
     
     var filteredRoutes: [Route] {
-        let allOptions = findRoute(from: fromStation.code, to: toStation.code)
-        return allOptions
+        guard let fromStation = tripViewModel.fromStation,
+              let toStation = tripViewModel.toStation else {
+            return []
+        }
+        return findRoute(from: fromStation.code, to: toStation.code)
     }
     
-    init(routes: [Route] = Route.mockRoutes, fromStation: Station, toStation: Station) {
-        self.fromStation = fromStation
-        self.toStation = toStation
+    init(tripViewModel: TripViewModel, routes: [Route] = Route.mockRoutes) {
+        self.tripViewModel = tripViewModel
         self.routes = routes
     }
     

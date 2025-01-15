@@ -11,6 +11,6 @@ enum ViewPath: Hashable {
     case stationsFromView
     case stationsToView
     case routesView
-    case timeSlotsView
+    case filterView
     case carrierView(Carrier)
 }

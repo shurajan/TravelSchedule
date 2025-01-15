@@ -11,8 +11,8 @@ struct RoutesView: View {
     @EnvironmentObject var themeViewModel: ThemeViewModel
     @EnvironmentObject var tripViewModel: TripViewModel
     @Binding var path: [ViewPath]
-    @ObservedObject var viewModel: RouteViewModel
     @ObservedObject var carrierViewModel: CarrierViewModel
+    @ObservedObject var routeViewModel: RouteViewModel
     
     var body: some View {
         ZStack {
@@ -22,28 +22,35 @@ struct RoutesView: View {
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(themeViewModel.textColor)
                 
-                Spacer().frame(height: 16)
-                
-                ScrollView(.vertical, showsIndicators: false) {
-                    LazyVStack(spacing: 8) {
-                        ForEach(viewModel.filteredRoutes) { route in
-                            if let carrier = carrierViewModel.findByID(route.carrierID) {
-                                RouteView(route: route, carrier: carrier)
-                                    .onTapGesture {
-                                        handleRouteSelection(route)
-                                    }
+                if !routeViewModel.filteredRoutes.isEmpty {
+                    Spacer().frame(height: 16)
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVStack(spacing: 8) {
+                            ForEach(routeViewModel.filteredRoutes) { route in
+                                if let carrier = carrierViewModel.findByID(route.carrierID) {
+                                    RouteView(route: route, carrier: carrier)
+                                        .onTapGesture {
+                                            handleRouteSelection(route)
+                                        }
+                                }
                             }
                         }
                     }
+                } else {
+                    Spacer()
+                    Text("Вариантов нет")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(themeViewModel.textColor)
+                    Spacer()
                 }
             }
-            .padding(.horizontal, 16)
             
             VStack {
                 Spacer()
                 
                 Button(action: {
-                    print("Button tapped")
+                    handleFilterButtonTap()
                 }) {
                     Text("Уточнить время")
                         .font(.system(size: 17, weight: .bold))
@@ -52,11 +59,11 @@ struct RoutesView: View {
                         .background(ColorPalette.blue.color)
                         .cornerRadius(16)
                 }
-                .padding(.horizontal, 16)
                 .padding(.bottom, 24)
             }
         }
         .background(themeViewModel.backgroundColor)
+        .padding(.horizontal, 16)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -76,6 +83,10 @@ struct RoutesView: View {
             path.append(.carrierView(carrier))
         }
     }
+    
+    private func handleFilterButtonTap() {
+        path.append(.filterView)
+    }
 }
 
 #Preview {
@@ -85,13 +96,10 @@ struct RoutesView: View {
     tripViewModel.fromStation = City.mockCities[0].stations[0]
     tripViewModel.toStation = City.mockCities[1].stations[0]
     
-    let viewModel = RouteViewModel(fromStation: City.mockCities[0].stations[0],
-                                   toStation: City.mockCities[1].stations[0])
-    
     let carrierViewModel = CarrierViewModel()
+    let routeViewModel = RouteViewModel(tripViewModel: tripViewModel)
     
-    
-    return RoutesView(path: .constant([]), viewModel: viewModel, carrierViewModel: carrierViewModel)
+    return RoutesView(path: .constant([]), carrierViewModel: carrierViewModel, routeViewModel: routeViewModel)
         .environmentObject(tripViewModel)
         .environmentObject(ThemeViewModel())
 }

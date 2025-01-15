@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CarrierViewModel: ObservableObject {
+final class CarrierViewModel: ObservableObject {
     private var carriers: [Carrier]
     
     init(carriers: [Carrier] = Carrier.mockCarriers) {

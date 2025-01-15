@@ -17,7 +17,7 @@ struct CarrierView: View {
             Image(carrier.logo)
                 .resizable()
                 .scaledToFit()
-                .frame(width: .infinity, height: 144)
+                .frame(height: 144)
                 .padding(.horizontal, 16)
                 .frame(maxWidth: .infinity, alignment: .center)
             
