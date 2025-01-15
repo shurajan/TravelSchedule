@@ -15,16 +15,26 @@ struct UserAgreementView: View {
     
     var body: some View {
         VStack {
-            WebView(
-                url: URL(string: "https://yandex.ru/legal/practicum_offer")!,
-                onError: { error in
-                    errorService.showError(.networkError(message: error.localizedDescription))
-                    dismiss()
-                }
-            )
-            .padding(.top, 16)
-            .padding(.horizontal, 16)
-            .edgesIgnoringSafeArea(.bottom)
+            if let url = AppConstants.userAgreementURL {
+                WebView(
+                    url: url,
+                    backgroundColor: theme.backgroundColor,
+                    textColor: theme.textColor,
+                    onError: { error in
+                        errorService.showError(.networkError(message: error.localizedDescription))
+                        dismiss()
+                    }
+                )
+                .padding(.top, 16)
+                .padding(.horizontal, 16)
+                .edgesIgnoringSafeArea(.bottom)
+            } else {
+                Spacer()
+                    .onAppear {
+                        errorService.showError(.networkError(message: "Incorrect URL"))
+                        dismiss()
+                    }
+            }
         }
         .foregroundColor(theme.textColor)
         .background(theme.backgroundColor)
@@ -61,41 +71,6 @@ struct UserAgreementView: View {
     }
 }
 
-struct WebView: UIViewRepresentable {
-    let url: URL
-    let onError: (Error) -> Void
-    
-    func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
-        webView.navigationDelegate = context.coordinator
-        return webView
-    }
-    
-    func updateUIView(_ uiView: WKWebView, context: Context) {
-        let request = URLRequest(url: url)
-        uiView.load(request)
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(onError: onError)
-    }
-    
-    class Coordinator: NSObject, WKNavigationDelegate {
-        let onError: (Error) -> Void
-        
-        init(onError: @escaping (Error) -> Void) {
-            self.onError = onError
-        }
-        
-        func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-            onError(error)
-        }
-        
-        func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-            onError(error)
-        }
-    }
-}
 
 #Preview {
     NavigationStack {
