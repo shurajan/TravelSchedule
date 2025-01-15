@@ -18,72 +18,70 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     let onItemTap: (ViewModel.Item) -> Void
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(viewModel.searchText.isEmpty ? AppColors.gray.color : theme.textColor)
-                        .padding(.leading, 8)
-                    
-                    TextField("",
-                              text: $viewModel.searchText,
-                              prompt: Text("Введите запрос")
-                                           .foregroundColor(AppColors.gray.color))
-                        .foregroundColor(theme.textColor)
-                        .autocorrectionDisabled(true)
-                        .autocapitalization(.none)
-                        .frame(height: 36)
-                }
-                .background(theme.searchFieldBackgroundColor)
-                .cornerRadius(10)
-                .padding()
+        VStack(spacing: 0) {
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(viewModel.searchText.isEmpty ? AppColors.gray.color : theme.textColor)
+                    .padding(.leading, 8)
                 
-                if viewModel.filteredItems.isEmpty {
-                    Spacer()
-                    Text(notification)
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(theme.textColor)
-                    Spacer()
-                } else {
-                    List {
-                        ForEach(viewModel.filteredItems, id: \.self) { item in
-                            Button {
-                                onItemTap(item)
-                            } label: {
-                                HStack {
-                                    Text(viewModel.displayName(for: item))
-                                        .font(.system(size: 17, weight: .regular))
-                                        .foregroundColor(theme.textColor)
-                                        .padding(.leading, 16)
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(theme.textColor)
-                                        .padding(.trailing, 16)
-                                }
-                                .frame(height: 60)
-                            }
-                            .background(theme.backgroundColor)
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets())
-                        }
-                    }
-                    .listStyle(.plain)
-                }
-                
+                TextField("",
+                          text: $viewModel.searchText,
+                          prompt: Text("Введите запрос")
+                    .foregroundColor(AppColors.gray.color))
+                .foregroundColor(theme.textColor)
+                .autocorrectionDisabled(true)
+                .autocapitalization(.none)
+                .frame(height: 36)
             }
-            .background(theme.backgroundColor)
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        viewModel.searchText = "" 
-                        path.removeLast()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(theme.textColor)
+            .background(theme.searchFieldBackgroundColor)
+            .cornerRadius(10)
+            .padding()
+            
+            if viewModel.filteredItems.isEmpty {
+                Spacer()
+                Text(notification)
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(theme.textColor)
+                Spacer()
+            } else {
+                List {
+                    ForEach(viewModel.filteredItems, id: \.self) { item in
+                        Button {
+                            onItemTap(item)
+                        } label: {
+                            HStack {
+                                Text(viewModel.displayName(for: item))
+                                    .font(.system(size: 17, weight: .regular))
+                                    .foregroundColor(theme.textColor)
+                                    .padding(.leading, 16)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(theme.textColor)
+                                    .padding(.trailing, 16)
+                            }
+                            .frame(height: 60)
+                        }
+                        .background(theme.backgroundColor)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets())
                     }
+                }
+                .listStyle(.plain)
+            }
+            
+        }
+        .background(theme.backgroundColor)
+        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    viewModel.searchText = "" 
+                    path.removeLast()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(theme.textColor)
                 }
             }
         }
