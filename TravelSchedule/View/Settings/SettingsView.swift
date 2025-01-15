@@ -28,11 +28,12 @@ struct SettingsView: View {
                 }
                 .padding()
                 
-                NavigationLink(destination: Text("Тут будет текст соглашения")) {
-                    HStack {
-                        Text("Пользовательское соглашение")
-                            .foregroundColor(theme.textColor)
-                        Spacer()
+                HStack {
+                    Text("Пользовательское соглашение")
+                        .foregroundColor(theme.textColor)
+                    Spacer()
+                    NavigationLink(destination: UserAgreementView()
+                                                    .navigationBarBackButtonHidden(true)) {
                         Image(systemName: "chevron.right")
                             .foregroundColor(theme.textColor)
                     }
