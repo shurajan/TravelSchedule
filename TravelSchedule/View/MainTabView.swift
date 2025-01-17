@@ -14,7 +14,7 @@ struct MainTabView: View {
     @State private var path: [ViewPath] = []
     @StateObject private var trip: Trip = Trip()
     
-    @StateObject var citiesViewModel = SelectorViewModel<City>(
+    @StateObject private var citiesViewModel = SelectorViewModel<City>(
         allItems: City.mockCities,
         nameKeyPath: \.name
     )

@@ -25,8 +25,7 @@ struct UserAgreementView: View {
                         dismiss()
                     }
                 )
-                .padding(.top, 16)
-                .padding(.horizontal, 16)
+                .padding([.top, .horizontal], 16)
                 .edgesIgnoringSafeArea(.bottom)
             } else {
                 Spacer()

@@ -14,7 +14,7 @@ final class CarrierViewModel: ObservableObject {
         self.carriers = carriers
     }
 
-    func findByID(_ id: UUID) -> Carrier? {
+    func findCarrier(by id: UUID) -> Carrier? {
         return carriers.first { $0.id == id }
     }
 }

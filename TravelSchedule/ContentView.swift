@@ -14,7 +14,6 @@ struct ContentView: View {
     
     var body: some View {
         MainTabView()
-            //.environmentObject(trip)
             .environmentObject(theme)
             .environmentObject(errorService)
             .onAppear {
@@ -35,7 +34,7 @@ struct ContentView: View {
             }
     }
     
-    func nearestStations() throws {
+    private func nearestStations() throws {
         let client = Client(
             serverURL: try Servers.Server1.url(),
             transport: URLSessionTransport()
@@ -52,7 +51,7 @@ struct ContentView: View {
         }
     }
     
-    func searches() throws {
+    private func searches() throws {
         let client = Client(
             serverURL: try Servers.Server1.url(),
             transport: URLSessionTransport()
@@ -69,7 +68,7 @@ struct ContentView: View {
         }
     }
     
-    func schedules() throws {
+    private func schedules() throws {
         let client = Client(
             serverURL: try Servers.Server1.url(),
             transport: URLSessionTransport()
@@ -86,7 +85,7 @@ struct ContentView: View {
         }
     }
     
-    func threads() throws {
+    private func threads() throws {
         let client = Client(
             serverURL: try Servers.Server1.url(),
             transport: URLSessionTransport()
@@ -103,7 +102,7 @@ struct ContentView: View {
         }
     }
     
-    func nearestSettlement() throws {
+    private func nearestSettlement() throws {
         let client = Client(
             serverURL: try Servers.Server1.url(),
             transport: URLSessionTransport()
@@ -120,7 +119,7 @@ struct ContentView: View {
         }
     }
     
-    func carriers() throws {
+    private func carriers() throws {
         let client = Client(
             serverURL: try Servers.Server1.url(),
             transport: URLSessionTransport()
@@ -137,7 +136,7 @@ struct ContentView: View {
         }
     }
     
-    func stationsList(timeout: TimeInterval = 120) throws {
+    private func stationsList(timeout: TimeInterval = 120) throws {
         let sessionConfiguration = URLSessionConfiguration.default
         sessionConfiguration.timeoutIntervalForRequest = timeout
         sessionConfiguration.timeoutIntervalForResource = timeout
@@ -169,7 +168,7 @@ struct ContentView: View {
         }
     }
     
-    func copyright() throws {
+    private func copyright() throws {
         let client = Client(
             serverURL: try Servers.Server1.url(),
             transport: URLSessionTransport()

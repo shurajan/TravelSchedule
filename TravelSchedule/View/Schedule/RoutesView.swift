@@ -29,7 +29,7 @@ struct RoutesView: View {
                     ScrollView(.vertical, showsIndicators: false) {
                         LazyVStack(spacing: 8) {
                             ForEach(routeViewModel.filteredRoutes) { route in
-                                if let carrier = carrierViewModel.findByID(route.carrierID) {
+                                if let carrier = carrierViewModel.findCarrier(by: route.carrierID) {
                                     RouteView(route: route, carrier: carrier)
                                         .onTapGesture {
                                             handleRouteSelection(route)
@@ -93,7 +93,7 @@ struct RoutesView: View {
     }
     
     private func handleRouteSelection(_ route: Route) {
-        if let carrier = carrierViewModel.findByID(route.carrierID) {
+        if let carrier = carrierViewModel.findCarrier(by: route.carrierID) {
             path.append(.carrierView(carrier))
         }
     }

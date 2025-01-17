@@ -9,11 +9,7 @@ import SwiftUI
 import Combine
 
 final class Theme: ObservableObject {
-    @AppStorage("isDarkMode") var isDarkMode = false {
-        didSet {
-            objectWillChange.send()
-        }
-    }
+    @AppStorage("isDarkMode") var isDarkMode = false
     
     var backgroundColor: Color {
         isDarkMode ? AppColors.black.color : AppColors.white.color

@@ -24,7 +24,7 @@ enum AppError: Identifiable, Error {
 }
 
 final class ErrorService: ObservableObject {
-    @Published var error: AppError? = nil
+    @Published var error: AppError?
     
     func showError(_ error: AppError) {
         DispatchQueue.main.async {

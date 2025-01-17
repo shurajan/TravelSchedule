@@ -10,9 +10,38 @@ import Foundation
 extension Date {
     
     static let dateFormatter = newDateFormatter()
-    static let ISODateFormatter = newISODateFormatter()
-    static let shortDateFormatter = newShortDateFormatter()
-    static let dayMonthFormatter = newDayMonthFormatter()
+    static let ISODateFormatter = getISODateFormatter()
+    static let shortDateFormatter = getShortDateFormatter()
+    static let dayMonthFormatter = getDayMonthFormatter()
+    
+    var dateString: String {
+        Date.dateFormatter.string(from: self)
+    }
+    
+    var shortDateString: String {
+        Date.shortDateFormatter.string(from: self)
+    }
+    
+    var shortTimeString: String {
+        Date.getTimeFormatter().string(from: self)
+    }
+    
+    var timeStampString: String {
+        Date.ISODateFormatter.string(from: self)
+    }
+    
+    var dayMonthString: String {
+        Date.dayMonthFormatter.string(from: self)
+    }
+    
+    func startOfDay() -> Date {
+        Calendar.current.startOfDay(for: self)
+    }
+    
+    func isSameDay(as date: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(self, inSameDayAs: date)
+    }
     
     private static func newDateFormatter() -> DateFormatter {
         let formatter = DateFormatter()
@@ -22,58 +51,29 @@ extension Date {
         return formatter
     }
     
-    private static func newISODateFormatter() -> ISO8601DateFormatter {
+    private static func getISODateFormatter() -> ISO8601DateFormatter {
         let formatter = ISO8601DateFormatter()
         return formatter
     }
     
-    private static func newShortDateFormatter() -> DateFormatter {
+    private static func getShortDateFormatter() -> DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yy"
         return formatter
     }
     
-    private static func newDayMonthFormatter() -> DateFormatter {
+    private static func getDayMonthFormatter() -> DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "d MMMM"
         formatter.locale = Locale(identifier: "ru_RU")
         return formatter
     }
     
-    private static func timeFormatter() -> DateFormatter {
+    private static func getTimeFormatter() -> DateFormatter {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ru_RU")
         formatter.dateFormat = "HH:mm"
         return formatter
-    }
-    
-    var dateString: String {
-        return Date.dateFormatter.string(from: self)
-    }
-    
-    var shortDateString: String {
-        return Date.shortDateFormatter.string(from: self)
-    }
-    
-    var shortTimeString: String {
-        return Date.timeFormatter().string(from: self)
-    }
-    
-    var timeStampString: String {
-        return Date.ISODateFormatter.string(from: self)
-    }
-    
-    var dayMonthString: String {
-        return Date.dayMonthFormatter.string(from: self)
-    }
-    
-    func startOfDay() -> Date {
-        return Calendar.current.startOfDay(for: self)
-    }
-    
-    func isSameDay(as date: Date) -> Bool {
-        let calendar = Calendar.current
-        return calendar.isDate(self, inSameDayAs: date)
     }
 }
 
@@ -98,7 +98,7 @@ extension Date {
         }
         
         var description: String {
-            return "\(self.rawValue) \(timeRange)"
+            return "\(rawValue) \(timeRange)"
         }
         
         func makeIterator() -> AnyIterator<TimeOfDay> {
