@@ -16,7 +16,7 @@ protocol StationsListServiceProtocol {
 }
 
 final class StationsListService: BasicService, StationsListServiceProtocol {
-    private let limit = 1024 * 1024 * 50 //50MiB
+    private let limit = APIConstants.maxJsonSize
     func getStationsList() async throws -> StationsList {
         let response = try await client.getStationsList(query: .init(
             apikey: self.apikey
