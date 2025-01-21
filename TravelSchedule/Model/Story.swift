@@ -12,12 +12,16 @@ struct Story: Hashable, Identifiable {
     let previewImageName: String
     let imageNames: [String]
     let text: String
-    let isWatched: Bool
+    var isWatched: Bool
+    
+    mutating func setWatched() {
+        isWatched = true
+    }
 }
 
 
 extension Story {
-    static let mockStories: [Story] = [
+    static var mockStories: [Story] = [
         Story(
             previewImageName: "preview_1",
             imageNames: ["1", "2"],

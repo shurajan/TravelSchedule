@@ -11,7 +11,8 @@ struct NavigationHandler {
     @Binding var path: [ViewPath]
     @ObservedObject var trip: Trip
     var citiesViewModel: SelectorViewModel<City>
-    var carrierViewModel: CarrierViewModel
+    var carriersViewModel: CarrierViewModel
+    var storiesViewModel: StoryViewModel
     
     @ViewBuilder
     func destination(for id: ViewPath) -> some View {
@@ -70,7 +71,7 @@ struct NavigationHandler {
             }
         case .routesView:
             let routeViewModel = RouteViewModel(trip: trip)
-            RoutesView(path: $path, trip: trip, carrierViewModel: carrierViewModel, routeViewModel: routeViewModel)
+            RoutesView(path: $path, trip: trip, carrierViewModel: carriersViewModel, routeViewModel: routeViewModel)
                 .navigationBarBackButtonHidden(true)
             
         case .carrierView(let carrier):
@@ -80,6 +81,12 @@ struct NavigationHandler {
         case .filterView:
             FilterView(path: $path, trip: trip)
                 .navigationBarBackButtonHidden(true)
+            
+        case .storyView(let index):
+            StoryView(story: storiesViewModel.stories[index])
+                .onDisappear{
+                    storiesViewModel.stories[index].setWatched()
+                }
         }
     }
     
