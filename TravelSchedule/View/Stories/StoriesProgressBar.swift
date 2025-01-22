@@ -8,22 +8,22 @@
 import SwiftUI
 import Combine
 
-struct StoryProgressBar: View {
-    let imagesCount: Int
+struct StoriesProgressBar: View {
+    let storiesCount: Int
     let timerConfiguration: TimerConfiguration
     @Binding var currentProgress: CGFloat
     @State private var timer: Timer.TimerPublisher
     @State private var cancellable: Cancellable?
     
     init(storiesCount: Int, timerConfiguration: TimerConfiguration, currentProgress: Binding<CGFloat>) {
-        self.imagesCount = storiesCount
+        self.storiesCount = storiesCount
         self.timerConfiguration = timerConfiguration
         self._currentProgress = currentProgress
         self.timer = Self.makeTimer(configuration: timerConfiguration)
     }
     
     var body: some View {
-        ProgressBar(numberOfSections: imagesCount, progress: currentProgress)
+        ProgressBar(numberOfSections: storiesCount, progress: currentProgress)
             .padding(.init(top: 7, leading: 12, bottom: 12, trailing: 12))
             .onAppear {
                 timer = Self.makeTimer(configuration: timerConfiguration)
@@ -44,7 +44,7 @@ struct StoryProgressBar: View {
     }
 }
 
-extension StoryProgressBar {
+extension StoriesProgressBar {
     private static func makeTimer(configuration: TimerConfiguration) -> Timer.TimerPublisher {
         Timer.publish(every: configuration.timerTickInternal, on: .main, in: .common)
     }

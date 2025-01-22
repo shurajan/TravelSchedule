@@ -83,10 +83,8 @@ struct NavigationHandler {
                 .navigationBarBackButtonHidden(true)
             
         case .storyView(let index):
-            StoryView(story: storiesViewModel.stories[index])
-                .onDisappear{
-                    storiesViewModel.stories[index].setWatched()
-                }
+            StoriesView(stories: storiesViewModel.stories)
+                .navigationBarBackButtonHidden(true)
         }
     }
     

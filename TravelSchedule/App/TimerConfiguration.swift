@@ -8,26 +8,26 @@
 import Foundation
 
 struct TimerConfiguration {
-    let imagesCount: Int
+    let storiesCount: Int
     let timerTickInternal: TimeInterval
     let progressPerTick: CGFloat
     
     init(
-        imagesCount: Int,
+        storiesCount: Int,
         secondsPerStory: TimeInterval = 5,
         timerTickInternal: TimeInterval = 0.25
     ) {
-        self.imagesCount = imagesCount
+        self.storiesCount = storiesCount
         self.timerTickInternal = timerTickInternal
-        self.progressPerTick = 1.0 / CGFloat(imagesCount) / secondsPerStory * timerTickInternal
+        self.progressPerTick = 1.0 / CGFloat(storiesCount) / secondsPerStory * timerTickInternal
     }
     
-    func progress(for imageIndex: Int) -> CGFloat {
-        return min(CGFloat(imageIndex) / CGFloat(imagesCount), 1)
+    func progress(for storyIndex: Int) -> CGFloat {
+        return min(CGFloat(storyIndex) / CGFloat(storiesCount), 1)
     }
     
     func index(for progress: CGFloat) -> Int {
-        return min(Int(progress * CGFloat(imagesCount)), imagesCount - 1)
+        return min(Int(progress * CGFloat(storiesCount)), storiesCount - 1)
     }
     
     func nextProgress(progress: CGFloat) -> CGFloat {
