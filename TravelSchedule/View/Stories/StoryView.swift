@@ -15,7 +15,7 @@ struct StoryView: View {
     @State private var previousImageIndex: Int = 0
     
     private var timerConfiguration: TimerConfiguration {
-        TimerConfiguration(storiesCount: story.imageNames.count)
+        TimerConfiguration(pagesCount: story.imageNames.count)
     }
     
     var body: some View {
@@ -67,6 +67,12 @@ struct StoryView: View {
     }
     
     private func didChangeCurrentProgress(newProgress: CGFloat) {
+        if currentProgress == 1 && newProgress == 1 {
+            withAnimation {
+                currentStoryIndex+=1
+            }
+        }
+        
         let index = timerConfiguration.index(for: newProgress)
 
         guard index != currentImageIndex else { return }
