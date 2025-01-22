@@ -40,11 +40,11 @@ struct ProgressBar: View {
     }
 }
 
-private struct MaskView: View {
+struct MaskView: View {
     let numberOfSections: Int
     
     var body: some View {
-        HStack {
+        HStack(spacing: 6) {
             ForEach(0..<numberOfSections, id: \.self) { _ in
                 MaskFragmentView()
             }
@@ -52,20 +52,30 @@ private struct MaskView: View {
     }
 }
 
-private struct MaskFragmentView: View {
+struct MaskFragmentView: View {
     var body: some View {
         RoundedRectangle(cornerRadius: .progressBarCornerRadius)
-            .fixedSize(horizontal: false, vertical: true)
             .frame(height: .progressBarHeight)
-            .foregroundStyle(.white)
+            .fixedSize(
+                horizontal: false,
+                vertical: true)
+            .foregroundStyle(AppColors.white.color)
     }
 }
 
 #Preview {
-    AppColors.white.color
+    AppColors.gray.color
         .ignoresSafeArea()
         .overlay(
-            ProgressBar(numberOfSections: 5, progress: 0.5)
-                .padding()
+            VStack(spacing: 10) {
+                ProgressBar(numberOfSections: 5, progress: 0.5)
+                    .padding()
+                
+                MaskView(numberOfSections: 5)
+                    .padding()
+                
+                MaskFragmentView()
+                    .padding()
+            }
         )
 }

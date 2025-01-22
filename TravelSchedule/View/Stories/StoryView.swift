@@ -49,13 +49,12 @@ struct StoryView: View {
                         .onChange(of: currentProgress) { newValue in
                             didChangeCurrentProgress(newProgress: newValue)
                         }
-                        .padding(.top, geometry.safeAreaInsets.top)
+                        .padding(.top, 28)
+                        .padding(.horizontal, 12)
                     }
                 }
         }
     }
-    
-    // MARK: - Логика
     
     private func didChangeCurrentIndex(oldIndex: Int, newIndex: Int) {
         guard oldIndex != newIndex else { return }
@@ -69,13 +68,7 @@ struct StoryView: View {
     
     private func didChangeCurrentProgress(newProgress: CGFloat) {
         let index = timerConfiguration.index(for: newProgress)
-        
-        if newProgress == 1.0 {
-            withAnimation{
-                currentStoryIndex += 1
-            }
-        }
-        
+
         guard index != currentImageIndex else { return }
         
         withAnimation {
