@@ -16,16 +16,9 @@ struct StoriesTabView: View {
         TabView(selection: $currentStoryIndex) {
             ForEach(stories) { story in
                 StoryView(story: story)
-                    .onTapGesture {
-                        didTapStory()
-                    }
             }
         }
         .ignoresSafeArea()
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-    }
-    
-    func didTapStory() {
-        currentStoryIndex = min(currentStoryIndex + 1, stories.count - 1)
     }
 }
