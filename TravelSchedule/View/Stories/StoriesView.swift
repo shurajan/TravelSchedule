@@ -8,21 +8,24 @@
 import SwiftUI
 
 struct StoriesView: View {
-    var stories: [Story]
-    @State private var currentStoryIndex: Int = 0
-    @State private var previousStoryIndex: Int = 0
+    @ObservedObject var viewModel: StoryViewModel
+    @Binding var currentStoryIndex: Int
+
     
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            StoriesTabView(stories: stories, currentStoryIndex: $currentStoryIndex)
-                .onChange(of: currentStoryIndex) { newValue in
-                    didChangeCurrentIndex(oldIndex: previousStoryIndex, newIndex: newValue)
-                    previousStoryIndex = newValue
-                }
+        TabView(selection: $currentStoryIndex) {
+            ForEach(viewModel.stories) { story in
+                StoryView(story: story, currentStoryIndex: $currentStoryIndex)
+            }
+        }
+        .ignoresSafeArea()
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .onChange(of: currentStoryIndex) { newValue in
+            didChangeCurrentIndex(newIndex: newValue)
         }
     }
     
-    private func didChangeCurrentIndex(oldIndex: Int, newIndex: Int) {
+    private func didChangeCurrentIndex(newIndex: Int) {
         print("New story № \(newIndex)")
     }
 }

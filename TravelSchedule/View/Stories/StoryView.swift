@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StoryView: View {
     let story: Story
-    
+    @Binding var currentStoryIndex: Int
     @State private var currentProgress: CGFloat = 0
     @State private var currentImageIndex: Int = 0
     @State private var previousImageIndex: Int = 0
@@ -19,39 +19,43 @@ struct StoryView: View {
     }
     
     var body: some View {
-        AppColors.black.color
-            .overlay {
-                ZStack {
-                    TabView(selection: $currentImageIndex) {
-                        ForEach(Array(story.imageNames.enumerated()), id: \.offset) { index, image in
-                            Image(image)
-                                .resizable()
-                                .scaledToFit()
-                                .onTapGesture {
-                                    didTapImage()
-                                }
-                                .tag(index)
+        GeometryReader { geometry in
+            AppColors.black.color
+                .ignoresSafeArea()
+                .overlay {
+                    ZStack(alignment: .top) {
+                        TabView(selection: $currentImageIndex) {
+                            ForEach(Array(story.imageNames.enumerated()), id: \.offset) { index, imageName in
+                                StoryPageView(image: imageName, text: story.text)
+                                    .clipped()
+                                    .tag(index)
+                                    .onTapGesture {
+                                        didTapImage()
+                                    }
+                            }
                         }
-                    }
-                    .ignoresSafeArea()
-                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                    
-                    if #available(iOS 17.0, *) {
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                        .onChange(of: currentImageIndex) { newValue in
+                            didChangeCurrentIndex(oldIndex: previousImageIndex, newIndex: newValue)
+                            previousImageIndex = newValue
+                        }
+                        .background(AppColors.black.color)
+                        
                         StoriesProgressBar(
                             storiesCount: story.imageNames.count,
                             timerConfiguration: timerConfiguration,
                             currentProgress: $currentProgress
                         )
-                        .padding(.top, 20)
-                        .onChange(of: currentProgress) { _, newValue in
+                        .onChange(of: currentProgress) { newValue in
                             didChangeCurrentProgress(newProgress: newValue)
                         }
-                    } else {
-                        // Fallback on earlier versions
+                        .padding(.top, geometry.safeAreaInsets.top)
                     }
                 }
-            }
+        }
     }
+    
+    // MARK: - Логика
     
     private func didChangeCurrentIndex(oldIndex: Int, newIndex: Int) {
         guard oldIndex != newIndex else { return }
@@ -65,15 +69,26 @@ struct StoryView: View {
     
     private func didChangeCurrentProgress(newProgress: CGFloat) {
         let index = timerConfiguration.index(for: newProgress)
+        
+        if newProgress == 1.0 {
+            withAnimation{
+                currentStoryIndex += 1
+            }
+        }
+        
         guard index != currentImageIndex else { return }
         
         withAnimation {
-            print(currentImageIndex)
             currentImageIndex = index
         }
     }
     
-    func didTapImage() {
-        currentImageIndex = min(currentImageIndex + 1, story.imageNames.count - 1)
+    private func didTapImage() {
+        if currentImageIndex == story.imageNames.count - 1 {
+            currentProgress = 1.0
+            return
+        }
+        
+        currentImageIndex += 1
     }
 }

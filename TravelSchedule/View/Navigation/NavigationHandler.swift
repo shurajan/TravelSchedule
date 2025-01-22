@@ -81,10 +81,6 @@ struct NavigationHandler {
         case .filterView:
             FilterView(path: $path, trip: trip)
                 .navigationBarBackButtonHidden(true)
-            
-        case .storyView(let index):
-            StoriesView(stories: storiesViewModel.stories)
-                .navigationBarBackButtonHidden(true)
         }
     }
     

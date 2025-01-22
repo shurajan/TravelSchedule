@@ -11,6 +11,8 @@ struct StoryCollectionView: View {
     @EnvironmentObject var theme: Theme
     @Binding var path: [ViewPath]
     @ObservedObject var viewModel: StoryViewModel
+    @State private var storiesPresentationIsOn = false
+    @State private var currentStoryIndex: Int = 0
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -20,6 +22,9 @@ struct StoryCollectionView: View {
                         .onTapGesture {
                             didTapStory(at: index)
                         }
+                        .fullScreenCover(isPresented: $storiesPresentationIsOn, onDismiss: didDismiss) {
+                            StoriesView(viewModel: viewModel, currentStoryIndex: $currentStoryIndex)
+                        }
                 }
             }
             .padding(EdgeInsets(top: 24, leading: 16, bottom: 24, trailing: 16))
@@ -28,9 +33,12 @@ struct StoryCollectionView: View {
     }
     
     func didTapStory(at index: Int) {
-        let story = viewModel.stories[index]
-        print("\(viewModel.stories[index].id) - \(viewModel.stories[index].text)")
-        path.append(.storyView(index))
+        storiesPresentationIsOn = true
+        currentStoryIndex = index
+    }
+    
+    func didDismiss() {
+        storiesPresentationIsOn = false
     }
 }
 

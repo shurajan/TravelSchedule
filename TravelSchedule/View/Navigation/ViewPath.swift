@@ -13,5 +13,4 @@ enum ViewPath: Hashable {
     case routesView
     case filterView
     case carrierView(Carrier)
-    case storyView(Int)
 }
