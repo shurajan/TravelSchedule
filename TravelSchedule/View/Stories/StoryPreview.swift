@@ -36,13 +36,5 @@ struct StoryPreview: View {
 }
 
 #Preview {
-    StoryPreview(
-        story: Story(
-            id: 0,
-            previewImageName: "preview_1",
-            imageNames: ["1", "2"],
-            text: "Text Text Text Text Text Text Text Text",
-            isWatched: true
-        )
-    )
+    StoryPreview(story: Story.mockStories[0])
 }

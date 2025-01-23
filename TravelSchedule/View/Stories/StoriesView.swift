@@ -20,12 +20,5 @@ struct StoriesView: View {
         }
         .ignoresSafeArea()
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-        .onChange(of: currentStoryIndex) { newValue in
-            didChangeCurrentIndex(newIndex: newValue)
-        }
-    }
-    
-    private func didChangeCurrentIndex(newIndex: Int) {
-        print("New story № \(newIndex)")
     }
 }

@@ -26,7 +26,7 @@ struct StoryView: View {
                     ZStack(alignment: .top) {
                         TabView(selection: $currentImageIndex) {
                             ForEach(Array(story.imageNames.enumerated()), id: \.offset) { index, imageName in
-                                StoryPageView(image: imageName, text: story.text)
+                                StoryPageView(image: imageName, description: story.description, text: story.text)
                                     .clipped()
                                     .tag(index)
                                     .onTapGesture {
