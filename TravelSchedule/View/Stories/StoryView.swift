@@ -48,12 +48,16 @@ struct StoryView: View {
                                 .onEnded { value in
                                     if value.translation.width < -50 {
                                         if currentImageIndex == story.imageNames.count-1 {
-                                            viewModel.moveToNextStory()
+                                            withAnimation {
+                                                viewModel.moveToNextStory()
+                                            }
                                         }
                                             
                                     } else if value.translation.width > 50 {
                                         if currentImageIndex == 0 {
-                                            viewModel.moveToPreviousStory()
+                                            withAnimation {
+                                                viewModel.moveToPreviousStory()
+                                            }
                                         }
                                     }
                                 }
