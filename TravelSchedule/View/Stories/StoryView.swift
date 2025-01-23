@@ -55,6 +55,21 @@ struct StoryView: View {
                         }
                         .padding(.top, 28)
                         .padding(.horizontal, 12)
+                        
+                        HStack {
+                            Spacer()
+                            
+                            Button(action: {
+                                viewModel.shouldDismissStories = true
+                            }) {
+                                Image("Close")
+                                    .resizable()
+                            }
+                            .frame(width: 30, height: 30)
+                            .padding(.top, 50)
+                            .padding(.trailing, 12)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
         }
