@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct StoryView: View {
-    let story: Story
-    @Binding var currentStoryIndex: Int
+    @ObservedObject var viewModel: StoryViewModel
+    
     @State private var currentProgress: CGFloat = 0
     @State private var currentImageIndex: Int = 0
     @State private var previousImageIndex: Int = 0
     
     private var timerConfiguration: TimerConfiguration {
         TimerConfiguration(pagesCount: story.imageNames.count)
+    }
+    
+    private var story: Story {
+        viewModel.getCurrentStory()
     }
     
     var body: some View {
@@ -69,7 +73,7 @@ struct StoryView: View {
     private func didChangeCurrentProgress(newProgress: CGFloat) {
         if currentProgress == 1 && newProgress == 1 {
             withAnimation {
-                currentStoryIndex+=1
+                viewModel.moveToNextStory()
             }
         }
         

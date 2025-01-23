@@ -8,14 +8,11 @@
 import SwiftUI
 
 struct StoriesView: View {
-    @ObservedObject var viewModel: StoryViewModel
-    @Binding var currentStoryIndex: Int
-
-    
+    @ObservedObject var viewModel: StoryViewModel    
     var body: some View {
-        TabView(selection: $currentStoryIndex) {
+        TabView(selection: $viewModel.currentIndex) {
             ForEach(viewModel.stories) { story in
-                StoryView(story: story, currentStoryIndex: $currentStoryIndex)
+                StoryView(viewModel: viewModel)
             }
         }
         .ignoresSafeArea()
