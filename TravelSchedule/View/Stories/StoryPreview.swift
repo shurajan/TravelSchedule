@@ -13,13 +13,13 @@ struct StoryPreview: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             Image(story.previewImageName)
-                .opacity(story.isWatched ? 1 : 0.5)
+                .opacity(story.isWatched ? 0.5 : 1)
                 .scaledToFit()
                 .frame(width: 92, height: 140)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(story.isWatched ? AppColors.blue.color : Color.clear, lineWidth: 4)
+                        .stroke(story.isWatched ? Color.clear : AppColors.blue.color, lineWidth: 4)
                 )
             
             Text(story.text)
@@ -36,5 +36,13 @@ struct StoryPreview: View {
 }
 
 #Preview {
-    StoryPreview(story: Story.mockStories[0])
+    var oldStory = Story.mockStories[0]
+    let newStory = Story.mockStories[1]
+    oldStory.setWatched()
+    
+    return HStack(spacing: 16) {
+        StoryPreview(story: oldStory)
+        StoryPreview(story: newStory)
+    }
 }
+
