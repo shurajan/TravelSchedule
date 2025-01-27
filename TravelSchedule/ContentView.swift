@@ -19,7 +19,7 @@ struct ContentView: View {
             .onAppear {
                 do {
                     //try nearestStations()
-                    try searches()
+                    //try searches()
                     //try schedules()
                     //try threads()
                     //try nearestSettlement()

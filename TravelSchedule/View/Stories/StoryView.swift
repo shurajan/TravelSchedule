@@ -2,46 +2,130 @@
 //  StoryView.swift
 //  TravelSchedule
 //
-//  Created by Alexander Bralnin on 04.01.2025.
+//  Created by Alexander Bralnin on 22.01.2025.
 //
 
 import SwiftUI
 
 struct StoryView: View {
-    let story: Story
+    @ObservedObject var viewModel: StoryViewModel
+    
+    @State private var currentProgress: CGFloat = 0
+    @State private var currentImageIndex: Int = 0
+    @State private var previousImageIndex: Int = 0
+    
+    private var timerConfiguration: TimerConfiguration {
+        TimerConfiguration(pagesCount: story.imageNames.count)
+    }
+    
+    private var story: Story {
+        viewModel.getCurrentStory()
+    }
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Image(story.previewImageName)
-                .opacity(story.isWatched ? 1 : 0.5)
-                .scaledToFit()
-                .frame(width: 92, height: 140)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(story.isWatched ? AppColors.blue.color : Color.clear, lineWidth: 4)
-                )
-            
-            Text(story.text)
-                .font(.system(size: 12))
-                .foregroundColor(AppColors.white.color)
-                .multilineTextAlignment(.leading)
-                .lineLimit(3)
-                .truncationMode(.tail)
-                .frame(width: 76, height: 45, alignment: .topLeading)
-                .padding(.horizontal, 8)
-                .padding(.bottom, 12)
+        GeometryReader { geometry in
+            AppColors.black.color
+                .ignoresSafeArea()
+                .overlay {
+                    ZStack(alignment: .top) {
+                        TabView(selection: $currentImageIndex) {
+                            ForEach(Array(story.imageNames.enumerated()), id: \.offset) { index, imageName in
+                                StoryPageView(image: imageName, description: story.description, text: story.text)
+                                    .clipped()
+                                    .tag(index)
+                                    .onTapGesture {
+                                        didTapImage()
+                                    }
+                            }
+                        }
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                        .onChange(of: currentImageIndex) { newValue in
+                            didChangeCurrentIndex(oldIndex: previousImageIndex, newIndex: newValue)
+                            previousImageIndex = newValue
+                        }
+                        .gesture(
+                            DragGesture()
+                                .onEnded { value in
+                                    if value.translation.width < -50 {
+                                        if currentImageIndex == story.imageNames.count-1 {
+                                            withAnimation {
+                                                viewModel.moveToNextStory()
+                                            }
+                                        }
+                                            
+                                    } else if value.translation.width > 50 {
+                                        if currentImageIndex == 0 {
+                                            withAnimation {
+                                                viewModel.moveToPreviousStory()
+                                            }
+                                        }
+                                    }
+                                }
+                        )
+                        .background(AppColors.black.color)
+                        
+                        StoriesProgressBar(
+                            storiesCount: story.imageNames.count,
+                            timerConfiguration: timerConfiguration,
+                            currentProgress: $currentProgress
+                        )
+                        .onChange(of: currentProgress) { newValue in
+                            didChangeCurrentProgress(newProgress: newValue)
+                        }
+                        .padding(.top, 28)
+                        .padding(.horizontal, 12)
+                        
+                        HStack {
+                            Spacer()
+                            
+                            Button(action: {
+                                viewModel.shouldDismissStories = true
+                            }) {
+                                Image("Close")
+                                    .resizable()
+                            }
+                            .frame(width: 30, height: 30)
+                            .padding(.top, 50)
+                            .padding(.trailing, 12)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
         }
     }
-}
+    
+    private func didChangeCurrentIndex(oldIndex: Int, newIndex: Int) {
+        guard oldIndex != newIndex else { return }
+        let progress = timerConfiguration.progress(for: newIndex)
+        guard abs(progress - currentProgress) >= 0.01 else { return }
+        
+        withAnimation {
+            currentProgress = progress
+        }
+    }
+    
+    private func didChangeCurrentProgress(newProgress: CGFloat) {
+        if currentProgress == 1 && newProgress == 1 {
+            withAnimation {
+                viewModel.moveToNextStory()
+            }
+        }
+        
+        let index = timerConfiguration.index(for: newProgress)
 
-#Preview {
-    StoryView(
-        story: Story(
-            previewImageName: "preview_1",
-            imageNames: ["1", "2"],
-            text: "Text Text Text Text Text Text Text Text",
-            isWatched: true
-        )
-    )
+        guard index != currentImageIndex else { return }
+        
+        withAnimation {
+            currentImageIndex = index
+        }
+    }
+    
+    private func didTapImage() {
+        if currentImageIndex == story.imageNames.count - 1 {
+            currentProgress = 1.0
+            return
+        }
+        
+        currentImageIndex += 1
+    }
 }

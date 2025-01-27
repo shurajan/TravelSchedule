@@ -15,3 +15,10 @@ enum APIConstants {
 enum AppConstants {
     static let userAgreementURL = URL(string: "https://yandex.ru/legal/practicum_offer")
 }
+
+enum AppViewConstants {
+    enum ProgressBar {
+        static let progressBarCornerRadius: CGFloat = 3
+        static let progressBarHeight: CGFloat = 6
+    }
+}

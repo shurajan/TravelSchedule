@@ -11,10 +11,11 @@ struct ScheduleView: View {
     @EnvironmentObject var theme: Theme
     @Binding var path: [ViewPath]
     @ObservedObject var trip: Trip
+    @ObservedObject var storyViewModel: StoryViewModel
     
     var body: some View {
         VStack(spacing: 20) {
-            StoriesCollectionView()
+            StoryCollectionView(path: $path, viewModel: storyViewModel)
             DirectionSelectorView(path: $path, trip: trip)
             
             if let fromStation = trip.fromStation,
@@ -40,10 +41,11 @@ struct ScheduleView: View {
 }
 
 #Preview {
+    let viewModel = StoryViewModel(stories: Story.mockStories)
     ScheduleView(
         path: .constant([]),
-        trip: Trip()
+        trip: Trip(),
+        storyViewModel: viewModel
     )
     .environmentObject(Theme())
-    //.environmentObject(Trip())
 }

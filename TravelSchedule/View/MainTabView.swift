@@ -20,6 +20,7 @@ struct MainTabView: View {
     )
     
     @StateObject var carrierViewModel = CarrierViewModel()
+    @StateObject var storyViewModel = StoryViewModel(stories: Story.mockStories)
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -33,7 +34,7 @@ struct MainTabView: View {
                         if let error = errorService.error {
                             errorView(for: error)
                         } else {
-                            ScheduleView(path: $path, trip: trip)
+                            ScheduleView(path: $path, trip: trip, storyViewModel: storyViewModel)
                         }
                     }
                     .tabItem {
@@ -67,7 +68,8 @@ struct MainTabView: View {
                     path: $path,
                     trip: trip,
                     citiesViewModel: citiesViewModel,
-                    carrierViewModel: carrierViewModel
+                    carriersViewModel: carrierViewModel,
+                    storiesViewModel: storyViewModel
                 ).destination(for: id)
             }
         }
