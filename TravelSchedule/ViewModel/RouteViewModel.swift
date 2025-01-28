@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-
+@MainActor
 final class RouteViewModel: ObservableObject {
     private var trip: Trip
     private let routes: [Route]

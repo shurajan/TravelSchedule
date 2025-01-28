@@ -11,22 +11,14 @@ import OpenAPIURLSession
 struct ContentView: View {
     @StateObject private var theme = Theme()
     @StateObject private var errorService: ErrorService = ErrorService()
-    
+   
     var body: some View {
         MainTabView()
             .environmentObject(theme)
             .environmentObject(errorService)
             .onAppear {
                 do {
-                    //try nearestStations()
-                    //try searches()
-                    //try schedules()
-                    //try threads()
-                    //try nearestSettlement()
-                    //try carriers()
-                    //try stationsList()
-                    //try copyright()
-                    print("Loaded")
+                    try stationsList()
                 } catch {
                     print(error.localizedDescription)
                     errorService.showError(.serverError(message: error.localizedDescription))
@@ -152,18 +144,23 @@ struct ContentView: View {
             transport: transport
         )
         
-        let service = StationsListService(
+        let apiService = StationsListService(
             client: client,
             apikey: APIConstants.apiKey
         )
         
         Task {
+            let transformer = StationsTransformer()
+            
+            let downloader = DataDownloader(apiService: apiService.getStationsList, transformer: transformer)
+            
             do {
-                let stationsList = try await service.getStationsList()
-                print(stationsList.countries?.count ?? "Not loaded")
+                try await downloader.fetchData()
                 
+                let cities = await downloader.getItems()
+                print("Loaded cities: \(cities.count)")
             } catch {
-                print("Error fetching stations list: \(error)")
+                print("Error fetching data: \(error)")
             }
         }
     }
