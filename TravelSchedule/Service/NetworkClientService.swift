@@ -8,24 +8,28 @@
 import Foundation
 import OpenAPIURLSession
 
-final class NetworkClientService {
-    let client: Client
+final class NetworkClientService: ObservableObject {
+    let client: Client?
     
-    init(timeout: TimeInterval = 120) throws {
-        let sessionConfiguration = URLSessionConfiguration.default
-        sessionConfiguration.timeoutIntervalForRequest = timeout
-        sessionConfiguration.timeoutIntervalForResource = timeout
-        
-        let session = URLSession(configuration: sessionConfiguration)
-        
-        let transportConfiguration = URLSessionTransport.Configuration(session: session)
-        
-        let transport = URLSessionTransport(configuration: transportConfiguration)
-        
-        self.client = Client(
-            serverURL: try Servers.Server1.url(),
-            transport: transport
-        )
+    private init(client: Client?) {
+        self.client = client
     }
     
+    static func create() -> NetworkClientService {
+        do {
+            let sessionConfiguration = URLSessionConfiguration.default
+            let session = URLSession(configuration: sessionConfiguration)
+            let transportConfiguration = URLSessionTransport.Configuration(session: session)
+            let transport = URLSessionTransport(configuration: transportConfiguration)
+            
+            let client = try Client(
+                serverURL: Servers.Server1.url(),
+                transport: transport
+            )
+            return NetworkClientService(client: client)
+        } catch {
+            Log.error(error: error, message: "Ошибка при создании NetworkClientService")
+            return NetworkClientService(client: nil)
+        }
+    }
 }

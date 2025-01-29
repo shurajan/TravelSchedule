@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 protocol SelectorViewModelProtocol: ObservableObject {
-    associatedtype Item: Hashable
+    associatedtype Item: Hashable & Sendable
     
     var searchText: String { get set }
     var filteredItems: [Item] { get }

@@ -5,7 +5,7 @@
 //  Created by Alexander Bralnin on 28.01.2025.
 //
 
-struct StationsTransformer: Transformer {
+struct StationsTransformer: Transformer {    
     func transform(_ input: Settlements) -> City? {
         guard let title = input.title,
               let settlementStations = input.stations,

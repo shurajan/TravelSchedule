@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-final class SelectorViewModel<Item: Hashable>: SelectorViewModelProtocol {
+final class SelectorViewModel<Item: Hashable & Sendable>: SelectorViewModelProtocol {
     @Published var searchText: String = ""
+    @Published var allItems: [Item] = []
     
-    private let allItems: [Item]
     private let nameKeyPath: KeyPath<Item, String>
     
     var filteredItems: [Item] {
@@ -27,6 +27,14 @@ final class SelectorViewModel<Item: Hashable>: SelectorViewModelProtocol {
     init(allItems: [Item], nameKeyPath: KeyPath<Item, String>) {
         self.allItems = allItems
         self.nameKeyPath = nameKeyPath
+    }
+    
+    init(asyncItems: @escaping () async -> [Item], nameKeyPath: KeyPath<Item, String>) {
+        self.nameKeyPath = nameKeyPath
+        Task {
+            let items = await asyncItems()
+            self.allItems = items
+        }
     }
     
     func displayName(for item: Item) -> String {

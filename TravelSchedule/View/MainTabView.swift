@@ -6,21 +6,15 @@
 //
 
 import SwiftUI
+import OpenAPIURLSession
 
 struct MainTabView: View {
     @EnvironmentObject var theme: Theme
     @EnvironmentObject var errorService: ErrorService
+    @EnvironmentObject var networkClient: NetworkClientService
+    @EnvironmentObject var appViewModel: ApplicationViewModel
     
     @State private var path: [ViewPath] = []
-    @StateObject private var trip: Trip = Trip()
-    
-    @StateObject private var citiesViewModel = SelectorViewModel<City>(
-        allItems: City.mockCities,
-        nameKeyPath: \.name
-    )
-    
-    @StateObject var carrierViewModel = CarrierViewModel()
-    @StateObject var storyViewModel = StoryViewModel(stories: Story.mockStories)
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -34,7 +28,7 @@ struct MainTabView: View {
                         if let error = errorService.error {
                             errorView(for: error)
                         } else {
-                            ScheduleView(path: $path, trip: trip, storyViewModel: storyViewModel)
+                            ScheduleView(path: $path, trip: appViewModel.trip, storyViewModel: appViewModel.storyViewModel)
                         }
                     }
                     .tabItem {
@@ -66,10 +60,7 @@ struct MainTabView: View {
             .navigationDestination(for: ViewPath.self) { id in
                 NavigationHandler(
                     path: $path,
-                    trip: trip,
-                    citiesViewModel: citiesViewModel,
-                    carriersViewModel: carrierViewModel,
-                    storiesViewModel: storyViewModel
+                    appViewModel: appViewModel
                 ).destination(for: id)
             }
         }
@@ -83,10 +74,30 @@ struct MainTabView: View {
             return AnyView(ServerErrorView())
         }
     }
+    
+    private func loadStationsList() async -> [City] {
+        guard let client = networkClient.client else {
+            errorService.showError(AppError.networkError(message: "can not create client"))
+            return []
+        }
+        
+        let apiService = StationsListService(client: client, apikey: APIConstants.apiKey)
+        let transformer = StationsTransformer()
+        let downloader = DataDownloader(apiService: apiService.getStationsList, transformer: transformer)
+        
+        do {
+            try await downloader.fetchData()
+            return await downloader.getItems()
+        } catch {
+            errorService.showError(AppError.networkError(message: "can not load data"))
+            return []
+        }
+    }
 }
 
 #Preview {
     MainTabView()
         .environmentObject(Theme())
         .environmentObject(ErrorService())
+        .environmentObject(NetworkClientService.create())
 }

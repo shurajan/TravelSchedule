@@ -9,13 +9,16 @@ import SwiftUI
 import OpenAPIURLSession
 
 struct ContentView: View {
-    @StateObject private var theme = Theme()
-    @StateObject private var errorService: ErrorService = ErrorService()
-   
+    @EnvironmentObject var theme: Theme
+    @EnvironmentObject var errorService: ErrorService
+    @EnvironmentObject var networkClientService: NetworkClientService
+    @EnvironmentObject var appViewModel: ApplicationViewModel
+    
     var body: some View {
         MainTabView()
             .environmentObject(theme)
             .environmentObject(errorService)
+            .environmentObject(networkClientService)
             .onAppear {
                 do {
                     try stationsList()
