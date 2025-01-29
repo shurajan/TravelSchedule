@@ -10,6 +10,16 @@ import SwiftUI
 struct RouteView: View {
     let route: Route
     let carrier: Carrier
+    
+    private let departureTime: Date
+    private let arrivalTime: Date
+    
+    init(route: Route, carrier: Carrier) {
+        self.route = route
+        self.carrier = carrier
+        self.departureTime = Date.ISODateFormatter.date(from: route.departureTime) ?? Date()
+        self.arrivalTime = Date.ISODateFormatter.date(from: route.arrivalTime) ?? Date()
+    }
         
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,14 +41,14 @@ struct RouteView: View {
                         
                         Spacer()
                         
-                        Text(route.departureTime.dayMonthString)
+                        Text(departureTime.dayMonthString)
                             .font(.system(size: 12, weight: .regular))
                             .foregroundColor(AppColors.black.color)
                             .padding(.trailing, 8)
                     }
                     
-                    if route.stations.count > 2 {
-                        Text("С пересадкой в \(route.stations[1])")
+                    if !route.isDirect {
+                        Text(route.stops)
                             .font(.system(size: 12, weight: .regular))
                             .foregroundColor(AppColors.red.color)
                     }
@@ -49,7 +59,7 @@ struct RouteView: View {
         
             
             HStack {
-                Text(route.departureTime.shortTimeString)
+                Text(departureTime.shortTimeString)
                     .font(.system(size: 17, weight: .regular))
                     .foregroundColor(AppColors.black.color)
  
@@ -67,7 +77,7 @@ struct RouteView: View {
                     .fill(AppColors.gray.color)
                     .frame(height: 2)
     
-                Text(route.arrivalTime.shortTimeString)
+                Text(arrivalTime.shortTimeString)
                     .font(.system(size: 17, weight: .regular))
                     .foregroundColor(AppColors.black.color)
 

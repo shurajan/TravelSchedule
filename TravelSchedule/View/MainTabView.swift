@@ -60,7 +60,9 @@ struct MainTabView: View {
             .navigationDestination(for: ViewPath.self) { id in
                 NavigationHandler(
                     path: $path,
-                    appViewModel: appViewModel
+                    appViewModel: appViewModel,
+                    networkClient: networkClient,
+                    errorService: errorService
                 ).destination(for: id)
             }
         }
@@ -72,25 +74,6 @@ struct MainTabView: View {
             return AnyView(NetworkErrorView())
         case .serverError(_):
             return AnyView(ServerErrorView())
-        }
-    }
-    
-    private func loadStationsList() async -> [City] {
-        guard let client = networkClient.client else {
-            errorService.showError(AppError.networkError(message: "can not create client"))
-            return []
-        }
-        
-        let apiService = StationsListService(client: client, apikey: APIConstants.apiKey)
-        let transformer = StationsTransformer()
-        let downloader = DataDownloader(apiService: apiService.getStationsList, transformer: transformer)
-        
-        do {
-            try await downloader.fetchData()
-            return await downloader.getItems()
-        } catch {
-            errorService.showError(AppError.networkError(message: "can not load data"))
-            return []
         }
     }
 }

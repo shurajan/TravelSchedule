@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 final class Log {
     static func info(message: String,
                      filePath: String = #file,

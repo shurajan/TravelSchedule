@@ -21,9 +21,8 @@ struct ContentView: View {
             .environmentObject(networkClientService)
             .onAppear {
                 do {
-                    try stationsList()
+                    try searches()
                 } catch {
-                    print(error.localizedDescription)
                     errorService.showError(.serverError(message: error.localizedDescription))
                 }
             }
@@ -54,11 +53,13 @@ struct ContentView: View {
         
         let service = SearchesService(
             client: client,
-            apikey: APIConstants.apiKey
+            apikey: APIConstants.apiKey,
+            from: "s2006004",
+            to: "s9602494"
         )
         
         Task {
-            let searches = try await service.getSearches(from: "s9600213", to: "s9727331")
+            let searches = try await service.getSegments()
             print(searches)
         }
     }

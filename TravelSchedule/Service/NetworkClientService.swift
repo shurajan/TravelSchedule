@@ -8,6 +8,7 @@
 import Foundation
 import OpenAPIURLSession
 
+@MainActor
 final class NetworkClientService: ObservableObject {
     let client: Client?
     

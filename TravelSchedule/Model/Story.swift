@@ -21,7 +21,7 @@ struct Story: Hashable, Identifiable {
 }
 
 extension Story {
-    static var mockStories: [Story] = [
+    static let mockStories: [Story] = [
         Story(
             id: 0,
             previewImageName: "preview_1",

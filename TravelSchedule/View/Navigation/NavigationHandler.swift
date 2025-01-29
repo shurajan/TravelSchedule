@@ -10,11 +10,9 @@ import SwiftUI
 @MainActor
 struct NavigationHandler {
     @Binding var path: [ViewPath]
-    var appViewModel: ApplicationViewModel
-    //@ObservedObject var trip: Trip
-    //var citiesViewModel: SelectorViewModel<City>
-    //var carriersViewModel: CarrierViewModel
-    //var storiesViewModel: StoryViewModel
+    let appViewModel: ApplicationViewModel
+    let networkClient: NetworkClientService
+    let errorService: ErrorService
     
     @ViewBuilder
     func destination(for id: ViewPath) -> some View {
@@ -72,7 +70,7 @@ struct NavigationHandler {
                 )
             }
         case .routesView:
-            let routeViewModel = RouteViewModel(trip: appViewModel.trip)
+            let routeViewModel = RouteViewModel(trip: appViewModel.trip, networkClient: networkClient, errorService: errorService)
             RoutesView(path: $path,
                        trip: appViewModel.trip,
                        carrierViewModel: appViewModel.carrierViewModel,

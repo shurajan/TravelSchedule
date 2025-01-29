@@ -716,6 +716,8 @@ components:
         arrival:
           type: string
           nullable: true
+        departure:
+          type: string
         from:
           $ref: '#/components/schemas/Station'
         thread:

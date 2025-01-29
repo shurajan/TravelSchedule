@@ -89,6 +89,11 @@ struct RoutesView: View {
                 }
             }
         }
+        .onAppear {
+            Task {
+                await routeViewModel.loadRoutesList()
+            }
+        }
         
     }
     
@@ -101,22 +106,4 @@ struct RoutesView: View {
     private func handleFilterButtonTap() {
         path.append(.filterView)
     }
-}
-
-#Preview {
-    let trip = Trip()
-    trip.from = City.mockCities[0]
-    trip.to = City.mockCities[1]
-    trip.fromStation = City.mockCities[0].stations[0]
-    trip.toStation = City.mockCities[1].stations[0]
-    
-    let carrierViewModel = CarrierViewModel()
-    let routeViewModel = RouteViewModel(trip: trip)
-    
-    return RoutesView(path: .constant([]),
-                      trip: trip,
-                      carrierViewModel: carrierViewModel,
-                      routeViewModel: routeViewModel)
-    .environmentObject(trip)
-    .environmentObject(Theme())
 }
