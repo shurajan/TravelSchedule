@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CarrierView: View {
     @EnvironmentObject var theme: Theme
@@ -14,6 +15,25 @@ struct CarrierView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
+            
+            if let logoURL = URL(string: carrier.logo) {
+                KFImage.url(logoURL)
+                    .resizable()
+                    .loadDiskFileSynchronously()
+                    .cacheMemoryOnly()
+                    .scaledToFit()
+                    .frame(height: 144)
+                    .padding(.horizontal, 16)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            } else {
+                Image(systemName: "questionmark.circle")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 144)
+                    .padding(.horizontal, 16)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+            
             Image(carrier.logo)
                 .resizable()
                 .scaledToFit()
