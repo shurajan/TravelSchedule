@@ -62,9 +62,3 @@ struct CarrierView: View {
         }
     }
 }
-
-#Preview {
-    let carrier = Carrier.mockCarriers[0]
-    CarrierView(path: .constant([]), carrier: carrier)
-        .environmentObject(Theme())
-}

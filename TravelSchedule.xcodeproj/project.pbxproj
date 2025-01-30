@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D94B40402D0734170007A587 /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = D94B403F2D0734170007A587 /* OpenAPIRuntime */; };
 		D94B40432D07342A0007A587 /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = D94B40422D07342A0007A587 /* OpenAPIURLSession */; };
+		D9B9777E2D4BEF34009B77E6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D9B9777D2D4BEF34009B77E6 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9B9777E2D4BEF34009B77E6 /* Kingfisher in Frameworks */,
 				D94B40402D0734170007A587 /* OpenAPIRuntime in Frameworks */,
 				D94B40432D07342A0007A587 /* OpenAPIURLSession in Frameworks */,
 			);
@@ -88,6 +90,7 @@
 			packageProductDependencies = (
 				D94B403F2D0734170007A587 /* OpenAPIRuntime */,
 				D94B40422D07342A0007A587 /* OpenAPIURLSession */,
+				D9B9777D2D4BEF34009B77E6 /* Kingfisher */,
 			);
 			productName = TravelSchedule;
 			productReference = D94B40262D070F490007A587 /* TravelSchedule.app */;
@@ -121,6 +124,7 @@
 				D94B403E2D0734170007A587 /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */,
 				D94B40412D07342A0007A587 /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
 				D94B40442D0734780007A587 /* XCRemoteSwiftPackageReference "swift-openapi-generator" */,
+				D9B9777C2D4BEF34009B77E6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D94B40272D070F490007A587 /* Products */;
@@ -397,6 +401,14 @@
 				minimumVersion = 1.5.0;
 			};
 		};
+		D9B9777C2D4BEF34009B77E6 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.1.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -414,6 +426,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D94B40442D0734780007A587 /* XCRemoteSwiftPackageReference "swift-openapi-generator" */;
 			productName = "plugin:OpenAPIGenerator";
+		};
+		D9B9777D2D4BEF34009B77E6 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D9B9777C2D4BEF34009B77E6 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

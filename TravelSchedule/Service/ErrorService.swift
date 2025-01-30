@@ -28,6 +28,7 @@ final class ErrorService: ObservableObject {
     @Published var error: AppError?
     
     func showError(_ error: AppError) {
+        Log.error(error: error, message: error.message)
         self.error = error
     }
     

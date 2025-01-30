@@ -13,6 +13,7 @@ final class CarrierViewModel: ObservableObject {
     
     func addCarrier(carrier: Carrier) async {
         if findCarrier(by: carrier.code) == nil {
+            //TODO: load image url - carrier.logo
             carriers.append(carrier)
         }
     }
