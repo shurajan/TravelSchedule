@@ -28,7 +28,6 @@ final class RouteViewModel: ObservableObject {
         self.networkClient = networkClient
         self.errorService = errorService
         routes = []
-        //routes = await RouteViewModel.loadRoutesList(trip: trip, networkClient: networkClient, errorService: errorService)
     }
 
     func loadRoutesList() async {

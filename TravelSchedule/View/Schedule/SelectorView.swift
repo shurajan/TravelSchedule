@@ -20,21 +20,12 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            topBar()
             searchBar()
-            
             contentView()
         }
         .background(theme.backgroundColor)
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                backButton()
-            }
-        }
         .onAppear {
-            configureNavigationBar()
             updateViewState()
         }
         .onChange(of: viewModel.filteredItems) { _ in
@@ -45,6 +36,26 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
         }
     }
     
+    // MARK: - Top Bar
+    @ViewBuilder
+    private func topBar() -> some View {
+        HStack {
+            backButton()
+            
+            Spacer()
+            
+            Text(title)
+                .font(.system(size: 17, weight: .bold))
+                .foregroundColor(theme.textColor)
+            
+            Spacer()
+        }
+        .padding(.horizontal)
+        .frame(height: 44)
+        .background(theme.backgroundColor)
+    }
+    
+    // MARK: - Search Bar
     @ViewBuilder
     private func searchBar() -> some View {
         HStack {
@@ -68,6 +79,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
         .padding()
     }
     
+    // MARK: - Content
     @ViewBuilder
     private func contentView() -> some View {
         switch viewState {
@@ -117,6 +129,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
         .listStyle(.plain)
     }
     
+    // MARK: - Back Button
     @ViewBuilder
     private func backButton() -> some View {
         Button {
@@ -128,23 +141,7 @@ struct SelectorView<ViewModel: SelectorViewModelProtocol>: View {
         }
     }
     
-    private func configureNavigationBar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor(theme.backgroundColor)
-        appearance.shadowColor = .clear
-        appearance.titleTextAttributes = [
-            .foregroundColor: UIColor(theme.textColor),
-            .font: UIFont.systemFont(ofSize: 17, weight: .bold)
-        ]
-        appearance.largeTitleTextAttributes = [
-            .foregroundColor: UIColor(theme.textColor)
-        ]
-        
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().tintColor = UIColor(theme.textColor)
-    }
-    
+    // MARK: - Logic
     private func updateViewState() {
         if viewModel.isDataLoaded {
             viewState = viewModel.filteredItems.isEmpty ? .empty : .success
