@@ -7,9 +7,11 @@
 
 import SwiftUI
 
+
 final class SelectorViewModel<Item: Hashable & Sendable>: SelectorViewModelProtocol {
     @Published var searchText: String = ""
     @Published var allItems: [Item] = []
+    @Published var isDataLoaded = false
     
     private let nameKeyPath: KeyPath<Item, String>
     
@@ -27,6 +29,7 @@ final class SelectorViewModel<Item: Hashable & Sendable>: SelectorViewModelProto
     init(allItems: [Item], nameKeyPath: KeyPath<Item, String>) {
         self.allItems = allItems
         self.nameKeyPath = nameKeyPath
+        self.isDataLoaded = true
     }
     
     init(asyncItems: @escaping () async -> [Item], nameKeyPath: KeyPath<Item, String>) {
@@ -34,6 +37,7 @@ final class SelectorViewModel<Item: Hashable & Sendable>: SelectorViewModelProto
         Task {
             let items = await asyncItems()
             self.allItems = items
+            self.isDataLoaded = true
         }
     }
     
