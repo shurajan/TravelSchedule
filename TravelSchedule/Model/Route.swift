@@ -14,7 +14,7 @@ struct Route: Hashable, Identifiable, Sendable {
     let duration: Int
     let stops: String
     var isDirect: Bool
-    let carrierID: UUID
+    let carrierCode: Int
     
     func durationText(from seconds: Int) -> String {
         let hours = seconds / 3600
@@ -38,7 +38,7 @@ extension Route {
             duration: 20 * 3600,
             stops: "С пересадкой в Костроме",
             isDirect: false,
-            carrierID: Carrier.mockCarriers[0].id
+            carrierCode: Carrier.mockCarriers[0].code
         ),
         Route(
             departureTime: "2025-01-15T01:15:00+03:00",
@@ -46,7 +46,7 @@ extension Route {
             duration: 9 * 3600,
             stops: "",
             isDirect: true,
-            carrierID: Carrier.mockCarriers[1].id
+            carrierCode: Carrier.mockCarriers[1].code
         ),
         Route(
             departureTime: "2025-01-16T12:30:00+03:00",
@@ -54,7 +54,7 @@ extension Route {
             duration: 9 * 3600,
             stops: "",
             isDirect: true,
-            carrierID: Carrier.mockCarriers[2].id
+            carrierCode: Carrier.mockCarriers[2].code
         ),
         Route(
             departureTime: "2025-01-17T22:30:00+03:00",
@@ -62,7 +62,7 @@ extension Route {
             duration: 20 * 3600,
             stops: "С пересадкой в Новгороде",
             isDirect: false,
-            carrierID: Carrier.mockCarriers[0].id
+            carrierCode: Carrier.mockCarriers[0].code
         ),
         Route(
             departureTime: "2025-01-17T22:30:00+03:00",
@@ -70,7 +70,7 @@ extension Route {
             duration: 12 * 3600,
             stops: "С пересадкой в Твери",
             isDirect: false,
-            carrierID: Carrier.mockCarriers[0].id
+            carrierCode: Carrier.mockCarriers[0].code
         ),
         Route(
             departureTime: "2025-01-14T22:30:00+03:00",
@@ -78,7 +78,7 @@ extension Route {
             duration: 26 * 3600,
             stops: "",
             isDirect: true,
-            carrierID: Carrier.mockCarriers[0].id
+            carrierCode: Carrier.mockCarriers[0].code
         ),
         Route(
             departureTime: "2025-01-14T22:30:00+03:00",
@@ -86,7 +86,7 @@ extension Route {
             duration: 28 * 3600,
             stops: "С пересадкой в Ростове-На-Дону",
             isDirect: false,
-            carrierID: Carrier.mockCarriers[0].id
+            carrierCode: Carrier.mockCarriers[0].code
         )
     ]
 }

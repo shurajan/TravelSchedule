@@ -13,6 +13,7 @@ final class RouteViewModel: ObservableObject {
     private let trip: Trip
     private let networkClient: NetworkClientService
     private let errorService: ErrorService
+    private let carrierViewModel: CarrierViewModel
     
     var filteredRoutes: [Route] {
         return routes.filter { route in
@@ -23,10 +24,11 @@ final class RouteViewModel: ObservableObject {
         }
     }
     
-    init(trip: Trip, networkClient: NetworkClientService, errorService: ErrorService) {
+    init(trip: Trip, networkClient: NetworkClientService, errorService: ErrorService, carrierViewModel: CarrierViewModel) {
         self.trip = trip
         self.networkClient = networkClient
         self.errorService = errorService
+        self.carrierViewModel = carrierViewModel
         routes = []
     }
 
@@ -44,7 +46,7 @@ final class RouteViewModel: ObservableObject {
         }
         
         let apiService = SearchesService(client: client, apikey: APIConstants.apiKey, from: fromCode, to: toCode)
-        let transformer = SegmentTransformer()
+        let transformer = SegmentTransformer(carrierViewModel: carrierViewModel)
         let downloader = DataDownloader(apiService: apiService.getSegments, transformer: transformer)
         
         do {

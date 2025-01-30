@@ -540,7 +540,7 @@ components:
       type: object
       properties:
         code:
-          type: number
+          type: integer
         contacts:
           type: string
           nullable: true

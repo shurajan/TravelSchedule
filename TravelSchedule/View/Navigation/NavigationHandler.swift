@@ -70,7 +70,10 @@ struct NavigationHandler {
                 )
             }
         case .routesView:
-            let routeViewModel = RouteViewModel(trip: appViewModel.trip, networkClient: networkClient, errorService: errorService)
+            let routeViewModel = RouteViewModel(trip: appViewModel.trip,
+                                                networkClient: networkClient,
+                                                errorService: errorService,
+                                                carrierViewModel: appViewModel.carrierViewModel)
             RoutesView(path: $path,
                        trip: appViewModel.trip,
                        carrierViewModel: appViewModel.carrierViewModel,

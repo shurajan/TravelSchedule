@@ -24,10 +24,15 @@ where TransformerType.Input: Sendable, TransformerType.Output: Sendable {
     func fetchData() async throws {
         do {
             let rawItems = try await apiService() ?? []
-        
-            items = rawItems.compactMap { rawItem in
-                transformer.transform(rawItem)
+            var transformedItems = [Item]()
+            
+            for rawItem in rawItems {
+                if let transformedItem = await transformer.transform(rawItem) {
+                    transformedItems.append(transformedItem)
+                }
             }
+            
+            items = transformedItems
         } catch {
             throw error
         }

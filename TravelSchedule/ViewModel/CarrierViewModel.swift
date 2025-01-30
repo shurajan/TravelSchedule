@@ -9,13 +9,15 @@ import Foundation
 
 @MainActor
 final class CarrierViewModel: ObservableObject {
-    private var carriers: [Carrier]
+    private var carriers: [Carrier] = []
     
-    init(carriers: [Carrier] = Carrier.mockCarriers) {
-        self.carriers = carriers
+    func addCarrier(carrier: Carrier) async {
+        if findCarrier(by: carrier.code) == nil {
+            carriers.append(carrier)
+        }
     }
-
-    func findCarrier(by id: UUID) -> Carrier? {
-        return carriers.first { $0.id == id }
+    
+    func findCarrier(by code: Int) -> Carrier? {
+        return carriers.first { $0.code == code }
     }
 }

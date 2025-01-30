@@ -6,7 +6,7 @@
 //
 
 struct StationsTransformer: Transformer {    
-    func transform(_ input: Settlements) -> City? {
+    func transform(_ input: Settlements) async -> City? {
         guard let title = input.title,
               let settlementStations = input.stations,
               !title.isEmpty
