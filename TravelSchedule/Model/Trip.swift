@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 final class Trip: ObservableObject {
     @Published var from: City?
     @Published var to: City?

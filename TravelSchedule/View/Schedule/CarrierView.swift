@@ -26,7 +26,7 @@ struct CarrierView: View {
                     .padding(.horizontal, 16)
                     .frame(maxWidth: .infinity, alignment: .center)
             } else {
-                Image(systemName: "questionmark.circle")
+                Image(systemName: carrier.transportIcon())
                     .resizable()
                     .scaledToFit()
                     .frame(height: 144)

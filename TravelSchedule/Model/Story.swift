@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Story: Hashable, Identifiable {
+struct Story: Hashable, Identifiable, Sendable {
     let id: Int
     let previewImageName: String
     let imageNames: [String]

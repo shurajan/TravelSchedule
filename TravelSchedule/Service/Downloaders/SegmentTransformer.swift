@@ -21,6 +21,7 @@ struct SegmentTransformer: Transformer {
         }
         
         let has_transfers = input.has_transfers ?? false
+        let transportType = input.from?.transport_type ?? "bus"
         
         guard
             let carrierData = input.thread?.carrier,
@@ -33,7 +34,8 @@ struct SegmentTransformer: Transformer {
                               name: title,
                               logo: carrierData.logo ?? "",
                               email: carrierData.email ?? "",
-                              phone: carrierData.phone ?? "")
+                              phone: carrierData.phone ?? "",
+                              transportType: transportType)
         await carrierViewModel.addCarrier(carrier: carrier)
         
         

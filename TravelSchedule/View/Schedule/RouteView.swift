@@ -34,7 +34,7 @@ struct RouteView: View {
                         .frame(width: 38, height: 38)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 } else {
-                    Image(systemName: "questionmark.circle")
+                    Image(systemName: carrier.transportIcon())
                         .resizable()
                         .scaledToFit()
                         .frame(width: 38, height: 38)

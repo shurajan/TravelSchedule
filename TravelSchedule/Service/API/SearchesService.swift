@@ -12,16 +12,21 @@ import Foundation
 typealias Searches = Components.Schemas.Searches
 typealias Segment = Components.Schemas.Segment
 
-final class SearchesService: BasicService, @unchecked Sendable {
+actor SearchesService: @unchecked Sendable {
+    let client: Client
+    let apikey: String
     private let from: String
     private let to: String
     private let transfers: Bool
     
+
     init(client: Client, apikey: String, from: String, to: String, transfers: Bool = true) {
+        self.client = client
+        self.apikey = apikey
         self.from = from
         self.to = to
         self.transfers = transfers
-        super.init(client: client, apikey: apikey)
+
     }
     
 

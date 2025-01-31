@@ -12,8 +12,15 @@ import Foundation
 typealias StationsList = Components.Schemas.StationsList
 typealias Settlements = Components.Schemas.Settlements
 
-final class StationsListService: BasicService, @unchecked Sendable {
+actor StationsListService: @unchecked Sendable {
+    let client: Client
+    let apikey: String
     private let limit = APIConstants.maxJsonSize
+    
+    init(client: Client, apikey: String) {
+        self.client = client
+        self.apikey = apikey
+    }
     
     func getStationsList() async throws -> [Settlements]? {
         let response = try await client.getStationsList(query: .init(apikey: self.apikey))
