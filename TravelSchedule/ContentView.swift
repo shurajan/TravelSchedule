@@ -9,26 +9,20 @@ import SwiftUI
 import OpenAPIURLSession
 
 struct ContentView: View {
-    @StateObject private var theme = Theme()
-    @StateObject private var errorService: ErrorService = ErrorService()
+    @EnvironmentObject var theme: Theme
+    @EnvironmentObject var errorService: ErrorService
+    @EnvironmentObject var networkClientService: NetworkClientService
+    @EnvironmentObject var appViewModel: ApplicationViewModel
     
     var body: some View {
         MainTabView()
             .environmentObject(theme)
             .environmentObject(errorService)
+            .environmentObject(networkClientService)
             .onAppear {
                 do {
-                    //try nearestStations()
-                    //try searches()
-                    //try schedules()
-                    //try threads()
-                    //try nearestSettlement()
-                    //try carriers()
-                    //try stationsList()
-                    //try copyright()
-                    print("Loaded")
+                    try searches()
                 } catch {
-                    print(error.localizedDescription)
                     errorService.showError(.serverError(message: error.localizedDescription))
                 }
             }
@@ -59,11 +53,13 @@ struct ContentView: View {
         
         let service = SearchesService(
             client: client,
-            apikey: APIConstants.apiKey
+            apikey: APIConstants.apiKey,
+            from: "s2006004",
+            to: "s9602494"
         )
         
         Task {
-            let searches = try await service.getSearches(from: "s9600213", to: "s9727331")
+            let searches = try await service.getSegments()
             print(searches)
         }
     }
@@ -152,18 +148,23 @@ struct ContentView: View {
             transport: transport
         )
         
-        let service = StationsListService(
+        let apiService = StationsListService(
             client: client,
             apikey: APIConstants.apiKey
         )
         
         Task {
+            let transformer = StationsTransformer()
+            
+            let downloader = DataDownloader(apiService: apiService.getStationsList, transformer: transformer)
+            
             do {
-                let stationsList = try await service.getStationsList()
-                print(stationsList.countries?.count ?? "Not loaded")
+                try await downloader.fetchData()
                 
+                let cities = await downloader.getItems()
+                print("Loaded cities: \(cities.count)")
             } catch {
-                print("Error fetching stations list: \(error)")
+                print("Error fetching data: \(error)")
             }
         }
     }

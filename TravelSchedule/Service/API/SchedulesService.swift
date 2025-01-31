@@ -10,11 +10,14 @@ import OpenAPIURLSession
 
 typealias Schedules = Components.Schemas.Schedules
 
-protocol SchedulesServiceProtocol {
-    func getSchedules(station: String) async throws -> Schedules
-}
-
-final class SchedulesService: BasicService, SchedulesServiceProtocol {
+actor SchedulesService: @unchecked Sendable {
+    let client: Client
+    let apikey: String
+    
+    init(client: Client, apikey: String) {
+        self.client = client
+        self.apikey = apikey
+    }
     
     func getSchedules(station: String) async throws -> Schedules {
         

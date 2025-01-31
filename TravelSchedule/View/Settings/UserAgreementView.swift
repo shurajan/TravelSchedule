@@ -13,59 +13,83 @@ struct UserAgreementView: View {
     @EnvironmentObject var errorService: ErrorService
     @Environment(\.dismiss) private var dismiss
     
+    @State private var viewState: ViewState = .loading
+    @State private var userAgreementURL: URL? = nil
+    
     var body: some View {
-        VStack {
-            if let url = AppConstants.userAgreementURL {
-                WebView(
-                    url: url,
-                    backgroundColor: theme.backgroundColor,
-                    textColor: theme.textColor,
-                    onError: { error in
-                        errorService.showError(.networkError(message: error.localizedDescription))
-                        dismiss()
-                    }
-                )
-                .padding([.top, .horizontal], 16)
-                .edgesIgnoringSafeArea(.bottom)
-            } else {
-                Spacer()
-                    .onAppear {
-                        errorService.showError(.networkError(message: "Incorrect URL"))
-                        dismiss()
-                    }
-            }
-        }
-        .foregroundColor(theme.textColor)
-        .background(theme.backgroundColor)
-        .navigationTitle("Пользовательское соглашение")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
+        VStack(spacing: 0) {
+            HStack {
                 Button {
                     dismiss()
                 } label: {
                     Image(systemName: "chevron.left")
                         .foregroundColor(theme.textColor)
                 }
+                
+                Spacer()
+                
+                Text("Пользовательское соглашение")
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundColor(theme.textColor)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .frame(height: 44)
+            .background(theme.backgroundColor)
+            
+            switch viewState {
+            case .loading:
+                Spacer()
+                    .overlay {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: theme.textColor))
+                    }
+                
+            case .success:
+                if let url = userAgreementURL {
+                    WebView(
+                        url: url,
+                        backgroundColor: theme.backgroundColor,
+                        textColor: theme.textColor,
+                        onError: { error in
+                            errorService.showError(.networkError(message: error.localizedDescription))
+                            dismiss()
+                        }
+                    )
+                    .padding([.top, .horizontal], 16)
+                    .edgesIgnoringSafeArea(.bottom)
+                } else {
+                    EmptyView()
+                }
+                
+            case .empty:
+
+                Spacer()
             }
         }
-        .onAppear {
-            let appearance = UINavigationBarAppearance()
+        .foregroundColor(theme.textColor)
+        .background(theme.backgroundColor)
+        .task {
+            await loadUserAgreement()
+        }
+    }
+    
+    // MARK: - Loading agreement
+    private func loadUserAgreement() async {
+        guard let url = AppConstants.userAgreementURL else {
+            errorService.showError(.networkError(message: "Incorrect URL"))
+            dismiss()
+            return
+        }
+        do {
+            _ = try await URLSession.shared.data(from: url)
             
-            appearance.backgroundColor = UIColor(theme.backgroundColor)
-            appearance.shadowColor = .clear
-            appearance.titleTextAttributes = [
-                .foregroundColor: UIColor(theme.textColor),
-                .font: UIFont.systemFont(ofSize: 17, weight: .bold)
-            ]
-            appearance.largeTitleTextAttributes = [
-                .foregroundColor: UIColor(theme.textColor)
-            ]
-            
-            UINavigationBar.appearance().standardAppearance = appearance
-            UINavigationBar.appearance().scrollEdgeAppearance = appearance
-            UINavigationBar.appearance().tintColor = UIColor(theme.textColor)
+            userAgreementURL = url
+            viewState = .success
+        } catch {
+            errorService.showError(.networkError(message: "Incorrect URL"))
+            dismiss()
         }
     }
 }

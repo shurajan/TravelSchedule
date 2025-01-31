@@ -10,11 +10,14 @@ import OpenAPIURLSession
 
 typealias Carriers = Components.Schemas.Carriers
 
-protocol CarrierServiceProtocol {
-    func getCarriers(code: String) async throws -> Carriers
-}
-
-final class CarriersService: BasicService, CarrierServiceProtocol {
+actor CarriersService: @unchecked Sendable {
+    let client: Client
+    let apikey: String
+    
+    init(client: Client, apikey: String) {
+        self.client = client
+        self.apikey = apikey
+    }
     
     func getCarriers(code: String) async throws -> Carriers {
         

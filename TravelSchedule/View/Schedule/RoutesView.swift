@@ -4,6 +4,7 @@
 //
 //  Created by Alexander Bralnin on 13.01.2025.
 //
+
 import SwiftUI
 
 struct RoutesView: View {
@@ -13,8 +14,10 @@ struct RoutesView: View {
     @ObservedObject var carrierViewModel: CarrierViewModel
     @ObservedObject var routeViewModel: RouteViewModel
     
+    @State private var viewState: ViewState = .loading
+    
     var body: some View {
-        ZStack (alignment: .bottom) {
+        ZStack(alignment: .bottom) {
             theme.backgroundColor
                 .ignoresSafeArea()
             
@@ -24,76 +27,100 @@ struct RoutesView: View {
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(theme.textColor)
                 
-                if !routeViewModel.filteredRoutes.isEmpty {
-                    Spacer().frame(height: 16)
-                    ScrollView(.vertical, showsIndicators: false) {
-                        LazyVStack(spacing: 8) {
-                            ForEach(routeViewModel.filteredRoutes) { route in
-                                if let carrier = carrierViewModel.findCarrier(by: route.carrierID) {
-                                    RouteView(route: route, carrier: carrier)
-                                        .onTapGesture {
-                                            handleRouteSelection(route)
-                                        }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    Spacer()
-                    Text("Вариантов нет")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(theme.textColor)
-                    Spacer()
-                }
-                
+                contentView()
             }
             .padding(.horizontal, 16)
             
-            VStack {
-                Button(action: {
-                    handleFilterButtonTap()
-                }) {
-                    HStack {
-                        Text("Уточнить время")
-                            .font(.system(size: 17, weight: .bold))
-                            .foregroundColor(AppColors.white.color)
-                            .background(AppColors.blue.color)
-                            .cornerRadius(16)
-                        
-                        let hasFilter = trip.isDirect != nil || !trip.TimeOfDay.isEmpty
-                        
-                        if hasFilter {
-                            Circle()
-                                .fill(AppColors.red.color)
-                                .frame(width: 8, height: 8)
-                        }
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 60,  maxHeight: 60)
-                    .background(AppColors.blue.color)
-                    .cornerRadius(16)
-                }
-            }
-            .padding(.bottom, 24)
-            .padding(.horizontal, 16)
+            filterButton()
         }
         .toolbarBackground(theme.backgroundColor, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    path.removeLast()
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(theme.textColor)
-                }
+                backButton()
             }
         }
-        
+        .task {
+            await loadRoutes()
+        }
+    }
+    
+    @ViewBuilder
+    private func contentView() -> some View {
+        switch viewState {
+        case .loading:
+            Spacer()
+                .overlay {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: theme.textColor))
+                }
+            
+        case .success:
+            ScrollView(.vertical, showsIndicators: false) {
+                LazyVStack(spacing: 8) {
+                    ForEach(routeViewModel.filteredRoutes) { route in
+                        if let carrier = carrierViewModel.findCarrier(by: route.carrierCode) {
+                            RouteView(route: route, carrier: carrier)
+                                .onTapGesture {
+                                    handleRouteSelection(route)
+                                }
+                        }
+                    }
+                }
+            }
+            
+        case .empty:
+            Spacer()
+            Text("Вариантов нет")
+                .font(.system(size: 24, weight: .bold))
+                .foregroundColor(theme.textColor)
+            Spacer()
+        }
+    }
+    
+    @ViewBuilder
+    private func filterButton() -> some View {
+        Button(action: {
+            handleFilterButtonTap()
+        }) {
+            HStack {
+                Text("Уточнить время")
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundColor(AppColors.white.color)
+                
+                let hasFilter = trip.isDirect != nil || !trip.TimeOfDay.isEmpty
+                if hasFilter {
+                    Circle()
+                        .fill(AppColors.red.color)
+                        .frame(width: 8, height: 8)
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 60, maxHeight: 60)
+            .background(AppColors.blue.color)
+            .cornerRadius(16)
+        }
+        .padding(.bottom, 24)
+        .padding(.horizontal, 16)
+    }
+    
+    @ViewBuilder
+    private func backButton() -> some View {
+        Button {
+            path.removeLast()
+        } label: {
+            Image(systemName: "chevron.left")
+                .foregroundColor(theme.textColor)
+        }
+    }
+    
+    private func loadRoutes() async {
+        await routeViewModel.loadRoutesList()
+        viewState = routeViewModel.filteredRoutes.isEmpty ? .empty : .success
     }
     
     private func handleRouteSelection(_ route: Route) {
-        if let carrier = carrierViewModel.findCarrier(by: route.carrierID) {
+        if let carrier = carrierViewModel.findCarrier(by: route.carrierCode) {
             path.append(.carrierView(carrier))
         }
     }
@@ -101,22 +128,4 @@ struct RoutesView: View {
     private func handleFilterButtonTap() {
         path.append(.filterView)
     }
-}
-
-#Preview {
-    let trip = Trip()
-    trip.from = City.mockCities[0]
-    trip.to = City.mockCities[1]
-    trip.fromStation = City.mockCities[0].stations[0]
-    trip.toStation = City.mockCities[1].stations[0]
-    
-    let carrierViewModel = CarrierViewModel()
-    let routeViewModel = RouteViewModel(trip: trip)
-    
-    return RoutesView(path: .constant([]),
-                      trip: trip,
-                      carrierViewModel: carrierViewModel,
-                      routeViewModel: routeViewModel)
-    .environmentObject(trip)
-    .environmentObject(Theme())
 }

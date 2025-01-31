@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Filter {
+struct Filter: Hashable, Sendable{
     var from: String?
     var to: String?
     var timeOfDay: [Date.TimeOfDay]
