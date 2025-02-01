@@ -7,12 +7,12 @@
 
 import SwiftUI
 
+@MainActor
 struct NavigationHandler {
     @Binding var path: [ViewPath]
-    @ObservedObject var trip: Trip
-    var citiesViewModel: SelectorViewModel<City>
-    var carriersViewModel: CarrierViewModel
-    var storiesViewModel: StoryViewModel
+    let appViewModel: ApplicationViewModel
+    let networkClient: NetworkClientService
+    let errorService: ErrorService
     
     @ViewBuilder
     func destination(for id: ViewPath) -> some View {
@@ -21,10 +21,10 @@ struct NavigationHandler {
             selectorView(
                 title: "Выбор города",
                 emptyListText: "Город не найден",
-                viewModel: citiesViewModel,
+                viewModel: appViewModel.citiesViewModel,
                 onItemTap: { newItem in
-                    citiesViewModel.searchText = ""
-                    trip.from = newItem
+                    appViewModel.citiesViewModel.searchText = ""
+                    appViewModel.trip.from = newItem
                     path.append(.stationsFromView)
                 }
             )
@@ -32,15 +32,15 @@ struct NavigationHandler {
             selectorView(
                 title: "Выбор города",
                 emptyListText: "Город не найден",
-                viewModel: citiesViewModel,
+                viewModel: appViewModel.citiesViewModel,
                 onItemTap: { newItem in
-                    citiesViewModel.searchText = ""
-                    trip.to = newItem
+                    appViewModel.citiesViewModel.searchText = ""
+                    appViewModel.trip.to = newItem
                     path.append(.stationsToView)
                 }
             )
         case .stationsFromView:
-            if let from = trip.from {
+            if let from = appViewModel.trip.from {
                 selectorView(
                     title: "Выбор станции",
                     emptyListText: "Станция не найдена",
@@ -49,13 +49,13 @@ struct NavigationHandler {
                         nameKeyPath: \.name
                     ),
                     onItemTap: { newItem in
-                        trip.fromStation = newItem
+                        appViewModel.trip.fromStation = newItem
                         path.removeAll()
                     }
                 )
             } 
         case .stationsToView:
-            if let to = trip.to {
+            if let to = appViewModel.trip.to {
                 selectorView(
                     title: "Выбор станции",
                     emptyListText: "Станция не найдена",
@@ -64,14 +64,20 @@ struct NavigationHandler {
                         nameKeyPath: \.name
                     ),
                     onItemTap: { newItem in
-                        trip.toStation = newItem
+                        appViewModel.trip.toStation = newItem
                         path.removeAll()
                     }
                 )
             }
         case .routesView:
-            let routeViewModel = RouteViewModel(trip: trip)
-            RoutesView(path: $path, trip: trip, carrierViewModel: carriersViewModel, routeViewModel: routeViewModel)
+            let routeViewModel = RouteViewModel(trip: appViewModel.trip,
+                                                networkClient: networkClient,
+                                                errorService: errorService,
+                                                carrierViewModel: appViewModel.carrierViewModel)
+            RoutesView(path: $path,
+                       trip: appViewModel.trip,
+                       carrierViewModel: appViewModel.carrierViewModel,
+                       routeViewModel: routeViewModel)
                 .navigationBarBackButtonHidden(true)
             
         case .carrierView(let carrier):
@@ -79,7 +85,7 @@ struct NavigationHandler {
                 .navigationBarBackButtonHidden(true)
             
         case .filterView:
-            FilterView(path: $path, trip: trip)
+            FilterView(path: $path, trip: appViewModel.trip)
                 .navigationBarBackButtonHidden(true)
         }
     }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Story: Hashable, Identifiable {
+struct Story: Hashable, Identifiable, Sendable {
     let id: Int
     let previewImageName: String
     let imageNames: [String]
@@ -21,7 +21,7 @@ struct Story: Hashable, Identifiable {
 }
 
 extension Story {
-    static var mockStories: [Story] = [
+    static let mockStories: [Story] = [
         Story(
             id: 0,
             previewImageName: "preview_1",

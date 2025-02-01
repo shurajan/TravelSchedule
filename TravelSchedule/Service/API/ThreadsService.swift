@@ -10,11 +10,15 @@ import OpenAPIURLSession
 
 typealias Threads = Components.Schemas.Threads
 
-protocol ThreadsServiceProtocol {
-    func getThreads(uid: String) async throws -> Threads
-}
-
-final class ThreadsService: BasicService, ThreadsServiceProtocol {
+actor ThreadsService: @unchecked Sendable {
+    let client: Client
+    let apikey: String
+    private let limit = APIConstants.maxJsonSize
+    
+    init(client: Client, apikey: String) {
+        self.client = client
+        self.apikey = apikey
+    }
     
     func getThreads(uid: String) async throws -> Threads {
         

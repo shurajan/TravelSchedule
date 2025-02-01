@@ -540,7 +540,7 @@ components:
       type: object
       properties:
         code:
-          type: number
+          type: integer
         contacts:
           type: string
           nullable: true
@@ -716,6 +716,8 @@ components:
         arrival:
           type: string
           nullable: true
+        departure:
+          type: string
         from:
           $ref: '#/components/schemas/Station'
         thread:

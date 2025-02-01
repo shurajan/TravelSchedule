@@ -7,8 +7,8 @@
 
 import Foundation
 
+@MainActor
 extension Date {
-    
     static let dateFormatter = newDateFormatter()
     static let ISODateFormatter = getISODateFormatter()
     static let shortDateFormatter = getShortDateFormatter()

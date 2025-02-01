@@ -7,30 +7,55 @@
 
 import SwiftUI
 
-
+@MainActor
 final class RouteViewModel: ObservableObject {
-    private var trip: Trip
-    private let routes: [Route]
+    @Published var routes: [Route]
+    private let trip: Trip
+    private let networkClient: NetworkClientService
+    private let errorService: ErrorService
+    private let carrierViewModel: CarrierViewModel
     
     var filteredRoutes: [Route] {
         return routes.filter { route in
-            matches(fromStation: route.stations.first, toStation: route.stations.last) &&
-            matchesTimeOfDay(route.departureTime) &&
+            let departureTime = Date.ISODateFormatter.date(from: route.departureTime) ?? Date()
+            
+            return matchesTimeOfDay(departureTime) &&
             matchesIsDirect(route.isDirect)
         }
     }
     
-    init(trip: Trip, routes: [Route] = Route.mockRoutes) {
+    init(trip: Trip, networkClient: NetworkClientService, errorService: ErrorService, carrierViewModel: CarrierViewModel) {
         self.trip = trip
-        self.routes = routes
+        self.networkClient = networkClient
+        self.errorService = errorService
+        self.carrierViewModel = carrierViewModel
+        routes = []
     }
-    
-    private func matches(fromStation: String?, toStation: String?) -> Bool {
-        guard let fromStationCode = trip.from?.name,
-              let toStationCode = trip.to?.name else {
-            return true
+
+    func loadRoutesList() async {
+        routes = []
+        guard let client = networkClient.client else {
+            errorService.showError(AppError.networkError(message: "Cannot create client"))
+            return
         }
-        return fromStation == fromStationCode && toStation == toStationCode
+        
+        guard let fromCode = trip.fromStation?.code,
+              let toCode = trip.toStation?.code
+        else {
+            return
+        }
+        
+        let apiService = SearchesService(client: client, apikey: APIConstants.apiKey, from: fromCode, to: toCode)
+        let transformer = SegmentTransformer(carrierViewModel: carrierViewModel)
+        let downloader = DataDownloader(apiService: apiService.getSegments, transformer: transformer)
+        
+        do {
+            try await downloader.fetchData()
+            routes = await downloader.getItems()
+        } catch {
+            errorService.showError(AppError.networkError(message: "Cannot load data"))
+            return
+        }
     }
     
     private func matchesTimeOfDay(_ departureTime: Date) -> Bool {
@@ -41,7 +66,7 @@ final class RouteViewModel: ObservableObject {
     }
     
     private func matchesIsDirect(_ isDirect: Bool) -> Bool {
-        guard let filter = self.trip.isDirect else {return true}
+        guard let filter = trip.isDirect else {return true}
         
         if filter {
             return isDirect
